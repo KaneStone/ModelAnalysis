@@ -2,10 +2,10 @@
 
 
 clear all
-var = 'T';
+var = 'O3';
 area = '7590S';
-ClLevel = 'highCl';
-trenddates = [2000,2016];
+ClLevel = 'lowCl';
+trenddates = [1955,1970];
 directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 files = dir([directory,'*.nc']);
 
@@ -79,10 +79,14 @@ if strcmp(var,'T');
      contourlims = [-3 3];
      maxheight = .1;
      ctitle = 'K/decade';
-else
+elseif strcmp(var,'Z3')
     contourlims = [-100 100];
     maxheight = 5;
     ctitle = 'm/decade';
+elseif strcmp(var,'O3');
+     contourlims = [-5.0e-7 5.0e-7];
+     maxheight = .1;
+     ctitle = '(mol/mol)/decade';
 end
 
 prestick = [1000:-100:300,200,100,90:-10:10,9:-1:1,.9:-.1:.1];

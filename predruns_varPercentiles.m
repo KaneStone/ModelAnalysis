@@ -1,4 +1,6 @@
-function [pct] = predruns_varPercentiles(data,monthin,percentile,nofiles)
+function [pct,dataout,Eachyear] = predruns_varPercentiles(data,datamontharrange,monthin,percentile,nofiles)
+
+%% using the percentile function
 
 yearlength = size(data,2)/nofiles;
 
@@ -19,7 +21,17 @@ for i = 1:nofiles
         pct.lowindrestruct(i).a = pct.lowind.a(pct.lowind.a <= yearlength*i & pct.lowind.a > yearlength*(i-1))-(i-1)*yearlength;
         pct.highindrestruct(i).a = pct.highind.a(pct.highind.a <= yearlength*i & pct.highind.a > yearlength*(i-1))-(i-1)*yearlength;
     end
+    temp.lowextract(i).a = squeeze(datamontharrange(i,monthin,pct.lowindrestruct(i).a));
+    temp.highextract(i).a = squeeze(datamontharrange(i,monthin,pct.highindrestruct(i).a));
         
 end
+dataout.lowextract = vertcat(temp.lowextract(:).a);
+dataout.highextract = vertcat(temp.highextract(:).a);
 
+%% taking upper and lower for each year
+[out,index] = sort(datamontharrange,1);
+Eachyear.lowextract = out(1:2,:,:);
+Eachyear.lowindex = index(1:2,:,:);
+Eachyear.highextract = out(end-1:end,:,:);
+Eachyear.highindex = index(end-1:end,:,:);
 end

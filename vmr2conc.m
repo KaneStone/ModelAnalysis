@@ -10,16 +10,24 @@ molmasswater=18.015286; %Molecular mass of water (g mol-1)
 R=k*Na; %JK-1mol-1
 air = 28.97; %(g mol-1)
 
-if (strcmp(trace, 'O3'));
+if (strcmp(trace, 'O3'))
     tr = 48; %(g mol-1)
-elseif (strcmp(trace, 'NO2'));
+elseif (strcmp(trace, 'NO2'))
     tr = 46.0055; %(g mol-1)
-elseif (strcmp(trace, 'NONO2'));
+elseif (strcmp(trace, 'N2O'))
+    tr = 44.0130; %(g mol-1)
+elseif (strcmp(trace, 'NONO2'))
     tr = 76.0116; %(g mol-1)
-elseif (strcmp(trace, 'BrO'));
+elseif (strcmp(trace, 'BrO'))
     tr = 95.904; %(g mol-1)
-elseif (strcmp(trace, 'ClO'));
+elseif (strcmp(trace, 'CLO'))
     tr = 51.45; %(g mol-1)
+elseif (strcmp(trace, 'HCL'))
+    tr = 36.46; %(g mol-1)
+elseif (strcmp(trace, 'CL'))
+    tr = 35.453; %(g mol-1)
+elseif (strcmp(trace, 'CH4'))
+    tr = 16.04; %(g mol-1)
 end
 
 if (~isempty(varargin))

@@ -1,5 +1,5 @@
 function [NumberDensity, MolConc, TAdata, Pressure, Altitude, GMH, Latitudes, Longitudes, datedata] = ...
-    ReadWACCMvertical(variable,temporal_period,commondir,prescoordinfile)
+    ReadWACCMvertical(variable,temporal_period,commondir,prescoordinfile,ND)
 % Read in WACCM 4D data and calculate associated pressure values
 % temporal_period = 'monthly','daily'
 % commondir = common location of files'
@@ -19,7 +19,8 @@ if strcmp(variable,'Extinction')
 %elseif strcmp(variable,'SAD_SULFC') || strcmp(variable,'Temperature')
 %    names = {'CCMI','MAM1990','MAM','VCMAM','Chemonly','ChemonlyfixedSSTs','Chemonlynoleap'};
 else
-    names = {'CCMI','MAM','VCMAM','Chemonly','ChemonlyfixedSSTs','Chemonlynoleap'};
+    names = {'CCMI','MAM1990','MAM','VCMAM','Chemonly','ChemonlyfixedSSTs','Chemonlynoleap'};
+    %names = {'CCMI','MAM','VCMAM','Chemonly','ChemonlyfixedSSTs','Chemonlynoleap'};
 end
 
 %file locations
@@ -132,7 +133,11 @@ for i = 1:length(files)
             || strcmp(variable,'SAD_ICE')
         NumberDensity.(names{i}) = [];
     else
-        NumberDensity.(names{i}) = vmr2conc(data.(names{i}).(variable),TAdata.(names{i}).T,Pressure.(names{i}),variable,'conc');
+        if ND
+            NumberDensity.(names{i}) = vmr2conc(data.(names{i}).(variable),TAdata.(names{i}).T,Pressure.(names{i}),variable,'conc');
+        else
+            NumberDensity.(names{i}) = []
+        end
     end
     
     if strcmp(variable,'Extinction')

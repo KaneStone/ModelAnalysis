@@ -48,16 +48,18 @@ for i = 1:length(lats)
     for j = 1:length(pressures)
         createfig('small','off');
         hold on
-        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),13:28)),'LineWidth',3)
-        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),25:40)),':','LineWidth',3)
-        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),37:52)),'LineWidth',3)
-        plot(squeeze(vertical_uniform.MAM(latind(i),presind(j),193:208)),'-.','LineWidth',3)
+        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),13:30)),'LineWidth',3)
+        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),25:42)),':','LineWidth',3)
+        plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),37:54)),'LineWidth',3)
+        plot(squeeze(vertical_uniform.MAM(latind(i),presind(j),193:210)),'-.','LineWidth',3)
+        plot(squeeze(vertical_uniform.MAM(latind(i),presind(j),1:18)),'-.','LineWidth',3)
+        %plot(squeeze(vertical_uniform.MAM1990(latind(i),presind(j),109:126)),'-.','LineWidth',3)
         set(gca,'fontsize',fsize);
         xlabel('Month','fontsize',fsize+2);
         set(gca,'xtick',1:1:100,'xticklabel',{'J','F','M','A','M','J','J','A','S','O','N','D'});        
         ylabel('cm^2/cm^3','fontsize',fsize+2);
         title(['Chemical sulfur surface area density at ',num2str(abs(lats(i))),char(176),'S and ',num2str(pressures(j)),'hPa'],'fontsize',fsize+2);
-        lh = legend('Pinatubo - 1991','Pinatubo - 1992','Pinatubo - 1993','Calbuco - 2015','location','NorthWest');
+        lh = legend('Pinatubo - 1991','Pinatubo - 1992','Pinatubo - 1993','Calbuco - 2015','Volcanically clean year - 1999','location','NorthWest');
         set(lh,'fontsize',fsize+2,'box','off');
         set(gca,'box','on');
         filename = ['/Users/kanestone/Dropbox/Work_Share/MITwork/CalbucoPaper/NewFigures/CalbucoPinatuboNewFigures/',num2str(abs(lats(i))),'S','and',num2str(pressures(j))];

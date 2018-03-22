@@ -1,4 +1,4 @@
-function [data,years,data_composite,dataMonthArrange] = predruns_ReadInlayer(directory,files,...
+function [data,years,data_composite,dataMonthArrange,dataMonthArrangeMean] = predruns_ReadInlayer(directory,files,...
     var,dates,lats,ifdetrend)
 
 % Read in pred run 3d data
@@ -12,7 +12,12 @@ for i = 1:length(files)
     end    
     
     % construct year only vector
-    years(i).y = CCMI_years(data(i).date);      
+    if isfield(data(i),'date')
+        years(i).y = CCMI_years(data(i).date,1);      
+    else        
+        temp = repmat(dates(1):dates(2),12,1);
+        years(i).y = temp(:);
+    end
     
     %constructing composite
     if i == 1
@@ -26,11 +31,19 @@ for i = 1:length(files)
     for j = 1:12                
         if ifdetrend
             for k = 1:length(data(1).lat)
-                dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).TS(:,k,dateind(1)+j-1:12:dateind(end)))')...
-                    + repmat(nanmean(squeeze(data(i).TS(:,k,dateind(1)+j-1:12:dateind(end)))),[length(data(i).lon),1])';
+                if i == 7
+                    a = 1;
+                end
+%                 dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))')...
+%                     + repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
+                
+                dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))');
+                    dataMonthArrangeMean(i,j,:,k,:) = repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
+                
+                
             end
         else
-            dataMonthArrange(i,j,:,:,:) = data(i).TS(:,:,dateind(1)+j-1:12:dateind(end));
+            dataMonthArrange(i,j,:,:,:) = data(i).(var)(:,:,dateind(1)+j-1:12:dateind(end));
         end        
     end
 end
@@ -41,12 +54,15 @@ for j = 1:12
         for k = 1:length(data(1).lat)
             data_composite.montharrange(j,:,k,1:length(data_composite.data)/12) = ...
                 (detrend(squeeze(data_composite.data(:,k,j:12:end))','linear',bp)...
-                +repmat(squeeze(nanmean(data_composite.data(:,k,j:12:end))),[1,length(data(i).lon)]))';
+                +repmat(squeeze(nanmean(data_composite.data(:,k,j:12:end),3)),[1,length(data_composite.data)/12])')';
         end
     else
         data_composite.montharrange(j,:,:,1:length(data_composite.data)/12) = data_composite.data(:,:,j:12:end);
     end
 end
+
+if ~ifdetrend
+    dataMonthArrange = permute(dataMonthArrange,[1,2,5,4,3]);
 
 end
     

@@ -1,16 +1,16 @@
 function [data,pressure,years,dataRegPres,regPres,dataMonthArrange,dataRegPres_composite]...
     = predruns_ReadIn(directory,files,var,dates)
 
-% Read in pred run 4d data
+% Read in pred run 3d data
 count = 1;
 for i = 1:length(files)
     %read in weighted area average data [height,time]
     [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);
     
-    %calculate pressure from hybrid_height
+    %calculate pressure from hybrid_height    
     pressure(i).p = permute(repmat(data(i).hyam.*data(i).P0,1,size(data(i).(var),1),size(data(i).(var),3)) + ...
        repmat(data(i).hybm,1,size(data(i).(var),1),size(data(i).(var),3)) ...
-       .* permute(repmat(data(i).PS,1,1,length(data(i).lev)),[3,1,2]),[2,1,3])./100; 
+       .* permute(repmat(data(i).PS,1,1,length(data(i).lev)),[3,1,2]),[2,1,3])./100;     
     
     %weighted average
     for j = 1:size(data(i).(var),2)

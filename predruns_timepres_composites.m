@@ -34,20 +34,22 @@ lats = [-90,-75];
 tozdates = [1995,2015];
 directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
-[toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,~] = ...
+[toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer(directory,tozfiles,tozvar,tozdates,lats);
 
-[pct_highcl] = predruns_varPercentiles(toz_composite.highcl.montharrange,tozmonth,percentile,length(tozfiles));
+[pct_highcl,~] = predruns_varPercentiles(toz_composite.highcl.montharrange,toz_dataMonthArrange.highcl,...
+    tozmonth,percentile,length(tozfiles));
 
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1975];
 directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
-[toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,~] = ...
+[toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer(directory,tozfilespast,tozvar,tozpastdates,lats);
 
-[pct_lowcl] = predruns_varPercentiles(toz_composite.lowcl.montharrange,tozmonth,percentile,length(tozfilespast));
+[pct_lowcl,~] = predruns_varPercentiles(toz_composite.lowcl.montharrange,toz_dataMonthArrangel.lowcl,...
+    tozmonth,percentile,length(tozfilespast));
 
 %% Extract high and low variable years and average
 

@@ -12,7 +12,7 @@ lineplots = 1;
 percentile = 10;
 lats = [-90,-75];
 tozmonth = 10;
-varmonth = [5]; % Can be any number of months in the year (e.g. [12,1,2] for austral summer)
+varmonth = [12,1,2]; % Can be any number of months in the year (e.g. [12,1,2] for austral summer)
 yearplus = 0;
 shortnames = 0;
 % read in data 
@@ -45,90 +45,27 @@ ClLevel = 'highCl';
 tozdates = [1995,2015];
 directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
-[toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,~] = ...
+[toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats);
 
-[pct_highcl] = predruns_varPercentiles(toz_composite.highcl.montharrange,tozmonth,percentile,length(tozfiles));
+[pct_highcl,~] = predruns_varPercentiles(toz_composite.highcl.montharrange,toz_dataMonthArrange.highcl,...
+    tozmonth,percentile,length(tozfiles));
 
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1975];
 directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
-[toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,~] = ...
+[toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilespast,tozvar,tozpastdates,lats);
 
-[pct_lowcl] = predruns_varPercentiles(toz_composite.lowcl.montharrange,tozmonth,percentile,length(tozfilespast));
+[pct_lowcl,~] = predruns_varPercentiles(toz_composite.lowcl.montharrange,toz_dataMonthArrange.lowcl,...
+    tozmonth,percentile,length(tozfilespast));
 
 %% Extract high and low variable years, average, and difference
 
-% highcl
-count = 1;
-count2 = 1;
-for i = 1:length(tozfiles)    
-    if length(varmonth) > 1                
-        for j = 1:length(varmonth)
-            if varmonth(j) <= 4 
-                yearplus = 1;
-            else yearplus = 0;
-            end
-            temp.highcl.lowind(i).a(j,:,:,:) = squeeze(dataMonthArrange.highcl(i,varmonth(j),...
-                pct_highcl.lowindrestruct(i).a+yearplus,:,:));
-            temp.highcl.highind(i).a(j,:,:,:) = squeeze(dataMonthArrange.highcl(i,varmonth(j),...
-                pct_highcl.highindrestruct(i).a+yearplus,:,:));
-             %[member,month,ind,lat,lon]
-        end
-        varextract.highcl.lowind(count:count-1+length(pct_highcl.lowindrestruct(i).a),:,:) = ...
-            squeeze(nanmean(temp.highcl.lowind(i).a,1));
-        varextract.highcl.highind(count2:count2-1+length(pct_highcl.highindrestruct(i).a),:,:) = ...
-            squeeze(nanmean(temp.highcl.highind(i).a,1));                                     
-    else
-        varextract.highcl.lowind(count:count-1+length(pct_highcl.lowindrestruct(i).a),:,:) = ...
-            squeeze(dataMonthArrange.highcl(i,varmonth,pct_highcl.lowindrestruct(i).a + yearplus,:,:));
-        varextract.highcl.highind(count2:count2-1+length(pct_highcl.highindrestruct(i).a),:,:) = ...
-            squeeze(dataMonthArrange.highcl(i,varmonth,pct_highcl.highindrestruct(i).a + yearplus,:,:));                                
-    end
-    count = count + length(pct_highcl.lowindrestruct(i).a);
-    count2 = count2 + length(pct_highcl.highindrestruct(i).a);
-end
-
-% lowcl
-count = 1;
-count2 = 1;
- for i = 1:length(tozfilespast)
-     if length(varmonth) > 1                
-        for j = 1:length(varmonth)
-            if varmonth(j) <= 4 
-                yearplus = 1;
-            else yearplus = 0;
-            end
-            temp.lowcl.lowind(i).a(j,:,:,:) = squeeze(dataMonthArrange.lowcl(i,varmonth(j),...
-                pct_lowcl.lowindrestruct(i).a+yearplus,:,:));
-            temp.lowcl.highind(i).a(j,:,:,:) = squeeze(dataMonthArrange.lowcl(i,varmonth(j),...
-                pct_lowcl.highindrestruct(i).a+yearplus,:,:));
-            %[member,month,ind,lat,lon]
-        end
-        varextract.lowcl.lowind(count:count-1+length(pct_lowcl.lowindrestruct(i).a),:,:) = ...
-            squeeze(nanmean(temp.lowcl.lowind(i).a,1));
-        varextract.lowcl.highind(count2:count2-1+length(pct_lowcl.highindrestruct(i).a),:,:) = ...
-            squeeze(nanmean(temp.lowcl.highind(i).a,1));                                               
-    else
-        varextract.lowcl.lowind(count:count-1+length(pct_lowcl.lowindrestruct(i).a),:,:) = ...
-            squeeze(dataMonthArrange.lowcl(i,varmonth,pct_lowcl.lowindrestruct(i).a + yearplus,:,:));
-        varextract.lowcl.highind(count2:count2-1+length(pct_lowcl.highindrestruct(i).a),:,:) = ...
-            squeeze(dataMonthArrange.lowcl(i,varmonth,pct_lowcl.highindrestruct(i).a + yearplus,:,:));                                
-    end
-    count = count + length(pct_lowcl.lowindrestruct(i).a);
-    count2 = count2 + length(pct_lowcl.highindrestruct(i).a);
-end
-    
-varextractmean.lowcl.lowind = squeeze(nanmean(varextract.lowcl.lowind));
-varextractmean.lowcl.highind = squeeze(nanmean(varextract.lowcl.highind));
-varextractmean.highcl.lowind = squeeze(nanmean(varextract.highcl.lowind));
-varextractmean.highcl.highind = squeeze(nanmean(varextract.highcl.highind));
-
-vardifference.lowcl = varextractmean.lowcl.lowind - varextractmean.lowcl.highind;
-vardifference.highcl = varextractmean.highcl.lowind - varextractmean.highcl.highind;
+[varextract,varextractmean,vardifference] = predruns_extractpct(dataMonthArrange,pct_highcl,...
+    pct_lowcl,varmonth,length(tozfiles),length(tozfilespast));
 
 latitude = data.highcl(1).lat;  
 longitude = data.highcl(1).lon;  
@@ -165,12 +102,12 @@ if contourplots
     %% plotting composite average surface temperatures lowcl
     cbrew = cbrewer('div','RdBu',16);         
     
-    contourtitle = {[monthnames(varmonth,1,shortnames),' TS difference of ', num2str(percentile),'th and ' num2str(100-percentile),...
+    contourtitle = {[monthnames(varmonth,1,shortnames),' TS difference of ', num2str(100-percentile),'th and ' num2str(percentile),...
         'th ',monthnames(tozmonth,0,0),' TOZ',' percentiles over ',...
         num2str(abs(lats(1))),'-',num2str(abs(lats(2))),'S, ',num2str(timeperiodlow(1)),'-',num2str(timeperiodlow(2))]};       
     
     subplotmaps(TScompositedifference_lowcl,longitude,latitude,{'div','RdBu'},1,lowcl.h,12,contourtitle,'Longitude','','K','on',...
-        [-2.5,2.5],18,[-90:10:0],[-90:10:0],[longitude(1:10:end)],[longitude(1:10:end)],'',1,[0 360],[-90 0],0,'none',1);
+        [-2,2],18,[-90:10:0],[-90:10:0],[longitude(1:10:end)],[longitude(1:10:end)],'',1,[0 360],[-90 0],0,'none',1);
     
     if detrend
         filename = ['/Users/kanestone/Dropbox/Work_Share/MITwork/predruns/','compositedifferences/compositeMaps/',monthnames(tozmonth,0,0),var,'_detrendTS_',...
@@ -187,11 +124,11 @@ if contourplots
 
     %% highcl
     cbrew = cbrewer('div','RdBu',16);    
-    contourtitle = {[monthnames(varmonth,1,shortnames),' TS difference of ', num2str(percentile),'th and ' num2str(100-percentile),...
+    contourtitle = {[monthnames(varmonth,1,shortnames),' TS difference of ', num2str(100-percentile),'th and ' num2str(percentile),...
         'th ',monthnames(tozmonth,0,0),' TOZ',' percentiles over ',...
         num2str(abs(lats(1))),'-',num2str(abs(lats(2))),'S, ',num2str(timeperiodhigh(1)),'-',num2str(timeperiodhigh(2))]};     
     subplotmaps(TScompositedifference_highcl,longitude,latitude,{'div','RdBu'},1,highcl.h,12,contourtitle,'Longitude','latitude','K','on',...
-        [-2.5,2.5],18,[-90:10:0],[-90:10:0],[longitude(1:10:end)],[longitude(1:10:end)],'',1,[0 360],[-90 0],0,'none',1);
+        [-2,2],18,[-90:10:0],[-90:10:0],[longitude(1:10:end)],[longitude(1:10:end)],'',1,[0 360],[-90 0],0,'none',1);
     
     if detrend
         filename = ['/Users/kanestone/Dropbox/Work_Share/MITwork/predruns/','compositedifferences/compositeMaps/',monthnames(tozmonth,0,0),var,'_detrendTS_',...
