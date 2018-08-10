@@ -1,5 +1,7 @@
 % Read in all data and take regression
-clear all
+clear variables
+clc
+close all
 %% Read in All HighCl data
 
 %% import SWOOSH
@@ -16,20 +18,187 @@ SWOOSHyears = repmat(1984:2017,[12,1]);
 SWOOSHextract = permute(SWOOSH.(sfields{1})(:,:,SWOOSHyears >= Stimeperiod(1) & SWOOSHyears <= Stimeperiod(2)),[2,1,3]);
 %% import highCl
 highCllevel = [SWOOSH.level;[.9,.8,.7,.6,.5,.4,.3,.2,.1]'];
-highClTimperiod = [1998 2024];
-[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl');
+highClTimperiod = [2000 2009];
+var = 'T';
+if strcmp(var,'T')
+    vartitle = 'temperature';
+elseif strcmp(var,'Z3')
+    vartitle = 'geopotential Height';
+elseif strcmp(var,'U')
+    vartitle = 'zonal Wind';
+elseif strcmp(var,'O3')
+    vartitle = 'ozone';
+end
+[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl',var);
 
 %% take regression of highcl
 clearvars O3Anomaly predictors b
 for i = 1:length(highClData)
     tic;
    [b(i),predictors(i,:,:),O3Anomaly(i)] = ...
-       ozoneRegressionTrends(highClData(i).O3,highClData(i).U,0,0,highClData(i).NINO34,...
-       highClData(i).HFsouth,highClData(i).HFnorth,0,0,highClTimperiod,0,0,0); % 
+       ozoneRegressionTrends(highClData(i).(var),highClData(i).Uregfun,0,0,highClData(i).NINO34,...
+       highClData(i).HFsouth,highClData(i).HFnorth,0,0,highClTimperiod,0,0,0,var); % 
    
    toc;
 end
 
+%% plot residuals
+plotres = 0;
+if plotres
+    lats = [-30 30];
+    lev = [25,150];
+    latind = WAClat >= lats(1) & WAClat <= lats(2);   
+    levind = highCllevel >= lev(1) & highCllevel <= lev(2);    
+    levind2 = find(levind);    
+    
+    clearvars highclO3 highclO3_Vertave highclO3vert
+    for i = 1:10      
+        for j = 1:sum(levind)        
+            highclO3_anomaly(j,i,:) = weightedaverage(squeeze(O3Anomaly(i).percent(:,levind2(j),latind))',WAClat(latind));    
+            highclO3_anomaly_res(j,i,:) = weightedaverage(squeeze(O3Anomaly(i).percent_residuals_months(:,levind2(j),latind))',WAClat(latind));    
+        end
+        highclO3_anomaly_vertave(i,:) = squeeze(nanmean(highclO3_anomaly(:,i,:),1));
+        highclO3_anomaly_res_vertave(i,:) = squeeze(nanmean(highclO3_anomaly_res(:,i,:),1));            
+    end
+    
+    createfig('medium','on')
+    for i = 1:10
+        if i == 10
+            plot(highclO3_anomaly_vertave(i,:),'r','LineWidth',2);
+        else
+            plot(highclO3_anomaly_vertave(i,:),'b','LineWidth',2);
+        end
+        hold on
+    end
+    for i = 1:10
+        if i ~= 10            
+            plot(highclO3_anomaly_res_vertave(i,:),'color',[.6 .6 .6],'LineWidth',2);
+        else
+            plot(highclO3_anomaly_res_vertave(i,:),'color','k','LineWidth',2);
+        end
+        hold on
+    end
+
+
+    %% constructing correlation matrix
+    clearvars corr_raw corr_res
+    for i = 1:9
+        for j = 1:9        
+            corr_raw(i,j) = corr(highclO3_anomaly_vertave(i,:)',highclO3_anomaly_vertave(j,:)');
+            corr_res(i,j) = corr(highclO3_anomaly_res_vertave(i,:)',highclO3_anomaly_res_vertave(j,:)');
+        end
+    end
+
+    highclO3_anomaly_vertave(10,:) = [];
+    highclO3_anomaly_res_vertave(10,:) = [];
+    %% plot histogram
+    fig = figure;
+    fsize = 7;
+    set(fig,'color','white','position',[100 100 500 350]);
+    histogram(corr_raw,-.2:.1:.5,'Normalization','probability')
+    hold on
+    histogram(corr_res,-.2:.1:.5,'Normalization','probability')
+    set(gca,'fontsize',fsize+1)
+    ylabel('Percent','fontsize',fsize+2);
+    xlabel('Correlation between ensemble members','fontsize',fsize+2);
+    title('Correlation matrix values between 30{\circ}S and 30{\circ}N, and 150 and 25 hPa','fontsize',fsize+4);
+    lh = legend('Ozone anomalies','Ozone anomaly residuals after regression');
+    set(lh,'box','off','fontsize',fsize+2);
+
+    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/SolarandTrendsPaper/Draft/Review/MyReply/NewFigures/Randomness_pdf'];
+
+    print(gcf, '-dpdf', '/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/SolarandTrendsPaper/Draft/Review/MyReply/NewFigures/Randomness_pdf.pdf'); 
+
+    %%
+
+    fig = figure;
+    fsize = 7;
+    set(fig,'color','white','position',[100 100 500 350]);
+    histogram(highclO3_anomaly_vertave(:),-17:1:17,'Normalization','probability')
+    hold on
+    histogram(highclO3_anomaly_res_vertave(:),-17:1:17,'Normalization','probability')
+    set(gca,'fontsize',fsize+1)
+    ylabel('Percent','fontsize',fsize+2);
+    xlabel('Correlation between ensemble members','fontsize',fsize+2);
+    title('Correlation matrix values between 30{\circ}S and 30{\circ}N, and 150 and 25 hPa','fontsize',fsize+4);
+    lh = legend('Ozone anomalies','Ozone anomaly residuals after regression');
+    set(lh,'box','off','fontsize',fsize+2);
+    ylim([0 .20]);
+    print(gcf, '-dpdf', '/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/SolarandTrendsPaper/Draft/Review/MyReply/NewFigures/Randomness_pdf_ofactualvalues.pdf');
+
+%%
+
+    corr_raw (corr_raw >= .9) = NaN;
+    corr_res (corr_res >= .9) = NaN;
+
+    corr_raw = [corr_raw,corr_raw(:,1)];
+    corr_raw = [corr_raw;corr_raw(1,:)];
+
+    corr_res = [corr_res,corr_res(:,1)];
+    corr_res = [corr_res;corr_res(1,:)];
+
+    fig = figure;
+    set(fig,'position',[100 100 500 1000],'color','white')
+    cbrew = cbrewer('seq','Reds',26);
+    cbrew = cbrew(4:end-3,:);
+    cbrew2 = cbrewer('seq','Blues',10);
+    cbrew2  = flipud(cbrew2(4:7,:));
+    cbrewtouse = [cbrew2;cbrew];
+    %cbrew = flipud(cbrew);
+
+    sh(1) = subplot(2,1,1);
+    pcolor(1:10,1:10,corr_raw);
+    colormap(cbrewtouse);
+    caxis([-.1 .5])
+    subpos(1,:) = get(sh(1),'position');
+    set(gca,'fontsize',16);
+    %xlabel('No.','fontsize',20);
+    ylabel('No.','fontsize',18);
+    set(gca,'color',[.6 .6 .6],'xtick',1.5:1:9.5,'xticklabel',1:1:9,'ytick',1.5:1:9.5,'yticklabel',1:1:9);
+    set(sh(1),'position',[subpos(1,1)-.05,subpos(1,2)-.1,subpos(1,3:4)-.05]);
+    title('Ozone anomalies','fontsize',18);
+
+    sh(2) = subplot(2,1,2);
+    pcolor(1:10,1:10,corr_res);
+    colormap(cbrewtouse);
+    caxis([-.1 .5])
+    subpos(2,:) = get(gca,'position');
+
+
+    ylabel('No.','fontsize',18);
+    xlabel('No.','fontsize',18);
+    set(gca,'fontsize',16);
+    set(gca,'color',[.6 .6 .6],'xtick',1.5:1:9.5,'xticklabel',1:1:9,'ytick',1.5:1:9.5,'yticklabel',1:1:9);
+    set(sh(2),'position',[subpos(2,1)-.05,subpos(2,2),subpos(2,3:4)-.05]);
+    ch = colorbar;
+    set(ch,'position',[subpos(2,1)+subpos(2,3)-.08,subpos(2,2),.05,.665]);
+    set(get(ch,'ylabel'),'string','Correlation','fontsize',18)
+    set(gca,'color',[.6 .6 .6]);
+
+    title('Ozone anomaly residuals after regression','fontsize',18);
+
+    annotation('textbox',[.01 .87 .95 0],'String','Correlation matrices','FitBoxToText','on','VerticalAlignment','top','HorizontalAlignment','center','fontsize',22,... % 
+        'EdgeColor','none','fontweight','bold');    
+    annotation('textbox',[.01 .84 .95 0],'String','(between 30{\circ}S and 30{\circ}N, and 150 and 25 hPa)','FitBoxToText','on','VerticalAlignment','top','HorizontalAlignment','center','fontsize',20,... % 
+        'EdgeColor','none','fontweight','bold');    
+
+    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/SolarandTrendsPaper/Draft/Review/MyReply/NewFigures/Randomness'];
+    export_fig(filename,'-pdf');
+
+    %% Correlation matrix of ozone anomalies between 30S and 30N, and 150 and 25 hPa
+
+    rawxcorr = xcorr(highclO3_anomaly_vertave(10,:));
+    rawxcorr2 = xcorr(highclO3_anomaly_res_vertave(10,:));
+
+    rawxcorr = rawxcorr(ceil(length(rawxcorr)./2):end);
+    rawxcorr2 = rawxcorr2(ceil(length(rawxcorr2)./2):end);
+
+    figure
+    plot(rawxcorr)
+    hold on
+    plot(rawxcorr2)
+
+end
 %%
 
 O3Anomaly(11).ppmv_residuals_months = nanmean(cat(4,O3Anomaly(1:9).ppmv_residuals_months),4);
@@ -55,8 +224,13 @@ ball_pvalue_toplot (ball_pvalue_toplot > sig) = 1;
 
 %% individual global trends
 for i = 1:9
-    %[bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).percent_residuals_months,highClTimperiod(2) - highClTimperiod(1));
-    [bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).percent_residuals_months,highClTimperiod(2) - highClTimperiod(1));
+    if strcmp(var,'T') || strcmp(var,'Z3') || strcmp(var,'U')    
+        %[bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).ppmv_residuals_months,highClTimperiod(2) - highClTimperiod(1));
+        [bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).ppmv,highClTimperiod(2) - highClTimperiod(1));
+    else
+         %[bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).percent_residuals_months,highClTimperiod(2) - highClTimperiod(1));
+         [bhclind(i).b,ballhclind(i).b] = ozoneRegressionEnsAve(O3Anomaly(i).percent,highClTimperiod(2) - highClTimperiod(1));
+    end
 end
 
 %%
@@ -74,20 +248,36 @@ prestick = [300,200,100,90:-10:10,9:-1:1,.9:-.1:.1];
 
 titles = {'No. 1','No. 2','No. 3','No. 4','No. 5','No. 6','No. 7','No. 8','No. 9'};
 
-mtit = {['Individual ensemble member global ozone linear trends over ', num2str(highClTimperiod(1)),char(8211),num2str(highClTimperiod(2))]};
+mtit = {['Individual ensemble member global ',vartitle,' linear trends over ', num2str(highClTimperiod(1)),char(8211),num2str(highClTimperiod(2))]};
+
+if strcmp(var,'T') 
+    clim = [-2 2];
+    ctitle = 'K/decade';
+elseif strcmp(var,'Z3') 
+    clim = [-100 100];
+    ctitle = 'm/decade';
+elseif strcmp(var,'U')   
+    clim = [-2 2];
+    ctitle = 'm/s/decade';
+else
+    clim = [-12 12];
+    ctitle = 'Percent/decade';
+end
+
 
 %bforplot = permute(reshape(squeeze(nanmean(b(:,:,:,10,2),1)),[1,31,96]),[1,3,2])*1e6*10;
 % bforplot = permute(reshape(squeeze(nanmean(blinearQBOrm(:,:,:,10,2),1)),[1,31,96]),[1,3,2])*1e6*10;
 %bforplot(1,:,:) = permute(reshape(squeeze(byearly(:,:,10,8)),[1,31,96]),[1,3,2])*12*10;
 %bforplot(2,:,:) = permute(reshape(squeeze(nanmean(blinearQBOrm(:,:,:,10,2),1)),[1,31,96]),[1,3,2])*1e6*10;
-subplotmaps(bindtoplot,WAClat,log(highCllevel),{'div','RdBu'},1,[],16,titles,'Latitude','Pressure (hPa)','Percent/decade','on',...
-    [-8 8],22,-90:30:90,-90:30:90,...
-    fliplr(logprestick),fliplr(presticklabel),mtit ,1,[-90 90],[log(1) log(200)],1,'-',0,'');
+subplotmaps(bindtoplot,WAClat,log(highCllevel),{'div','RdBu'},1,[],16,titles,'Latitude','Pressure (hPa)',ctitle,'on',...
+    clim,22,-90:30:90,-90:30:90,...
+    fliplr(logprestick),fliplr(presticklabel),mtit ,1,[-90 90],[log(10) log(300)],1,'-',0,'');
 
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/solarcycleandtrends/LatPres/','Ensave_indmem_',num2str(highClTimperiod(1)),'-',num2str(highClTimperiod(2))];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/solarcycleandtrends/LatPres/','Ensave_indmem_',var,'_',num2str(highClTimperiod(1)),'-',num2str(highClTimperiod(2))];
+set(gcf,'Renderer','Painters')
 
-%export_fig(filename,'-png');
-export_fig(filename,'-pdf');
+print(filename,'-depsc');
+export_fig(filename,'-png');
 
 %%
 subplotmaps(bstd,WAClat,log(highCllevel),{'div','RdBu'},1,[],20,{['Ens-ave standard deviation in linear trends ',num2str(highClTimperiod(1)),char(8211),num2str(highClTimperiod(2))]},'Latitude','Pressure (hPa)','Percent/decade','on',...
@@ -460,7 +650,7 @@ end
 
 [bSWOOSH,predictorsSWOOSH,O3AnomalySWOOSH] = ...
     ozoneRegressionTrends(SWOOSHextract,SWOOSHregfun.singaporedata,...
-    SWOOSHregfun.solardata,0,SWOOSHregfun.MEIdata,0,0,0,Stimeperiod,0,0,0);%SDWaccmData(2).SPEintpres,, SDWaccmData(1).NO2*1e9
+    SWOOSHregfun.solardata,0,SWOOSHregfun.MEIdata,0,0,0,0,Stimeperiod,0,0,0);%SDWaccmData(2).SPEintpres,, SDWaccmData(1).NO2*1e9
 
 % [bSWOOSH,predictorsSWOOSH,O3AnomalySWOOSH] = ...
 %     ozoneRegressionTrends(SWOOSHextract,SDWaccmData(1).U,SDWaccmData(2).solar,...
@@ -566,7 +756,7 @@ end
 
 
 %% create line plot
-createlineplot = 0;
+createlineplot = 1;
 if createlineplot
     lats = [-69 -63;63 67];
 

@@ -168,11 +168,18 @@ for i = 1:length(fields)
     p.ind.(fields{i}) (p.ind.(fields{i}) <= .05) = 0;
     p.ind.(fields{i}) (p.ind.(fields{i}) > .05) = 1;
 end
-
-save(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
-    num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
-    num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_','roll',num2str(rollwindow),'_',ClLevel],'r','p','bpred','bpred_int','lats','lons','rollcorr','rolltrend');
+    if exist(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
+        num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
+        num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_','roll',num2str(rollwindow),'_',ClLevel],'file')
+    else
+        save(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
+            num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
+            num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_','roll',num2str(rollwindow),'_',ClLevel],'r','p','bpred','bpred_int','lats','lons','rollcorr','rolltrend');
+    end
+    %calculate standard deviation of ensemble members
+    rstd(i,:,:) = std(r.ind.(fields{i}),0,1);
 end
+
 
 %% taking differences of upper and lower percentiles in each member
 
@@ -210,7 +217,8 @@ if plotens
 %         [num2str(thigh(1)),'-',num2str(thigh(2)),' (high chlorine)'],...
 %         [num2str(thigh(1)),'-',num2str(thigh(2)),' (high chlorine - low GHG)']};
     if strcmp(ClLevel,'highCl')        
-        titles = {[num2str(thigh(1)),'-',num2str(thigh(2)),' (high chlorine)']};
+        %titles = {[num2str(thigh(1)),'-',num2str(thigh(2)),' (high chlorine)']};
+        titles = {[num2str(thigh(1)),'-',num2str(thigh(2)),' (high chlorine)'],'absolute ensave - std'};
     elseif strcmp(ClLevel,'lowCl')
          titles = {[num2str(thigh(1)),'-',num2str(thigh(2)),' (low chlorine)']};
     elseif strcmp(ClLevel,'lowGHG')
@@ -220,20 +228,22 @@ if plotens
     mtitle = '';
     %mtitle = ['Esemble mean correlations of ',num2str(abs(lats2(1))),'-',num2str(abs(lats2(2))),hemext,' toz and ',var];
 
-    subplotmaps(r.ensave(1,:,:),lons,lats,{'div','RdBu'},1,p.ensave(1,:,:),16,titles,'Longitude','latitude','Correlation','on',...
-        clims,18,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],mtitle,1,[0 360],xlims,0,'none',1,'Miller Cylindrical');
-
-    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/','correlations/maps/Ensmean2_',monthnames(tozmonth,0,0),'toz','_',var,'_detrend',...
-            num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
-            num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_',ClLevel];
-
-    export_fig(filename,'-png');
+%     subplotmaps(r.ensave(1,:,:),lons,lats,{'div','RdBu'},1,p.ensave(1,:,:),16,titles,'Longitude','latitude','Correlation','on',...
+%         clims,18,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],mtitle,1,[0 360],xlims,0,'none',1,'Miller Cylindrical');
+% 
+%     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/','correlations/maps/Ensmean2_',monthnames(tozmonth,0,0),'toz','_',var,'_detrend',...
+%             num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
+%             num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_',ClLevel];
+% 
+%     export_fig(filename,'-png');
     %export_fig(filename,'-pdf');
 
     %mtitle = ['Composite mean correlations of ',num2str(abs(lats2(1))),'-',num2str(abs(lats2(2))),hemext,' toz and ',var];
     mtitle = '';
+    
+    comptoplot = cat(1,r.composite,abs(r.composite)-rstd);
 
-    subplotmaps(r.composite(1,:,:),lons,lats,{'div','RdBu'},1,p.composite(1,:,:),16,titles,'Longitude','Latitude','Correlation','on',...
+    subplotmaps(comptoplot,lons,lats,{'div','RdBu'},1,cat(1,p.composite(1,:,:),ones(size(p.composite(1,:,:)))),16,titles,'Longitude','Latitude','Correlation','on',...
         clims2,22,[-90:10:20],[-90:10:20],[lons(1:10:end)],[lons(1:10:end)],mtitle,1,[0 360],xlims,0,'none',1,'Miller Cylindrical');
 
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/','correlations/maps/composite2_',monthnames(tozmonth,0,0),'toz','_',var,'_detrend',...

@@ -10,7 +10,7 @@ SWOOSH.level = [316.22775;261.01572;215.44347;177.82794;146.77992;121.15276;100;
 %% import highCl
 highCllevel = [SWOOSH.level;[.9,.8,.7,.6,.5,.4,.3,.2,.1]'];
 highClTimperiod = [1998 2016];
-[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl');
+[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl','O3');
 
 %% import Chem-only and MAM
 SDtimeperiod = [2000 2014];

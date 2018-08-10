@@ -58,12 +58,30 @@ latitude = data(1).highcl.lat;
 %%
 
 predruns_diffandcorr_percentiles(dataMonthArrange,dataMonthArrangeMean,toz_dataMonthArrange,varmonth,tozmonth,var,latitude,...
-    longitude,timeperiodhigh,lats,removeENSO,Eachyear,ClLevel);
+    longitude,timeperiodhigh,lats,removeENSO,Eachyear,ClLevel,1);
+
+%% take individual months
+plotdiffmonths = 0;
+if plotdiffmonths
+    
+    varmonthind = [3,4,5,6];
+    
+    for i = 1:length(varmonthind)
+        [~,diff(i,:,:)] = predruns_diffandcorr_percentiles(dataMonthArrange,dataMonthArrangeMean,toz_dataMonthArrange,varmonthind(i),tozmonth,var,latitude,...
+            longitude,timeperiodhigh,lats,removeENSO,Eachyear,ClLevel,1);
+    end
+    
+    %%
+    
+    predruns_plotdiffmonths(diff,longitude,latitude,length(varmonthind));
+    
+end
+    %% plot diffmonths
 
 %% predict regression
 TSdataout = load(['/Volumes/MyBook/work/data/predruns/output/data/TS_ninoremoved_',num2str(timeperiodhigh(1)),'-',num2str(timeperiodhigh(2)),num2str(abs(lats(1))),'-',...
 num2str(abs(lats(2)))]);
-predruns_regmodel(Eachyear,TSdataout,toz_dataMonthArrange,tozmonth,longitude,latitude,1);
+predruns_regmodel(Eachyear,TSdataout,toz_dataMonthArrange,tozmonth,longitude,latitude,1,timeperiodhigh);
 
 %% take correlations of composite and ensemble mean
 

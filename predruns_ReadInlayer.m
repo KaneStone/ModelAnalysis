@@ -1,15 +1,11 @@
 function [data,years,data_composite,dataMonthArrange,dataMonthArrangeMean] = predruns_ReadInlayer(directory,files,...
-    var,dates,lats,ifdetrend)
+    var,dates,ifdetrend)
 
 % Read in pred run 3d data
 count = 1;
 for i = 1:length(files)
     %read in weighted area average data [height,time]
-    [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);
-    if i == 1
-        [~,latind(1)] = min(abs(data(i).lat - lats(1)));
-        [~,latind(2)] = min(abs(data(i).lat - lats(2)));
-    end    
+    [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);    
     
     % construct year only vector
     if isfield(data(i),'date')
@@ -34,16 +30,18 @@ for i = 1:length(files)
                 if i == 7
                     a = 1;
                 end
-%                 dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))')...
-%                     + repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
+                dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))')...
+                    + repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
                 
-                dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))');
-                    dataMonthArrangeMean(i,j,:,k,:) = repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
+%                 dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))') + ...
+%                     nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))'));
+                dataMonthArrangeMean(i,j,:,k,:) = repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
                 
                 
             end
         else
             dataMonthArrange(i,j,:,:,:) = data(i).(var)(:,:,dateind(1)+j-1:12:dateind(end));
+            dataMonthArrangeMean = [];
         end        
     end
 end

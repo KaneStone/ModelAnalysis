@@ -56,10 +56,10 @@ for j = 1:size(lats,1)
             %for j = 1:size(SDWaccmData(1).O3,1)
                 for k = 1:12
                     %SDanom(l,i,k,:) = squeeze(SDWaccmData(l).O3(j,i,k:12:end)) - nanmean(squeeze(SDWaccmData(l).O3(j,i,k:12:end)));
-                    SDanom(j,l,i,k,:) = squeeze(SDweighted(j,l,i,k:12:end)) - nanmean(squeeze(SDweighted(j,l,i,k:12:end)));
+                    SDanom(j,l,i,k,:) = squeeze(SDweighted(j,l,i,k:12:end)) - nanmean(squeeze(SDweighted(j,l,i,96+k:12:144)));
                     for m = 1:size(SDWaccmData(1).NO2,2)       
                         SDanomalllats(l,i,m,k,:) = (squeeze(SDWaccmData(l).NO2(i,m,k:12:end)) - ...
-                            nanmean(squeeze(SDWaccmData(l).NO2(i,m,k:12:end))));
+                            nanmean(squeeze(SDWaccmData(l).NO2(i,m,96+k:12:144))));
                     end
                 end
             %end
@@ -69,10 +69,10 @@ for j = 1:size(lats,1)
             %for j = 1:size(SDWaccmData(1).O3,1)
                 for k = 1:12
                     %SDanom(l,i,k,:) = squeeze(SDWaccmData(l).O3(j,i,k:12:end)) - nanmean(squeeze(SDWaccmData(l).O3(j,i,k:12:end)));
-                    SDanom_nointerp(j,l,i,k,:) = squeeze(SDweighted_nointerp(j,l,i,k:12:end)) - nanmean(squeeze(SDweighted_nointerp(j,l,i,k:12:end)));
+                    SDanom_nointerp(j,l,i,k,:) = squeeze(SDweighted_nointerp(j,l,i,k:12:end)) - nanmean(squeeze(SDweighted_nointerp(j,l,i,96+k:12:144)));
                     for m = 1:size(SDWaccmData(1).NO2nointerp,1)       
                         SDanomalllats_nointerp(l,i,m,k,:) = (squeeze(SDWaccmData(l).NO2nointerp(m,i,k:12:end)) - ...
-                            nanmean(squeeze(SDWaccmData(l).NO2nointerp(m,i,k:12:end))));
+                            nanmean(squeeze(SDWaccmData(l).NO2nointerp(m,i,96+k:12:144))));
                     end
                 end
             %end
@@ -137,7 +137,7 @@ SDanomalllats_atlev_O3 = squeeze(SDanomalllats_O3(:,levind,:,:))*1e6;
 %% contourplot 
 
 
-save('/Volumes/MyBook/work/data/regressionOutput/NO2forregression.mat','SDanomalllats','SDanomalllats_nointerp');
+save('/Volumes/MyBook/work/data/regressionOutput/NO2forregression2.mat','SDanomalllats','SDanomalllats_nointerp');
 
 %% plot unusual regression results
 

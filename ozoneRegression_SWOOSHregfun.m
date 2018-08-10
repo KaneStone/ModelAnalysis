@@ -8,11 +8,13 @@ function SWOOSHRegfun = ozoneRegression_SWOOSHregfun(timeperiod)
        MEIdata = permute(MEIdata,[2,1]);
        SWOOSHRegfun.MEIdata = MEIdata(:);
    
-    %% Read in QBO proxies (30 and 10 hPa winds
+    %% Read in QBO proxies (30 and 10 hPa winds)
     
-    syears = [1987:2017]; 
-    singapore10 = importdata('/Volumes/MyBook/work/data/SWOOSH/SWOOSHregfunctions/singapore2.dat');
-    singapore30 = importdata('/Volumes/MyBook/work/data/SWOOSH/SWOOSHregfunctions/singapore3.dat');
+    syears = [1984:2017]; 
+    singapore10 = importdata('/Volumes/MyBook/work/data/SWOOSH/SWOOSHregfunctions/qbo10.dat');
+    singapore10 = reshape(singapore10,[12,length(singapore10)./12])';    
+    singapore30 = importdata('/Volumes/MyBook/work/data/SWOOSH/SWOOSHregfunctions/qbo30.dat');
+    singapore30 = reshape(singapore30,[12,length(singapore30)./12])';
     s_dateindex = syears >= timeperiod(1) & syears <= timeperiod(2);
     singapore10data = singapore10(s_dateindex,:);
     singapore30data = singapore30(s_dateindex,:);

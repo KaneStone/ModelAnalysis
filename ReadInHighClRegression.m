@@ -1,7 +1,7 @@
-function [highClData,WAClat] = ReadInHighClRegression(intpres,timeperiod,type)
+function [highClData,WAClat] = ReadInHighClRegression(intpres,timeperiod,type,variable)
 
 %% Read in highcl runs
-directory = ['/Volumes/MyBook/work/data/predruns/O3/',type,'/zonalmean/'];
+directory = ['/Volumes/MyBook/work/data/predruns/',variable,'/',type,'/zonalmean/'];
 files = dir([directory,'*.nc']);
 for i = 1:length(files)
     [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);    
@@ -10,14 +10,14 @@ for i = 1:length(files)
         highclyears = repmat(highclyears,[12,1]);
         highclyears = highclyears(:);        
     end
-    data(i).O3 = data(i).O3(:,:,highclyears >= timeperiod(1) & highclyears <= timeperiod(2));
+    data(i).(variable) = data(i).(variable)(:,:,highclyears >= timeperiod(1) & highclyears <= timeperiod(2));
     data(i).PS = data(i).PS(:,highclyears >= timeperiod(1) & highclyears <= timeperiod(2));
     
     pressure(i).p =  permute(repmat(data(i).hyam*100000,[1,size(data(i).PS)]),[2,1,3]) + ...
         permute(repmat(data(i).hybm,[1,size(data(i).PS)]),[2,1,3]) .* ...
         double(permute(repmat(data(i).PS,[1,1,length(data(i).lev)]),[1,3,2]));           
-    for j = 1:size(data(i).O3,1)
-        [highClData(i).O3(:,j,:),~] = intRegPres(squeeze(data(i).O3(j,:,:)),...
+    for j = 1:size(data(i).(variable),1)
+        [highClData(i).(variable)(:,j,:),~] = intRegPres(squeeze(data(i).(variable)(j,:,:)),...
             squeeze(pressure(i).p(j,:,:))./100,intpres);
     end
 end
@@ -34,8 +34,8 @@ for i = 1:length(filesU)
     if i == 1        
         [~,levind] = min(abs(levs-highclU(i).lev));
     end
-    highClData(i).U = highclU(i).U(levind,:);
-    highClData(i).U = highClData(i).U(:,highclyears >= timeperiod(1) & highclyears <= timeperiod(2));
+    highClData(i).Uregfun = highclU(i).U(levind,:);
+    highClData(i).Uregfun = highClData(i).Uregfun(:,highclyears >= timeperiod(1) & highclyears <= timeperiod(2));
     
 end
 
@@ -109,8 +109,8 @@ for i = 1:length(filesTS)+1
 end
 
 %% taking ensemble averages
-highClData(10).O3 = nanmean(cat(4,highClData(:).O3),4);
-highClData(10).U = nanmean(cat(3,highClData(:).U),3);
+highClData(10).(variable) = nanmean(cat(4,highClData(:).(variable)),4);
+highClData(10).Uregfun = nanmean(cat(3,highClData(:).Uregfun),3);
 highClData(10).HFsouth = nanmean(cat(3,highClData(:).HFsouth),3);
 highClData(10).HFnorth = nanmean(cat(3,highClData(:).HFnorth),3);
 

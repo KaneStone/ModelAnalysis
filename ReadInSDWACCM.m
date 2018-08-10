@@ -96,7 +96,8 @@ clearvars count
 
 %% Read in NO2 regression function
 
-load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression.mat');
+load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression2.mat');
+%abc = load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression2.mat');
 
 SDWaccmData(1).NO2 = squeeze(SDanomalllats(1,:,:,:));
 SDWaccmData(2).NO2 = squeeze(SDanomalllats(2,:,:,:));

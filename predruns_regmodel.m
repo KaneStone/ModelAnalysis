@@ -1,4 +1,4 @@
-function [] = predruns_regmodel(Eachyear,TSdataout,toz_dataMonthArrange,tozmonth,lons,lats,hem)
+function [] = predruns_regmodel(Eachyear,TSdataout,toz_dataMonthArrange,tozmonth,lons,lats,hem,inputtime)
 
 %for i = 1:size(Eachyear.lowindex,2)
 for j = 1:size(Eachyear.lowindex,3)         
@@ -46,27 +46,39 @@ for i = 1:9
     lowerind(i).u = find(squeeze(toz_dataMonthArrange.highcl(i,tozmonth,:)) <= pctlower(i));
     
     TSdifferences(i,:,:) = squeeze(nanmean(TSdataout.dataVarMonthAve.highcl(i,upperind(i).u,:,:),2) - nanmean(TSdataout.dataVarMonthAve.highcl(i,lowerind(i).u,:,:),2));
-   
+    for j = 1:size(TSdataout.dataVarMonthAve.highcl,3)
+        for k = 1:size(TSdataout.dataVarMonthAve.highcl,4)
+            pdiff(i,j,k) = ttest2(squeeze(TSdataout.dataVarMonthAve.highcl(i,lowerind(i).u,j,k)),squeeze(TSdataout.dataVarMonthAve.highcl(i,upperind(i).u,j,k)));
+        end
+    end
 end
+
+pdiff (pdiff == 0) = -1;
+pdiff (pdiff == 1) = 0;
+
 TSdifferences = permute(TSdifferences,[1,3,2]);
 %% plot TS differences
 plot_TSdiff = 0;
 if plot_TSdiff
     for i = 1:9
-        mtitle = {['No. ',num2str(i)]};   
+        mtitle = {['No. ',num2str(i),'{, }',num2str(inputtime(1)),'-',num2str(inputtime(2))]};   
 
         %mtitle = ['Esemble mean correlations of ',num2str(abs(lats2(1))),'-',num2str(abs(lats2(2))),hemext,' toz and ',var];
 
-        subplotmaps(TSdifferences(i,:,:),lons,lats,{'div','RdBu'},1,[],16,mtitle,'Longitude','latitude','Temperature difference (K)','on',...
-            [-4 4],22,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+        subplotmaps(TSdifferences(i,:,:),lons,lats,{'div','RdBu'},1,[],16,mtitle,'Longitude','Latitude','Temperature difference (K)','on',...
+            [-5 5],22,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
 
-        filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/','correlations/maps/',sprintf('%02d',i),'_difference_','NH'];
+        filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/',...
+            'correlations/maps/',sprintf('%02d',i),'_difference_','NH',num2str(inputtime(1)),'_',num2str(inputtime(2))];
 
         export_fig(filename,'-png');
     end
 end
 
-%% take regression
+%% take regression over inputtime (may not be the entire time series)
+
+% data has already been detrended and anomalized (ozone may not be
+% detrended, and may need to be)
 
 for l = 1:size(TSdataout.dataVarMonthAve.highcl,1)
     for i = 1:size(TSdataout.dataVarMonthAve.highcl,3)
@@ -81,7 +93,7 @@ for l = 1:size(TSdataout.dataVarMonthAve.highcl,1)
     end
 end
 
-%%
+%% taking rolling correlations for selection criteria (if used)
 rollwindow = 12;
 for i = 1:size(TSdataout.dataVarMonthAve.highcl,1)
     %for j = 1:size(TSdataout.dataVarMonthAve.highcl,3)
@@ -93,16 +105,31 @@ for i = 1:size(TSdataout.dataVarMonthAve.highcl,1)
             
     for j = 1:size(TSdataout.dataVarMonthAve.highcl,3)
         for k = 1:size(TSdataout.dataVarMonthAve.highcl,4)
-            rall(i,j,k) = corr(squeeze(TSdataout.dataVarMonthAve.highcl(i,:,j,k))',...
+            [rall(i,k,j),rallpval(i,k,j)] = corr(squeeze(TSdataout.dataVarMonthAve.highcl(i,:,j,k))',...
                 squeeze(toz_dataMonthArrange.highcl(i,tozmonth,:)));
-            
+            palltoplot = rallpval(i,:,:);
+            palltoplot (palltoplot <= .05) = 0;
+            palltoplot (palltoplot > .05) = -1;
         end
     end
             
-    %    end
-    %end
-    %test(:,:,i,:) = abs(correlations(i).r.*(1-correlations(i).p)./std(correlations(i).r,0,3));
-    %test(:,:,i,:) = abs(correlations(i).r./std(correlations(i).r,0,3));
+    %% correlation
+    plot_corr = 0;
+    if plot_corr
+
+        mtitle = {['No. ',num2str(i),'{, }',num2str(inputtime(1)),'-',num2str(inputtime(2))]};   
+
+        subplotmaps(rall(i,:,:),lons,lats,{'div','RdBu'},1,palltoplot,16,mtitle,'Longitude','Latitude','Correlation','on',...
+            [-1 1],22,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+
+        filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/',...
+            'correlations/maps/',sprintf('%02d',i),'_corr_','NH',num2str(inputtime(1)),'-',num2str(inputtime(2))];
+
+        export_fig(filename,'-png');
+    end
+
+    %% t
+
     if hem
         %test(:,:,i,:) = (abs(correlations(i).r) - 2.*std(correlations(i).r,0,3)).*nanmean(correlations(i).r(:,:,1:end-1),3);
         test(:,:,i,:) = (abs(correlations(i).r) - 2.*std(correlations(i).r,0,3));
@@ -112,10 +139,35 @@ for i = 1:size(TSdataout.dataVarMonthAve.highcl,1)
     end
     
 end
+
+%% plot std of rall correlations and temperature differences
+plotstd = 0;
+if plotstd
+    stdofcd(1,:,:) = squeeze(std(rall,0,1));
+    stdofcd2(1,:,:) = squeeze(std(TSdifferences,0,1));
+
+    subplotmaps(stdofcd(1,:,:),lons,lats,{'seq','YlOrBr'},1,[],16,{['Standard deviation of correlations, ',num2str(inputtime(1)),'-',num2str(inputtime(2))]},'Longitude','latitude','Correlation','on',...
+        [0 .5],22,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+
+    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/',...
+                'correlations/maps/',sprintf('%02d',i),'_stdcorr_','NH',num2str(inputtime(1)),'-',num2str(inputtime(2))];
+
+    export_fig(filename,'-png');
+
+    subplotmaps(stdofcd2(1,:,:),lons,lats,{'seq','YlOrBr'},1,[],16,{['Standard deviation of temperature differences, ',num2str(inputtime(1)),'-',num2str(inputtime(2))]},'Longitude','latitude','Correlation','on',...
+        [0 4],22,[-90:10:90],[-90:10:90],[lons(1:10:end)],[lons(1:10:end)],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+
+    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITwork/predruns/',...
+                'correlations/maps/',sprintf('%02d',i),'_stdtempdiff_','NH',num2str(inputtime(1)),'-',num2str(inputtime(2))];
+
+    export_fig(filename,'-png');
+
+end
+%%
 test2 = test(:,:,:,end);
 %test2 = test(:,:,:,end).*nanmean(test,4);
 test2 = permute(test2,[3,1,2]);
-%% plotting
+%% plotting rolling correlations
 plotroll = 0;
 if plotroll
     if hem == 1
@@ -134,10 +186,14 @@ if plotroll
     end
 end
 
-%% Finding areas that have high and low
-Areasforanom(1,:,:) = [0 180;50,80];
-Areasforanom(2,:,:) = [230 300;30 70];
-Areasforanom(3,:,:) = [30 130;15 30];
+%% Extracting point areas follow the criteria: 
+% of correlation above .5 and temperature differences above 4 over three
+% areas
+
+ Areasforanom(1,:,:) = [0 120;45,80]; % Russia
+Areasforanom(2,:,:) = [230 290;30 70]; % USA
+Areasforanom(3,:,:) = [30 120;15 45]; % Central Asia
+Areasforanom(4,:,:) = [300 330;55 80]; % Greenland
 tempfutureextract = [];
 tozfutureextract = [];
 pastmean = squeeze(nanmean(TSdataout.dataMonthArrangeMean.highcl(:,[3,4],:,:,:),2));
@@ -147,22 +203,24 @@ temptouse = TS9524.dataVarMonthAve.highcl + squeeze(nanmean(TS9524.dataMonthArra
 for i = 1:size(b,1)
     for j = 1:size(b,2)
         for k = 1:size(b,3)
-            tempfuture = squeeze(TS9524.dataVarMonthAve.highcl(i,end-cn:end,k,j));
-            %tempfuture = squeeze(temptouse(i,end-cn:end,k,j));
+            tempfuture = squeeze(TS9524.dataVarMonthAve.highcl(i,end-cn:end,k,j));            
             tozfuture = squeeze(toz_rest2(i,tozmonth,:));
-            futurepred = b(i,j,k,1)+b(i,j,k,2)*tozfuture;
-            %if abs(rall(i,k,j)) >= .55 && abs(TSdifferences(i,j,k)) >= 5
-            if abs(test2(i,j,k)) >= .4 && abs(TSdifferences(i,j,k)) >= 5
-                ind = [find(tozfuture >= pctupper(i));find(tozfuture <= pctlower(i))];                
-                tozfutureextract = [tozfutureextract;futurepred(ind)];
-                tempfutureextract = [tempfutureextract,tempfuture(ind)];
-%                 figure;
-%                 plot(futurepred);
-%                 hold on 
-%                 plot(tempfuture)
-            end
+            futurepred = b(i,j,k,1)+b(i,j,k,2)*tozfuture;            
         end
     end
+    %tozfutureextract = [tozfutureextract;futurepred(ind)];
+    %tempfutureextract = [tempfutureextract,tempfuture(ind)];
+    
+    % find best fit of criteria within ach area.    
+    for l = size(Areasforanom,1)
+        latind = lats >= Areasforanom(l,2,1) & lats <= Areasforanom(l,2,2);
+        lonind = lons >= Areasforanom(l,1,1) & lons <= Areasforanom(l,1,2);
+        if abs(b(i,lonind,latind)) >= .5 && abs(TSdifferences(i,lonind,latind)) >= 4
+            ind = [find(tozfuture >= pctupper(i));find(tozfuture <= pctlower(i))];                
+            test = b(i,lonind,latind,2).*TSdifferences(i,lonind,latind);
+            
+        end                 
+    end     
 end
 tempfutureextract = tempfutureextract';
 figure;

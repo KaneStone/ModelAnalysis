@@ -1,5 +1,5 @@
 function [b,predictorsout,O3Anomaly,uncertainty] = ozoneRegressionTrends(data,QBOdata,solardata,SPEdata,...
-    ENSOdata,HFSdata,HFNdata,NO2data,aerosols,years,chemonly,linear,ARmodel)
+    ENSOdata,HFSdata,HFNdata,NO2data,aerosols,years,chemonly,linear,ARmodel,var)
 
 % take regression of ozone anomalies using supplied predictors. 
 % QBO data is broken down into 6 proxies
@@ -230,8 +230,13 @@ monthvector = vectorofones(1:12:end);
 % percent anomalies
 for i = 1:12
     O3Anomaly.percent(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,i:12:end),3))./nanmean(data(:,:,i:12:end),3)*100;
-    O3Anomaly.ppmv(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,i:12:end),3))*1e6;
-    O3Anomaly.ppmv2(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,:),3))*1e6;
+    if strcmp(var,'O3')
+        O3Anomaly.ppmv(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,i:12:end),3))*1e6;
+        O3Anomaly.ppmv2(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,:),3))*1e6;
+    else
+        O3Anomaly.ppmv(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,i:12:end),3));
+        O3Anomaly.ppmv2(:,:,i,:) = (data(:,:,i:12:end) - nanmean(data(:,:,:),3));
+    end
 end
 O3Anomaly.percent = permute(O3Anomaly.percent(:,:,:),[3,1,2]);
 O3Anomaly.ppmv2 = permute(O3Anomaly.ppmv2(:,:,:),[3,1,2]);
@@ -260,12 +265,11 @@ for i = 1:size(O3Anomaly.ppmv,2) % pressure
             %predictorstouse = [vectorofones,linearvector,QBO,ENSO,HFtouse,aer,solar];                                            
             predictorstouse = [vectorofones,linearvector,QBO,solar,aer,ENSO,HFtouse];                                            
         end
-        predind = 1:size(predictorstouse,2);       
-        
+        predind = 1:size(predictorstouse,2);               
         % regression using fourier pair method
         [b.percent(i,j,predind),~,O3Anomaly.percent_residuals(:,i,j),~,~] = regress(O3Anomaly.percent(:,i,j),predictorstouse);        
         [b.ppmv(i,j,predind),~,O3Anomaly.ppmv_residuals(:,i,j)] = regress(O3Anomaly.ppmv(:,i,j),predictorstouse);      
-        %p.percent(i,j,predind) = stats(3,:);
+        %p.percent(i,j,predind) = stats(3,:);        
         uncertainty.u(i,j) = nanstd(O3Anomaly.percent_residuals(:,i,j),0)./((length(O3Anomaly.percent_residuals(:,i,j))./120).^(3/2));        
         AC2(i,j,:,:) = corrcoef(O3Anomaly.percent_residuals(1:end-1,i,j),O3Anomaly.percent_residuals(2:end,i,j),'rows','pairwise');
         AC1(i,j) = AC2(i,j,1,2);
@@ -273,7 +277,7 @@ for i = 1:size(O3Anomaly.ppmv,2) % pressure
          if i == 27 && j == 27
              a = 1;
          end
-        if uncertainty.u(i,j)*2*sqrt((1+AC1(i,j))./(1-AC1(i,j))) >= abs(b.percent(i,j,2))*120
+        if uncertainty.u(i,j)*2*sqrt((1+AC1(i,j))./(1-AC1(i,j))) >= abs(b.percent(i,j,2))*120 || isnan(uncertainty.u(i,j))
             uncertainty.sig(i,j) = -1;
         else
             uncertainty.sig(i,j) = 0;
@@ -352,7 +356,7 @@ for i = 1:size(O3Anomaly.ppmv,2) % pressure
 end
 
 % create continuous time series
-
+b.percent (b.percent == 0) = NaN;
 O3Anomaly.regmodel_months = permute(O3Anomaly.regmodel_months(:,:,:),[3,1,2]);
 O3Anomaly.percent_regmodel_months = permute(O3Anomaly.percent_regmodel_months(:,:,:),[3,1,2]);
 O3Anomaly.ppmv_residuals_months = permute(O3Anomaly.ppmv_residuals_months(:,:,:),[3,1,2]);

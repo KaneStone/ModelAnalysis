@@ -16,8 +16,8 @@ SWOOSHextract = permute(SWOOSH.(sfields{1})(:,:,SWOOSHyears >= Stimeperiod(1) & 
 
 %% import highCl
 highCllevel = [SWOOSH.level;[.9,.8,.7,.6,.5,.4,.3,.2,.1]'];
-highClTimperiod = [1995 2016];
-[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl');
+highClTimperiod = [1995 2024];
+[highClData,WAClat] = ReadInHighClRegression(highCllevel,highClTimperiod,'highCl','O3');
 
 %% WACCM pressure levels
 
@@ -45,10 +45,23 @@ highClTimperiod = [1995 2016];
 %     end
 %     
 % end
+
+%% testing something
+
+plot(squeeze(SWOOSHextract(4,40,:)))
+
+testdata = squeeze(SWOOSHextract(4,40,:));
+testdatamean1 = testdata(1:115) - nanmean(testdata(1:115));
+testdatamean2 = testdata(116:end) - nanmean(testdata(116:end));
+testdatamean3 = [testdatamean1;testdatamean2];
+testdatamean4 = testdata - nanmean(testdata);
+
 %%
 lats = [-30 30];
-lev = [25,150];
+%lats = [-80 -50]; %
+lev = [25 100];%lev = [1,3]; % 
 latind = WAClat >= lats(1) & WAClat <= lats(2);
+latindSWOOSH = SWOOSH.lat >= lats(1) & SWOOSH.lat <= lats(2);
 %[~,levind] = min(abs(highCllevel - lev));
 levind = highCllevel >= lev(1) & highCllevel <= lev(2);
 %slevind = highCllevel >= lev(1) & highCllevel <= lev(2);
@@ -81,15 +94,15 @@ highclO3_anom_ts (highclO3_anom_ts <= -30) = NaN;
 %% SWOOSH
 clearvars SWOOSHwa SWOOSHwa_Vertave SWOOSHwa_vert
 
-saltind = SWOOSH.lat >= lats(1) & SWOOSH.lat <= lats(2);
+slatind = SWOOSH.lat >= lats(1) & SWOOSH.lat <= lats(2);
 
 for j = 1:sum(levind)    
-    SWOOSHwa(j,:) = weightedaverage(squeeze(SWOOSHextract(levind2(j),latind,:)),SWOOSH.lat(latind));
+    SWOOSHwa(j,:) = weightedaverage(squeeze(SWOOSHextract(levind2(j),slatind,:)),SWOOSH.lat(slatind));
 end
 SWOOSHwa_Vertave = squeeze(nanmean(SWOOSHwa,1));
 
 for i = 1:size(SWOOSHextract,1)
-    SWOOSHwa_vert(i,:) = weightedaverage(squeeze(SWOOSHextract(i,latind,:)),SWOOSH.lat(latind));
+    SWOOSHwa_vert(i,:) = weightedaverage(squeeze(SWOOSHextract(i,slatind,:)),SWOOSH.lat(slatind));
 end
 
 for i = 1:12
@@ -136,20 +149,21 @@ end
 %%
 cbrew = cbrewer('qual','Set1',10);
 
-createfig('medium','on')
+fig = figure;
+set(fig,'color','white','position',[100 100 1000 500]);
 pe = plot(highclO3_anom_ts(:,:)','color',[.7 .7 .7],'LineWidth',2);
 hold on
 
 ps = plot(SWOOSH_anom_ts','k','LineWidth',3);
 
-xlim([-11 276]);
-ylim([-11 11]);
+xlim([-11 370]);
+%ylim([-11 11]);
 
-set(gca,'fontsize',18,'xtick',1:36:300,'xticklabel',1995:3:2020);
+set(gca,'fontsize',18,'xtick',1:36:400,'xticklabel',1995:3:2025);
 xlabel('Year','fontsize',20);
 ylabel('Ozone mixing ratio anomaly (%)','fontsize',20);
-title(['Time series averaged between ',num2str(abs(lats(1))),'S and ',num2str(abs(lats(2))),...
-    'N, and ',num2str(lev(2)),' and ', num2str(lev(1)) ,' hPa'],'fontsize',22);
+title(['Time series averaged between ',num2str(abs(lats(1))),'{\circ}S and ',num2str(abs(lats(2))),...
+    '{\circ}N, and ',num2str(lev(2)),' and ', num2str(lev(1)) ,' hPa'],'fontsize',22);
 
 lh = legend([pe(1),ps],'Ensemble members','SWOOSH');
 set(lh,'box','off','fontsize',20);

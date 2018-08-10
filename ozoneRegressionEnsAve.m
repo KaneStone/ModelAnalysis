@@ -15,10 +15,10 @@ for i = 1:size(data,2) % pressure
         AC2(i,j,:,:) = corrcoef(ball_residuals(1:end-1,i,j),ball_residuals(2:end,i,j),'rows','pairwise');
         AC1(i,j) = AC2(i,j,1,2);                
         %AC1(i,j) = corr(ball_residuals(1:end-1,i,j),ball_residuals(2:end,i,j));        
-        twosigma(i,j) =  nanstd(ball_residuals(:,i,j),1)*2;%*sqrt((1+AC1(i,j))./(1-AC1(i,j)));
+        twosigma(i,j) =  nanstd(ball_residuals(:,i,j),1)*2;%*sqrt((1+AC1(i,j))./(1-AC1(i,j)));        
         uncertainty.u(i,j) = nanstd(ball_residuals(:,i,j),1)./((length(ball_residuals(:,i,j))./120).^(3/2));
         
-        if uncertainty.u(i,j)*2*sqrt((1+AC1(i,j))./(1-AC1(i,j))) >= abs(ball(i,j,2))*120
+        if uncertainty.u(i,j)*2*sqrt((1+AC1(i,j))./(1-AC1(i,j))) >= abs(ball(i,j,2))*120 || isnan(uncertainty.u(i,j))
             uncertainty.sig(i,j) = -1;
         else
             uncertainty.sig(i,j) = 0;
