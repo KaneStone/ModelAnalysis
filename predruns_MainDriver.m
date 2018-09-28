@@ -8,7 +8,7 @@ clc
 inputs = predruns_inputs;
 
 %%
-[surfacedata,tozdata] = predruns_ReadinModel(inputs);
+[surfacedata,tozdata] = predruns_ReadinModel(inputs,0);
 
 % obtaining number and names of fields 
 fields = fieldnames(surfacedata);

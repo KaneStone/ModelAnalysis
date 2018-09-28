@@ -1,4 +1,4 @@
-function [surfacedata,tozdata] = predruns_ReadinModel(inputs)
+function [surfacedata,tozdata] = predruns_ReadinModel(inputs,seaice)
 
 % Reads in the model surface variable and total ozone
 
@@ -7,6 +7,9 @@ for i = 1:length(inputs.ClLevel)
     %% Read in surface temperature or other similar variable
     vardirectory = ['/Volumes/MyBook/work/data/predruns/',inputs.var,'/',inputs.ClLevel{i},'/'];
     varfiles = dir([vardirectory,'*.nc']);
+    if seaice
+        varfiles(1) = []
+    end
 
     [surfacedata.(inputs.ClLevel{i}).data,surfacedata.(inputs.ClLevel{i}).years,surfacedata.(inputs.ClLevel{i}).composite,...
         surfacedata.(inputs.ClLevel{i}).dataMonthArrange,surfacedata.(inputs.ClLevel{i}).dataMonthArrangeMean]...

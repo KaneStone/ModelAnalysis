@@ -2,7 +2,7 @@ function [inputs] = predruns_inputs
 
 % general
 inputs.tozvar = 'toz';
-inputs.var = 'TS';
+inputs.var = 'SNOWHICE'; %TS
 inputs.detrend = 0;
 inputs.detrend_ozone = 0;
 inputs.lats = [63,90];
@@ -12,7 +12,7 @@ inputs.timeperiodvar = [1995,2024];
 inputs.percentile = 20;
 inputs.tozmonth = 3;
 inputs.varmonth = [3,4,5,6,7];
-inputs.varmonthtomean = [4];
+inputs.varmonthtomean = [3];
 inputs.removeENSO = 0;
 inputs.lastfiveyears = 1;
 %compare to obs
