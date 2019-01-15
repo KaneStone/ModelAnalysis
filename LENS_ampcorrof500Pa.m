@@ -1,6 +1,6 @@
 clear all
 
-directory = '/Volumes/MyBook/work/data/LENS/500hPa/highcl/';
+directory = '/Volumes/ExternalOne/work/data/LENS/500hPa/highcl/';
 files = dir([directory,'*.nc']);
 
 %%

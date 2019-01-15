@@ -1,8 +1,8 @@
 % plot high correlation areas and take predictions
 clear all
 remove_ENSO = 0;
-SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
-NHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_75-90S_Tperiod-MarApr_rmENSO.mat');
+SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
+NHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_75-90S_Tperiod-MarApr_rmENSO.mat');
 
 %% Finding maxmimum and minimum correlation spots
 % highcl case only
@@ -41,7 +41,7 @@ lonsofmax2 (lonsofmax2 > 180) = (lonsofmax2 (lonsofmax2 > 180)) - 360;
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2016];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
@@ -52,7 +52,7 @@ varfiles = dir([vardirectory,'*.nc']);
 
 ClLevel = 'highCl';
 tozdates = [1995,2015];
-directory = ['/Volumes/MyBook/work/data/predruns/','TOZ','/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/','TOZ','/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,'toz',tozdates,[-95,-75],0);
@@ -61,7 +61,7 @@ tozfiles = dir([directory,'*.nc']);
 ClLevel = 'highCl';
 timeperiodhigh = [2016,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data_forpred.highcl,years_forpred.highcl,composite_forpred.highcl,dataMonthArrange_forpred.highcl]...
@@ -75,7 +75,7 @@ temp_forpred = nanmean(cat(5,squeeze(dataMonthArrange_forpred.highcl(:,12,1:end-
 
 ClLevel = 'highCl';
 tozdates = [2016,2023];
-directory = ['/Volumes/MyBook/work/data/predruns/','TOZ','/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/','TOZ','/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data_forpred.highcl,toz_years_forpred.highcl,toz_varweighted_forpred.highcl,toz_composite_forpred.highcl,toz_dataMonthArrange_forpred.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,'toz',tozdates,[-95,-75],1);
@@ -321,7 +321,7 @@ end
 
 %% testing
 % %% histogram
-% load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins');
+% load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins');
 % toplot = polar_correlations(:,61:end);
 % % createfig('medium','on')
 % % h = histogram(sort(toplot(:)),50,'Normalization','Probability');

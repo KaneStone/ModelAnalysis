@@ -1,7 +1,7 @@
 % looking at NOX
 clear all
 [~,data,~] = Read_in_netcdf('/Users/kanestone/work/projects/WACCM/netcdffiles/NOX/NOX_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.fsst.nl.004f.cam.h0zm_merged_c160407.nc');
-[~,SPE,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
+[~,SPE,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
 [~,temp,~] = Read_in_netcdf('/Users/kanestone/work/projects/WACCM/netcdffiles/reactionrates/OddOx_lossrates_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.fsst.nl.004f.cam.h0zm_merged_c160407.nc');
 HOx = temp.OddOx_HOx_Loss;
 SPEde = SPE.Prod(:,SPE.date >= 20000101 & SPE.date <= 20141201);
@@ -28,7 +28,7 @@ runs = {runs{2},runs{6}};
 
 NO2chemonly = MolConc.(runs{2});
 
-load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression.mat');
+load('/Volumes/ExternalOne/work/data/regressionOutput/NO2forregression.mat');
 
 NO2anom = squeeze(SDanomalllats_nointerp(2,:,:,:));
 NO2anom = permute(NO2anom,[2,1,3]);

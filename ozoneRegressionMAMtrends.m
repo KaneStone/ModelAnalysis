@@ -16,8 +16,8 @@ highCllevel = [SWOOSH.level;[.9,.8,.7,.6,.5,.4,.3,.2,.1]'];
 
 %% Read in WACCM
 
-[~,MAM.O3,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/O3/otherMAM/O3_species_f.e11.FWTREFC1SD.f19.f19.ccmi34.79-15.nohetice.mfp.mam.004fg.cam.h0zm.nc');
-[~,MAM.T,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/O3/otherMAM/T_species_f.e11.FWTREFC1SD.f19.f19.ccmi34.79-15.nohetice.mfp.mam.004fg.cam.h0zm.nc');
+[~,MAM.O3,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/O3/otherMAM/O3_species_f.e11.FWTREFC1SD.f19.f19.ccmi34.79-15.nohetice.mfp.mam.004fg.cam.h0zm.nc');
+[~,MAM.T,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/O3/otherMAM/T_species_f.e11.FWTREFC1SD.f19.f19.ccmi34.79-15.nohetice.mfp.mam.004fg.cam.h0zm.nc');
 MAM.timeperiod.years = 1979:2014;
 timeperiodmonths_temp = repmat(1979:2014,12,1);
 MAM.timeperiod.months = timeperiodmonths_temp(:);

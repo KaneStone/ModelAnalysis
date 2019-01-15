@@ -5,14 +5,14 @@ compareyears = [2000,2015];
 highclcompareyears = [1998,2024];
 
 %% import SWOOSH
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
 % SWOOSHlatindex = find(SWOOSH.lat > lats(1) & SWOOSH.lat < lats(2));
 % SWOOSH.combinedo3q = SWOOSH.combinedo3q(:,:,1:end-11);
 % SWOOSHyears = 1984:2015;
 % SWOOSHtimeindex = find(SWOOSHyears >= compareyears(1) & SWOOSHyears <= compareyears(2));
 
 %% Read in highcl runs
-directory = '/Volumes/MyBook/work/data/predruns/O3/highCl/zonalmean/';
+directory = '/Volumes/ExternalOne/work/data/predruns/O3/highCl/zonalmean/';
 files = dir([directory,'*.nc']);
 for k = 1:size(lats,2)
     

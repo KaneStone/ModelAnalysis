@@ -1,7 +1,7 @@
 function [years,PSdata,datefiles,PSfiles] = ReadinCESMDateandPS(date,PS)
 
-datedirectory = '/Volumes/MyBook/work/data/CESM-CCMI/date/';
-PSdirectory = '/Volumes/MyBook/work/data/CESM-CCMI/PS/';
+datedirectory = '/Volumes/ExternalOne/work/data/CESM-CCMI/date/';
+PSdirectory = '/Volumes/ExternalOne/work/data/CESM-CCMI/PS/';
 if date
     datefiles = dir([datedirectory,'*.nc*']);
     for i = 1:length(datefiles);    

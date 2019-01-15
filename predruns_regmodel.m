@@ -20,7 +20,7 @@ else
     cn = 6;
 end
 %tozdates = [1955,1974];%[1955,1975]
-directory = ['/Volumes/MyBook/work/data/predruns/','toz','/','highCl','/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/','toz','/','highCl','/'];
 tozfiles = dir([directory,'*.nc']);
 
 if hem
@@ -33,9 +33,9 @@ end
 
 %% load in the entire time series
 if hem
-    TS9524 = load('/Volumes/MyBook/work/data/predruns/output/data/TS_ninoremoved_1995-202463-90.mat');
+    TS9524 = load('/Volumes/ExternalOne/work/data/predruns/output/data/TS_ninoremoved_1995-202463-90.mat');
 else
-    TS9524 = load('/Volumes/MyBook/work/data/predruns/output/data/TS_ninoremoved_1995-202490-63.mat');
+    TS9524 = load('/Volumes/ExternalOne/work/data/predruns/output/data/TS_ninoremoved_1995-202490-63.mat');
 end
 
 %% find upper and lower percentiles in ozone

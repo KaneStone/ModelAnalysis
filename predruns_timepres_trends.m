@@ -6,7 +6,7 @@ var = 'O3';
 area = '7590S';
 ClLevel = 'lowCl';
 trenddates = [1955,1970];
-directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 files = dir([directory,'*.nc']);
 
 DepletionEraDifference = 1;

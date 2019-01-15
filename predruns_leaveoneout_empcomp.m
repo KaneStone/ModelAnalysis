@@ -22,7 +22,7 @@ function [] = predruns_leaveoneout_empcomp(surfacedata,surfacedataind,tozdata,in
 surfacedata_composite = permute(surfacedata,[3,4,2,1]);
 surfacedata_composite = surfacedata_composite(:,:,:); 
 
-for i = 1:9
+for i = 1:size(tozdata,1)
     precondtoz(:,i) = squeeze(tozdata(i,inputs.tozmonth,:));%-nanmean(squeeze(tozdata(i,inputs.tozmonth,:)));    
 end
 
@@ -133,12 +133,12 @@ end
 % correct_months = zeros(9,28,96,5,144);
 
 
-pred = zeros(9,30,96,144);
-pred_months = zeros(9,30,96,5,144);
-pred2 = zeros(9,30,96,144);
-correct = zeros(9,30,96,144);
-correct2 = zeros(9,30,96,144);
-correct_months = zeros(9,30,96,5,144);
+pred = zeros(size(surfacedata,1),size(surfacedata,2),96,144); %THIS NEEDS TO BE CHANGED TO SIZE OF DATASET
+pred_months = zeros(size(surfacedata,1),size(surfacedata,2),96,5,144);
+pred2 = zeros(size(surfacedata,1),size(surfacedata,2),96,144);
+correct = zeros(size(surfacedata,1),size(surfacedata,2),96,144);
+correct2 = zeros(size(surfacedata,1),size(surfacedata,2),96,144);
+correct_months = zeros(size(surfacedata,1),size(surfacedata,2),96,5,144);
 
 for k = 1:size(surfacedata,1)
     tic;
@@ -240,27 +240,27 @@ for k = 1:size(surfacedata,1)
                 temp_anomaly = squeeze(surfacedata(k,leaveout,j,:)) - leaveout'.*b(1,:);% - b(2,:); %looks good
                 temp_left = squeeze(surfacedata(k,count,j,:))' - count.*b(1,:);% - b(2,:); %looks good      
             end
-            if j == 69 %lonind = 30
-                abc = 1;
-            end
+%             if j == 69 %lonind = 30
+%                 abc = 1;
+%             end
             temp_left = squeeze(temp_left) - squeeze(nanmedian(temp_anomaly));
             temp_anomaly = squeeze(temp_anomaly) - squeeze(nanmedian(temp_anomaly));
 
             temp_anomaly_upper = squeeze(nanmean(temp_anomaly(ozoneupperind(k,i).m,:)));
             temp_anomaly_lower = squeeze(nanmean(temp_anomaly(ozonelowerind(k,i).m,:)));            
                         
-            if j == 84 && i > 1 && i < 30
-                templow(k,i,:) = temp_anomaly(ozoneupperind(k,i).m,29);
-                temphigh(k,i,:) = temp_anomaly(ozonelowerind(k,i).m,29);
-            end
+%             if j == 84 && i > 1 && i < 30
+%                 templow(k,i,:) = temp_anomaly(ozoneupperind(k,i).m,29);
+%                 temphigh(k,i,:) = temp_anomaly(ozonelowerind(k,i).m,29);
+%             end
             
             signchange = sign(temp_anomaly_upper-temp_anomaly_lower);
             
             datasign(k,i,j,:) = sign(temp_left);
                   
-            if j == 88 && i == 30
-                abc = 1;
-            end
+%             if j == 88 && i == 30
+%                 abc = 1;
+%             end
             
             for l = 1:length(squeeze(datasign(k,i,j,:)))
 %                 if signlower(k,i,j,l) < 0 
@@ -400,7 +400,7 @@ end
 %% emp
 
 % extracting pct
-for i = 1:9
+for i = 1:size(tozdata,1)
 %     correctpct(i,:,:,:) = correct(i,[pct.highCl.ind.highind(i,:),pct.highCl.ind.lowind(i,:)],:,:);   
 %     correct_months_pct(i,:,:,:,:) = correct_months(i,[pct.highCl.ind.highind(i,:),pct.highCl.ind.lowind(i,:)],:,:,:);
 %         
@@ -449,7 +449,7 @@ adm = permute(datasign_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','file')
+if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat'],'file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -478,11 +478,14 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','f
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
-else
-    allsig = load('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat');
-end
+    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
+%     allsig.percentiles  = percentiles;
+%     allsig.percentiles  = percentilesm;
+%     allsig.percentiles  = bootstat;
+%     allsig.percentiles  = bootstatm;
 
+end
+allsig = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat']);
 p = zeros(size(GSS.all.mean));
 p (GSS.all.mean < reshape(allsig.percentiles.ninetyfive,[1,size(allsig.percentiles.ninetyfive)])) = -1;
 
@@ -501,7 +504,7 @@ adm = permute(datasignpct_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','file')
+if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat'],'file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -530,11 +533,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','f
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
-else
-    allsigpct = load('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat');
+    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
 end
-
+allsigpct = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat']);
 p2 = zeros(size(GSS.all.mean));
 p2 (GSS.pct.mean < reshape(allsigpct.percentiles.ninetyfive,[1,size(allsigpct.percentiles.ninetyfive)])) = -1;
 
@@ -564,7 +565,7 @@ annotation('textbox',[sppos(1),sppos(2)+.01,sppos(3:4)],'String','d','FitBoxToTe
 
 
 set(gcf,'Renderer','Painters');
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/predictions/maps/CompEmp_Ensmean_GSSothercolor_nodetrend_upto80_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'.eps'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/predictions/maps/CompEmp_Ensmean_GSSothercolor_nodetrend_upto80_',inputs.ClLevel{1},'_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'.eps'];
 print(filename,'-depsc');            
     
 %% plot skill lines    
@@ -1000,7 +1001,7 @@ end
 annotation('textbox',[.01 .995 .925 0],'String','March TCO - surface temperature ensemble composite HSSs','FitBoxToText','on','VerticalAlignment','top','HorizontalAlignment','center','fontsize',fsize+6,... % 
         'EdgeColor','none','fontweight','bold');    
 
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/CompEmp_Ind_',corrtoplotext,'_','mean_Locations_withpct_test','_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),monthnames(mon+2,0,0),'both'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/CompEmp_Ind_',inputs.ClLevel{1},'_',corrtoplotext,'_','mean_Locations_withpct_test','_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),monthnames(mon+2,0,0),'both'];
 print(filename,'-depsc');
 end
 end

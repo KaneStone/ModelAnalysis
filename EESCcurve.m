@@ -12,7 +12,7 @@ plot_EESC = 0;
 %cbrew = cbrewer('qual','Set1',10);
 
 %% read in WMO 2011 file
-filedir = '/Volumes/MyBook/work/data/rcp6.0_table_wmo2011';
+filedir = '/Volumes/ExternalOne/work/data/rcp6.0_table_wmo2011';
 fid = fopen(filedir); 
 while ~en
     line = fgetl(fid);

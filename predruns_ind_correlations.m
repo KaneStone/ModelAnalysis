@@ -4,8 +4,8 @@ ClLevel = 'highCl';
 tozvar = 'toz';
 var = 'TS';
 
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 files = dir([directory,'*.nc']);
 varfiles = dir([vardirectory,'*.nc']);
 lats = [63,90];
@@ -45,7 +45,7 @@ tozmonth = 3;
 %     
 % %     timeperiodhigh = [1995,2016];%[1955,1975]
 % 
-% %     vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+% %     vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 % %     varfiles = dir([vardirectory,'*.nc']);
 % % 
 % %     [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
@@ -91,7 +91,7 @@ noyears = timeperiodhighformodel(2) - timeperiodhighformodel(1)+1;
 timeperiodrest = (timeperiodhighformodel(2)+1):timeperiodhigh(2);
 noyears2 = timeperiodhigh(2) - timeperiodhighformodel(2);
 ifdetrend = 1;
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data2.highcl,years2.highcl,composite.highcl,dataMonthArrange.highcl]...
@@ -107,7 +107,7 @@ monthcombinetopredict.(var) = squeeze(nanmean(dataMonthArrange.highcl(:,varmonth
 %% Read in TOZ highcl and take percentiles
 ClLevel = 'highCl';
 tozdates = [1995,2024];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 detrend_ozone = 1;
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...

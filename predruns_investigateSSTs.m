@@ -7,7 +7,7 @@ inputs.timeperiodvar = [1995,2024];
 inputs.detrend = 0;
 inputs.varmonth = 3;
 % Read in surface temperature or other similar variable
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',inputs.var,'/',inputs.ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',inputs.var,'/',inputs.ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [surfacedata.(inputs.ClLevel).ice.data,surfacedata.(inputs.ClLevel).years,surfacedata.(inputs.ClLevel).ice.composite,...
@@ -16,7 +16,7 @@ varfiles = dir([vardirectory,'*.nc']);
 
 inputs.var = 'TS';
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',inputs.var,'/',inputs.ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',inputs.var,'/',inputs.ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [surfacedata.(inputs.ClLevel).TS.data,surfacedata.(inputs.ClLevel).years,surfacedata.(inputs.ClLevel).TS.composite,...

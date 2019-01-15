@@ -14,14 +14,14 @@ tic;
 %% Read in TOZ highcl
 ClLevel = 'highCl';
 tozdates = [1995,2024];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
 
 %% Read in TOZ lowGHG
 ClLevel = 'lowGHG';
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilesGHG = dir([directory,'*.nc']);
 [toz_data.lowGHG,toz_years.lowGHG,toz_varweighted.lowGHG,toz_composite.lowGHG,toz_dataMonthArrange.lowGHG] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilesGHG,tozvar,tozdates,lats,detrend_ozone);
@@ -32,7 +32,7 @@ longitudes = toz_data.lowGHG.lon;
 %% Read in TOZ lowcl
 ClLevel = 'lowCl';
 tozpastdates = [1955,1979];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
 [toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilespast,tozvar,tozpastdates,lats,detrend_ozone);
@@ -45,7 +45,7 @@ var = 'T';
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilespast = dir([vardirectory,'*.nc']);
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
     = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodhigh,lats,1);
@@ -55,7 +55,7 @@ var = 'T';
 ClLevel = 'lowGHG';
 timeperiodhigh = [1995,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilesGHG = dir([vardirectory,'*.nc']);
 [data.lowGHG,years.lowGHG,composite.lowGHG,dataMonthArrange.lowGHG]...
     = predruns_ReadInlayer(vardirectory,varfilesGHG,var,timeperiodhigh,lats,1);
@@ -65,7 +65,7 @@ var = 'T';
 ClLevel = 'lowCl';
 timeperiodhigh = [1955,1979];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilespast = dir([vardirectory,'*.nc']);
 [data.lowcl,years.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
     = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodhigh,lats,1);
@@ -74,9 +74,9 @@ fieldnames = fields(data);
 
 %% Read in zonal average 4060S data
 
-wa4060S.highcl = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/highCl_standard_4060Swa.mat');
-wa4060S.lowcl = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/lowCl_standard_4060Swa.mat');
-wa4060S.lowGHG = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/lowGHG_standard_4060Swa.mat');
+wa4060S.highcl = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/highCl_standard_4060Swa.mat');
+wa4060S.lowcl = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/lowCl_standard_4060Swa.mat');
+wa4060S.lowGHG = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/lowGHG_standard_4060Swa.mat');
 regpres = wa4060S.lowcl.regpres;
 
 %% create composite for correlations
@@ -180,7 +180,7 @@ end
 end
 
 %% save output so I can compare to others
-textfilename = '/Volumes/MyBook/work/data/matlabOutput/zonalAnalysis/WACCM_predruns.mat';
+textfilename = '/Volumes/ExternalOne/work/data/matlabOutput/zonalAnalysis/WACCM_predruns.mat';
 save(textfilename,'minvalue','maxvalue','minlong','maxlong','minlong_std','maxlong_std',...
     'minlong_mean','maxlong_mean','minvalue2','maxvalue2','minlong_mean2','maxlong_mean2',...
     'var_minvalue','var_maxvalue','var_minlong','var_maxlong','var_minlong_std','var_maxlong_std',...

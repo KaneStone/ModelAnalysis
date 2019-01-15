@@ -3,7 +3,7 @@
 % Read in Can2ESM Temperature data
 clear all
 preslev = '50hPa';
-directory = ['/Volumes/MyBook/work/data/CanESM2/',preslev,'/3090S/'];
+directory = ['/Volumes/ExternalOne/work/data/CanESM2/',preslev,'/3090S/'];
 files = dir([directory,'*.nc']);
 read_in = 1;
 plot_ens = 0;

@@ -4,7 +4,7 @@
 % Read in Can2ESM Temperature data
 clear all
 preslev = '50hPa';
-directory = ['/Volumes/MyBook/work/data/CESM-CCMI/T/',preslev,'/'];
+directory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/T/',preslev,'/'];
 files = dir([directory,'*.nc']);
 read_in = 1;
 plot_ens = 0;

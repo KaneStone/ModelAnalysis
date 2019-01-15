@@ -1,7 +1,7 @@
 % plot NION34
 
-ERA = load('/Volumes/MyBook/work/data/predruns/output/NINO34/ERA-Interim_1980_2016');
-HighCL = load('/Volumes/MyBook/work/data/predruns/output/NINO34/highcl_1995_2014');
+ERA = load('/Volumes/ExternalOne/work/data/predruns/output/NINO34/ERA-Interim_1980_2016');
+HighCL = load('/Volumes/ExternalOne/work/data/predruns/output/NINO34/highcl_1995_2014');
 
 %%
 comparelines = 0;
@@ -28,7 +28,7 @@ tcolat = [-90,-75];
 timeperiodbs = [1980,2016];
 tcolon = 26;
 tcolat_QBO = [-30,-10];
-[~,BSdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
+[~,BSdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
 
 BSyears = 1980:2016;
 BSyear_vector = repmat(BSyears,12,1);
@@ -52,7 +52,7 @@ lats = [-90,-75];
 
 ClLevel = 'highCl';
 tozdates = [1995,2016];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);

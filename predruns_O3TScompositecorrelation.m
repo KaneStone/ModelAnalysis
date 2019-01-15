@@ -2,8 +2,8 @@ clear all
 ClLevel = 'highCl';
 tozvar = 'TOZ';
 var = 'TS';
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
-TSdirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+TSdirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 files = dir([directory,'*.nc']);
 TSfiles = dir([TSdirectory,'*.nc']);
 lat = -30;

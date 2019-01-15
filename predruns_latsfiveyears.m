@@ -343,7 +343,7 @@ end
 
 %% read in observations
 
-obstoplot = load('/Volumes/MyBook/work/data/predruns/output/obsFigure3/obsFig3.mat');
+obstoplot = load('/Volumes/ExternalOne/work/data/predruns/output/obsFigure3/obsFig3.mat');
 
 %%
 toplotind = 1;

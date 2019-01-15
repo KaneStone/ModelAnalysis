@@ -13,7 +13,7 @@ var = 'T';
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilespast = dir([vardirectory,'*.nc']);
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
     = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodhigh,lats,1);
@@ -23,7 +23,7 @@ var = 'T';
 ClLevel = 'lowGHG';
 timeperiodhigh = [1995,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilesGHG = dir([vardirectory,'*.nc']);
 [data.lowGHG,years.lowGHG,composite.lowGHG,dataMonthArrange.lowGHG]...
     = predruns_ReadInlayer(vardirectory,varfilesGHG,var,timeperiodhigh,lats,1);
@@ -33,7 +33,7 @@ var = 'T';
 ClLevel = 'lowCl';
 timeperiodhigh = [1955,1979];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/50hPa/'];
 varfilespast = dir([vardirectory,'*.nc']);
 [data.lowcl,years.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
     = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodhigh,lats,1);
@@ -45,9 +45,9 @@ longitudes = data.lowcl.lon;
 
 %% Read in zonal average 4060S data
 
-wa4060S.highcl = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/highCl_standard_4060Swa.mat');
-wa4060S.lowcl = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/lowCl_standard_4060Swa.mat');
-wa4060S.lowGHG = load('/Volumes/MyBook/work/data/predruns/output/zonalanalysis/lowGHG_standard_4060Swa.mat');
+wa4060S.highcl = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/highCl_standard_4060Swa.mat');
+wa4060S.lowcl = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/lowCl_standard_4060Swa.mat');
+wa4060S.lowGHG = load('/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/lowGHG_standard_4060Swa.mat');
 regpres = wa4060S.lowcl.regpres;
 
 %% create composite for correlations

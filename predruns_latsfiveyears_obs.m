@@ -224,7 +224,7 @@ end
 end
 
 %% saving data
-save('/Volumes/MyBook/work/data/predruns/output/obsFigure3/obsFig3.mat','rval','lattoplot','lontoplot','toplot','toplotmodel','modelyears2','latitude','longitude','corr2use');
+save('/Volumes/ExternalOne/work/data/predruns/output/obsFigure3/obsFig3.mat','rval','lattoplot','lontoplot','toplot','toplotmodel','modelyears2','latitude','longitude','corr2use');
 
 
 %% plotting combination

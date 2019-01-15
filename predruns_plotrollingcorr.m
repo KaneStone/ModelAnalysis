@@ -1,8 +1,8 @@
 % predruns_plotrollingcorr
 
 clear all
-%SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2024_90-63S_Tperiod-DecJanFeb_rmENSO_lagged_roll20.mat');
-SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2024_63-90S_Tperiod-MarApr_rmENSO_lagged_roll20.mat');
+%SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2024_90-63S_Tperiod-DecJanFeb_rmENSO_lagged_roll20.mat');
+SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2024_63-90S_Tperiod-MarApr_rmENSO_lagged_roll20.mat');
 
 %% take rollcorr ensemble mean
 
@@ -18,7 +18,7 @@ tozvar = 'toz';
 detrend_ozone = 0;
 ClLevel = 'highCl';
 tozdates = [1995,2023];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);

@@ -13,7 +13,7 @@ for p = 1:1
 clearvars -except lats fsize plot_MLScomp plot_WACCMonly percent compareyears plotSWOOSHwaccm highclcompareyears
 
 %% import SWOOSH
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
 SWOOSHlatindex = find(SWOOSH.lat > lats(1) & SWOOSH.lat < lats(2));
 SWOOSH.combinedo3q = SWOOSH.combinedo3q(:,:,1:end-11);
 SWOOSHyears = 1984:2015;
@@ -30,7 +30,7 @@ Pressure = rmfield(Pressure, 'MAM1990');
 runs = fields(MolConc);
 
 %% Read in highcl runs
-directory = '/Volumes/MyBook/work/data/predruns/O3/highCl/zonalmean/';
+directory = '/Volumes/ExternalOne/work/data/predruns/O3/highCl/zonalmean/';
 files = dir([directory,'*.nc']);
 for i = 1:length(files)
     [~,highcldata(i),~] = Read_in_netcdf([directory,files(i).name]);
@@ -54,7 +54,7 @@ end
 higcl_ra_te(i+1).h = nanmean(cat(4,higcl_ra_te(:).h),4);
 
 %% Read in Uwind
-directory = '/Volumes/MyBook/work/data/predruns/U/highCl/';
+directory = '/Volumes/ExternalOne/work/data/predruns/U/highCl/';
 filesU = dir([directory,'*.nc']);
 for i = 1:length(filesU)
     [~,highclU(i),~] = Read_in_netcdf([directory,filesU(i).name]);

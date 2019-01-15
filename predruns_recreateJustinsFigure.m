@@ -11,7 +11,7 @@ shortnames = 0;
 removeENSO = 0;
 %% Read in ERA-interim surface temperature
 
-ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
+ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
 ERAyears = 1979:2016;
 ERAyear_vector = repmat(ERAyears,12,1);
 ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vector(:)),1)*max(ERAyear_vector(:))+1];
@@ -19,7 +19,7 @@ ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vect
 %% Read in Halley Station
 
 %% Initialize variables.
-filename = '/Volumes/MyBook/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
+filename = '/Volumes/ExternalOne/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
 startRow = 3;
 
 formatSpec = '%4f%7f%7f%7f%7f%7f%7f%7f%7f%7f%f%[^\n\r]';
@@ -114,7 +114,7 @@ end
 lat = ERAdata.latitude;
 lon = ERAdata.longitude;
 
-save(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins_',num2str(timeperiod(1)),'-',num2str(timeperiod(2)),'_',rmENSOappend],...
+save(['/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins_',num2str(timeperiod(1)),'-',num2str(timeperiod(2)),'_',rmENSOappend],...
     'polar_correlations','polar_p','rollcorr','rolltrend','lat','lon');
 
 %% 

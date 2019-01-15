@@ -3,17 +3,17 @@ clear variables
 run = 'highCl';
 var = 'T';
 %% Read in MSU weighting function
-TMTlanddir = '/Volumes/MyBook/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_land.txt';
-TMToceandir = '/Volumes/MyBook/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_ocean.txt';
+TMTlanddir = '/Volumes/ExternalOne/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_land.txt';
+TMToceandir = '/Volumes/ExternalOne/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_ocean.txt';
 
 [TMT.land,TMT.landsurface,TMT.headers] = ReadinMSUweightingfunctions(TMTlanddir);
 [TMT.ocean,TMT.oceansurface,~] = ReadinMSUweightingfunctions(TMToceandir);
 %% Read in landfrac
-[~,landfrac,~] = Read_in_netcdf('/Volumes/MyBook/work/data/predruns/landfrac/LANDFRAC_b.e11.BWTREFC2.f19_g16.ccmi32.001.cam.h0.2097-08.nc');
+[~,landfrac,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/predruns/landfrac/LANDFRAC_b.e11.BWTREFC2.f19_g16.ccmi32.001.cam.h0.2097-08.nc');
 
 %% Read in standardized highCl data individually
-directory = ['/Volumes/MyBook/work/data/predruns/T/',run,'/raw/'];
-TSdirectory = ['/Volumes/MyBook/work/data/predruns/TS/',run,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/T/',run,'/raw/'];
+TSdirectory = ['/Volumes/ExternalOne/work/data/predruns/TS/',run,'/'];
 
 files = dir([directory,'*.nc']);
 TSfiles = dir([TSdirectory,'*.nc']);
@@ -76,7 +76,7 @@ for j = 1:size(Tdata.T,1) %lons
 end
 
 end
-save('/Volumes/MyBook/work/data/predruns/output/MSU/TMT.mat','Tweight');
+save('/Volumes/ExternalOne/work/data/predruns/output/MSU/TMT.mat','Tweight');
 
     %%              
             

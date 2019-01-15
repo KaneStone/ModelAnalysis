@@ -3,7 +3,7 @@ var = 'O3';
 area = '7590S';
 ClLevel = 'highCl';
 dates = [1995,2005];
-directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 files = dir([directory,'*.nc']);
 
 % Read in future
@@ -12,7 +12,7 @@ files = dir([directory,'*.nc']);
 
 ClLevel = 'lowCl';
 pastdates = [1965,1975];
-directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 pastfiles = dir([directory,'*.nc']);
 
 % Read in past

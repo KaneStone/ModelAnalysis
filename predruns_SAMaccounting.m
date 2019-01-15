@@ -24,7 +24,7 @@ removeENSO = 0;
 ClLevel = 'lowCl';
 timeperiodlow = [1955,1976];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfilespast = dir([vardirectory,'*.nc']);
 
 [data.lowcl,years.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
@@ -35,7 +35,7 @@ varfilespast = dir([vardirectory,'*.nc']);
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2016];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
@@ -46,7 +46,7 @@ varfiles = dir([vardirectory,'*.nc']);
 ClLevel = 'lowGHG';
 timeperiodhigh = [1995,2016];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfileslowGHG = dir([vardirectory,'*.nc']);
 
 [data.lowGHG,years.lowGHG,composite.lowGHG,dataMonthArrange.lowGHG]...
@@ -55,7 +55,7 @@ varfileslowGHG = dir([vardirectory,'*.nc']);
 %% Read in TOZ highcl and take percentiles
 ClLevel = 'highCl';
 tozdates = [1995,2015];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
@@ -66,7 +66,7 @@ tozfiles = dir([directory,'*.nc']);
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1975];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
 [toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilespast,tozvar,tozpastdates,lats,detrend_ozone);
@@ -77,7 +77,7 @@ tozfilespast = dir([directory,'*.nc']);
 %% Read in TOZ lowGHG and take percentiles
 ClLevel = 'lowGHG';
 tozpastdates = [1995,2015];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfileslowGHG = dir([directory,'*.nc']);
 [toz_data.lowGHG,toz_years.lowGHG,toz_varweighted.lowGHG,toz_composite.lowGHG,toz_dataMonthArrange.lowGHG] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfileslowGHG,tozvar,tozpastdates,lats,detrend_ozone);
@@ -132,7 +132,7 @@ end
 %tcolat = [75,90];
 tcolat = -65;
 
-[~,BSdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
+[~,BSdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
 
 BSyears = 1980:2016;
 BSyear_vector = repmat(BSyears,12,1);

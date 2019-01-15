@@ -7,7 +7,7 @@ clear all
 
 ClLevel = 'highCl';
 tozdates = [1995,2024];
-directory = ['/Volumes/MyBook/work/data/predruns/','TOZ','/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/','TOZ','/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,'toz',tozdates,[-30,-10],0);
@@ -18,7 +18,7 @@ tozfiles = dir([directory,'*.nc']);
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2024];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...

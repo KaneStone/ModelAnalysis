@@ -1,11 +1,11 @@
 % compare difference between ENSO and no ENSO signals in correlations
 
 clear all
-% SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
-% SHreg_rmENSO = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_rmENSO_lagged.mat');
+% SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
+% SHreg_rmENSO = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_rmENSO_lagged.mat');
 
-SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_63-90S_Tperiod-MarApr_.mat');
-SHreg_rmENSO = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_63-90S_Tperiod-MarApr_rmENSO_lagged.mat');
+SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_63-90S_Tperiod-MarApr_.mat');
+SHreg_rmENSO = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsMarchtoz_TS_detrend1995-2016_63-90S_Tperiod-MarApr_rmENSO_lagged.mat');
 
 tozmonth = 3;
 varmonth = [3,4];
@@ -29,8 +29,8 @@ end
 
 %% Observations
 
-obsreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins_.mat');
-obsreg_rmENSO = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins_rmENSO.mat');
+obsreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins_.mat');
+obsreg_rmENSO = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins_rmENSO.mat');
 
 obsENSOdiff = reshape(abs(obsreg.polar_correlations) - abs(obsreg_rmENSO.polar_correlations),[1,size(obsreg.polar_correlations)]);
 

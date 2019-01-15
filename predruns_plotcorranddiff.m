@@ -114,9 +114,9 @@ end
 if inputs.plotcorr
     
     %read in zonal wind
-    files = dir(['/Volumes/MyBook/work/data/predruns/U/highCl/500hPa/','*.mat']);
+    files = dir(['/Volumes/ExternalOne/work/data/predruns/U/highCl/500hPa/','*.mat']);
     for i = 1:length(files)
-        Uwind(i) = load(['/Volumes/MyBook/work/data/predruns/U/highCl/500hPa/',files(i).name]);
+        Uwind(i) = load(['/Volumes/ExternalOne/work/data/predruns/U/highCl/500hPa/',files(i).name]);
         for j = 1:length(inputs.varmonthtomean)
             Uwindmonthave(:,:,i,j) = nanmean(squeeze(Uwind(i).standardout(:,:,:,inputs.varmonthtomean(j):12:end)),3);                
         end
@@ -146,13 +146,13 @@ if inputs.plotcorr
     toplotp = cat(1,p,ones(size(p)),ones(size(p)));
     toplotp2 = cat(1,p2,ones(size(p2)),ones(size(p2)));
     
-    clims = [-1 1];
+    clims = [-.75 .75];
     % all data
     titles = {'Ensemble mean correlation'}; 
     subplotmaps(toplot(1,:,:),lons,lats,{'div','RdBu'},1,toplotp(1,:,:),16,titles,'Longitude','Latitude','Correlation','on',...
         clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[0:15:90],[0:15:90],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
     
-    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_correlations2_',monthnames(inputs.varmonthtomean,1,1),'_',inputs.timeperiodvar(1),'-',inputs.timeperiodvar(2)];
+    filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_correlations2_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext];
     export_fig(filename,'-png');        
     %%
     clearvars ax2 ax

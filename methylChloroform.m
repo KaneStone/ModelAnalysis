@@ -11,7 +11,7 @@ plot_EESC = 0;
 plot_regression = 1;
 cbrew = cbrewer('qual','Set1',5);
 %read in WMO 2011 file
-fid = fopen('/Volumes/MyBook/work/data/rcp6.0_table_wmo2011'); 
+fid = fopen('/Volumes/ExternalOne/work/data/rcp6.0_table_wmo2011'); 
 while ~en
     line = fgetl(fid);
     if strcmp(line(1:10),'      Year')

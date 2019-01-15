@@ -27,7 +27,7 @@ ENSO = 0;
 removeENSO = 1;
 ClLevel = 'highCl';
 % read in data 
-%directqory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+%directqory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 %files = dir([directory,'*.nc']);
 
 %% Read in highcl variable
@@ -36,7 +36,7 @@ ClLevel = 'highCl';
 timeperiodhigh = [1995,2016];%[1955,1975]
 %timeperiodhigh = [1955,1975];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl,dataMonthArrangeMean.highcl]...
@@ -46,7 +46,7 @@ varfiles = dir([vardirectory,'*.nc']);
 
 tozdates = [1995,2016];
 %tozdates = [1955,1974];%[1955,1975]
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
@@ -86,7 +86,7 @@ useHalley = 0;
 useBodeker = 1;
 %% Read in ERA-interim surface temperature
 
-ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
+ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
 ERAyears = 1979:2016;
 ERAyear_vector = repmat(ERAyears,12,1);
 ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vector(:)),1)*max(ERAyear_vector(:))+1];
@@ -97,7 +97,7 @@ if useBodeker
   
     tcolon = 26;
     tcolat_QBO = [10,30];
-    [~,BSdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
+    [~,BSdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
 
     BSyears = 1980:2016;
     BSyear_vector = repmat(BSyears,12,1);
@@ -123,7 +123,7 @@ if useHalley
 
     %% Initialize variables.
       tcolat = [-90,-63];
-    filename = '/Volumes/MyBook/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
+    filename = '/Volumes/ExternalOne/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
     startRow = 3;
 
     formatSpec = '%4f%7f%7f%7f%7f%7f%7f%7f%7f%7f%f%[^\n\r]';
@@ -221,7 +221,7 @@ end
 NINO34all = NINOmonth(:);
 NINO34 = NINOmonth(ninomonth,:);
 
-%save('/Volumes/MyBook/work/data/predruns/output/NINO34/ERA-Interim_1980_2016','NINO34all','NINO34');
+%save('/Volumes/ExternalOne/work/data/predruns/output/NINO34/ERA-Interim_1980_2016','NINO34all','NINO34');
     
 for i = 1:12    
     for j = 1:size(ERAdata.t2m,2)

@@ -11,7 +11,7 @@ percentile = 10;
 area = '7590S';
 ClLevel = 'highCl';
 dates = [1995,2016];
-directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 files = dir([directory,'*.nc']);
 
 [data.highcl,pressure.highcl,years.highcl,dataRegPres.highcl,regPres.highcl,...
@@ -22,7 +22,7 @@ files = dir([directory,'*.nc']);
 %% Read in lowcl variable
 ClLevel = 'lowCl';
 pastdates = [1955,1976];
-directory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',area,'/'];
 pastfiles = dir([directory,'*.nc']);
 
 [data.lowcl,pressure.lowcl,years.lowcl,dataRegPres.lowcl,regPres.lowcl,...
@@ -32,7 +32,7 @@ pastfiles = dir([directory,'*.nc']);
 ClLevel = 'highCl';
 lats = [-90,-75];
 tozdates = [1995,2015];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer(directory,tozfiles,tozvar,tozdates,lats);
@@ -43,7 +43,7 @@ tozfiles = dir([directory,'*.nc']);
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1975];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
 [toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer(directory,tozfilespast,tozvar,tozpastdates,lats);

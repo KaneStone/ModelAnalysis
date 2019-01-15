@@ -17,8 +17,8 @@ elseif strcmp(variable,'Z3')
     ctitle = 'm/decade';
 end
 
-directory = ['/Volumes/MyBook/work/data/CESM-CCMI/',variable,'/'];
-datedirectory = ['/Volumes/MyBook/work/data/CESM-CCMI/date/'];
+directory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/',variable,'/'];
+datedirectory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/date/'];
 datefiles = dir([datedirectory,'*.nc*']);
 files = dir([directory,'/','*nc*']);
 filenames = {files.name}';
@@ -51,8 +51,8 @@ if trendyears(1,1) > 1979 || trendyears(2,2) < 2016
     includeERA = 1;
     scale = 1;
     eravar = 't2m';
-    ERAdata = ncread(['/Volumes/MyBook/work/data/ERA-Interim/',variable,'/',variable,'_ERA-Interim.nc'],eravar)./scale;
-    ERAlatitude = ncread('/Volumes/MyBook/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','latitude');    
+    ERAdata = ncread(['/Volumes/ExternalOne/work/data/ERA-Interim/',variable,'/',variable,'_ERA-Interim.nc'],eravar)./scale;
+    ERAlatitude = ncread('/Volumes/ExternalOne/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','latitude');    
     yearsERA = repmat([1979:2016],[12,1]);
     yERA.y = yearsERA(:); 
     ERAInt.wa = squeeze(nanmean(ERAdata));

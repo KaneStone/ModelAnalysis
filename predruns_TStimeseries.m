@@ -2,9 +2,9 @@
 %% plot TS surface temperatures
 clear all
 ClLevel = 'highcl';
-TSdirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+TSdirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 
-TSdirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+TSdirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 TSfiles = dir([TSdirectory,'*.nc']);
 
 latitudestoplot = [-80];

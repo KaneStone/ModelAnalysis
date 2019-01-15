@@ -29,12 +29,12 @@ latitude = surfacedata.(fields{1}).data(1).lat;
 
 %% Calculate correlations and upper and lower temperature differences between TS and toz
 if inputs.removeENSO
-    filename = ['/Volumes/MyBook/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_ninoremoved_','diffsandcorrs_',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_ninoremoved_','diffsandcorrs_',...
         monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
         num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 else
-    filename = ['/Volumes/MyBook/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_','diffsandcorrs_',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_','diffsandcorrs_',...
         monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
         num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
@@ -75,8 +75,9 @@ if inputs.lastfiveyears_obs
 end
 
 %% Take of ensemble average and perform leave one out metric
+
 %predruns_leaveoneout_empirical(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMonthArrange,inputs,latitude,longitude,pct);
-predruns_leaveoneout_empcomp(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,differences.composite,surfacedata.(fields{i}).dataMonthArrange);
+predruns_leaveoneout_empcomp(dataVarMonthAve,dataVarMonth,tozdata.(inputs.ClLevel{1}).dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,differences.composite,surfacedata.(fields{i}).dataMonthArrange);
 %predruns_leaveoneout_empcomp_composite(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,differences.composite,surfacedata.(fields{i}).dataMonthArrange);
 %predruns_leaveoneout(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,correlations.indmonths.individual);
 %predruns_RMSE(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,correlations.indmonths.individual);
@@ -84,7 +85,7 @@ predruns_leaveoneout_empcomp(dataVarMonthAve,dataVarMonth,tozdata.highCl.dataMon
 
 %% obs leave one out
 
-Observations = load(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
+Observations = load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
 [obs.GSS] = predruns_obsleaveoneout(Observations,longitude,latitude,inputs);
 %[obs.GSS] = predruns_obsleaveoneout_test(Observations,longitude,latitude,inputs);
 

@@ -15,15 +15,15 @@ for j = 1:12
 end   
 
 NINO34all = NINOmonth(:,:);    
-save(['/Volumes/MyBook/work/data/predruns/output/NINO34/',ClLevel,inputs.timeperiodvar(1),'-',inputs.timeperiodvar(1),'_',num2str(inputs.detrend)],'NINO34all','NINOmonth');
+save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',ClLevel,'_',ClLevel,inputs.timeperiodvar(1),'-',inputs.timeperiodvar(1),'_',num2str(inputs.detrend)],'NINO34all','NINOmonth');
 
 if inputs.removeENSO
-    filename = ['/Volumes/MyBook/work/data/predruns/output/data/',ClLevel,'_TS_ninoremoved_',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',ClLevel,'_TS_ninoremoved_',...
         monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
     num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 else
-    filename = ['/Volumes/MyBook/work/data/predruns/output/data/',ClLevel,'_TS_',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/outputdata/',ClLevel,'_TS_',...
         monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
     num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
@@ -50,7 +50,9 @@ if ~exist([filename,'.mat'],'file')
         %together(:,:,:,:,j) = squeeze(datamonthall(:,:,:,varmonth2(j):12:end-inputs.varmonth(1)+inputs.varmonth(end)));
         together(:,:,:,:,j) = squeeze(datamonthall(:,:,:,varmonth2(j):12:end));
     end
-    temp = nanmean(together(:,:,:,:,inputs.varmonthtomean-2),5);
+    
+    [~,vmindex] = intersect(inputs.varmonth,inputs.varmonthtomean);
+    temp = nanmean(together(:,:,:,:,vmindex),5);
 
     if inputs.removeENSO        
         % finding maximum regression lag time

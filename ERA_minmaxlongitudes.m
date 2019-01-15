@@ -1,10 +1,10 @@
 % ERA-interim minimum and maximum
 clear all 
-ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/T/3090S_50hPa_T_ERA.nc');
+ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/T/3090S_50hPa_T_ERA.nc');
 years(1).y = repmat(1979:2016,12,1);
 years(1).y = [years(1).y(:);2017;2017];
 
-ERAdata4060S = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/T/wgt4060S_T_ERA-Interim.nc');
+ERAdata4060S = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/T/wgt4060S_T_ERA-Interim.nc');
 plotlines = 1;
 plotcorr = 1;
 %% finding minimum and maximum longitudes
@@ -140,7 +140,7 @@ end
 ERA.years = years;
 ERA.latitude = lats;
 ERA.longitude = ERAdata.longitude;
-save('/Volumes/MyBook/work/data/matlabOutput/zonalAnalysis/ERA.mat','ERA');
+save('/Volumes/ExternalOne/work/data/matlabOutput/zonalAnalysis/ERA.mat','ERA');
 
 clearvars dateind
 

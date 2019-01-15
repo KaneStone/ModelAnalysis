@@ -24,7 +24,7 @@ coorwithozone = 0;
 if coorwithozone
     %% read in LENS prescribed ozone
 
-    [~,LENSozone,~] = Read_in_netcdf('/Volumes/MyBook/work/data/LENS/O3/9030S_50hPa_b.e11.BRCP85C5CNBDRD.f09_g16.034.cam.h0.ozone.192001-210012.nc');
+    [~,LENSozone,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/LENS/O3/9030S_50hPa_b.e11.BRCP85C5CNBDRD.f09_g16.034.cam.h0.ozone.192001-210012.nc');
 
     %% manipulate
     lat = [-50:-5:-85];
@@ -545,7 +545,7 @@ readvertdata = 0;
 LENScorr = 0;
 if LENScorr
     if readvertdata
-        LENSverticaldir = '/Volumes/MyBook/work/data/LENS/3060S/';
+        LENSverticaldir = '/Volumes/ExternalOne/work/data/LENS/3060S/';
         LENSverfiles = dir([LENSverticaldir,'*.nc']);
 
         for i = 1:length(LENSverfiles)
@@ -654,7 +654,7 @@ readvertdata = 1;
 CanESM2corr = 1;
 if CanESM2corr
     if readvertdata
-        CanESM2verticaldir = '/Volumes/MyBook/work/data/CanESM2/3060S/';
+        CanESM2verticaldir = '/Volumes/ExternalOne/work/data/CanESM2/3060S/';
         CanESM2verfiles = dir([CanESM2verticaldir,'*.nc']);
 
         for i = 1:length(CanESM2verfiles)

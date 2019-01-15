@@ -7,7 +7,7 @@ constantyears = 1;
 plotting_detrend = 0;
 plotting_correlations = 0;
 hemisphere = 'north';
-directory = ['/Volumes/MyBook/work/data/CESM-CCMI/O3/43_73hPa/',hemisphere,'/'];
+directory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/O3/43_73hPa/',hemisphere,'/'];
 files = dir([directory,'*.nc*']);
 surface = 0;
 [years,PSdata,yearfiles,PSfiles] = ReadinCESMDateandPS(1,1);
@@ -34,7 +34,7 @@ end
 
 years(~x1) = [];
 %% read in hybrid_height coordinates
-[~,hhc,~] = Read_in_netcdf('/Volumes/MyBook/work/data/CESM-CCMI/hybrid_coords/hhc.nc');
+[~,hhc,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/CESM-CCMI/hybrid_coords/hhc.nc');
 
 %% read in O3 data
 for i = 1:length(files)-1;    
@@ -62,10 +62,10 @@ end
 
 %% Read in surface temperature
 if surface
-    TSdirectory = '/Volumes/MyBook/work/data/CESM-CCMI/TS/';
+    TSdirectory = '/Volumes/ExternalOne/work/data/CESM-CCMI/TS/';
     var = 'TS';
 else
-    TSdirectory = '/Volumes/MyBook/work/data/CESM-CCMI/T/200hPa/';
+    TSdirectory = '/Volumes/ExternalOne/work/data/CESM-CCMI/T/200hPa/';
     var = 'T';
 end
 TSfiles = dir([TSdirectory,'*.nc*']);
@@ -283,14 +283,14 @@ else
 end
 if constantyears
     if pastonly
-        save(['/Volumes/MyBook/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_past'],'latitude','longitude','r','rpoly','years','O3weighted','TSdata_MAM');
+        save(['/Volumes/ExternalOne/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_past'],'latitude','longitude','r','rpoly','years','O3weighted','TSdata_MAM');
     elseif futureonly
-        save(['/Volumes/MyBook/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_future'],'latitude','longitude','r','rpoly','years','O3weighted','TSdata_MAM');
+        save(['/Volumes/ExternalOne/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_future'],'latitude','longitude','r','rpoly','years','O3weighted','TSdata_MAM');
     else
-        save(['/Volumes/MyBook/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_SD'],'latitude','longitude','r','years','O3weighted','TSdata_MAM');
+        save(['/Volumes/ExternalOne/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_constantyears_SD'],'latitude','longitude','r','years','O3weighted','TSdata_MAM');
     end
 else
-    save(['/Volumes/MyBook/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_poly'],'latitude','longitude','r','years','O3weighted','TSdata_MAM');
+    save(['/Volumes/ExternalOne/work/data/CESM-CCMI/O3/output/',hemisphere,'_',ext,'_O3_correlations_poly'],'latitude','longitude','r','years','O3weighted','TSdata_MAM');
 end
 
 %% test line plot

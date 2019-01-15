@@ -1,6 +1,6 @@
 
 clear all
-directory = '/Volumes/MyBook/work/data/CanESM2/400hPa/090S/strat/';
+directory = '/Volumes/ExternalOne/work/data/CanESM2/400hPa/090S/strat/';
 files = dir([directory,'*.nc']);
 strat = 1;
 %%

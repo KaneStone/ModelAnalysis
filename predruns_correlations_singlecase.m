@@ -23,7 +23,7 @@ ENSO = 0;
 removeENSO = 1;
 ClLevel = 'highCl';
 % read in data 
-%directqory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+%directqory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 %files = dir([directory,'*.nc']);
 
 %% Read in highcl variable
@@ -32,7 +32,7 @@ ClLevel = 'highCl';
 timeperiodhigh = [1995,2016];%[1955,1975]
 %timeperiodhigh = [1955,1975];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl,dataMonthArrangeMean.highcl]...
@@ -42,7 +42,7 @@ varfiles = dir([vardirectory,'*.nc']);
 
 tozdates = [1995,2016];
 %tozdates = [1955,1974];%[1955,1975]
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
@@ -79,7 +79,7 @@ end
     %% plot diffmonths
 
 %% predict regression
-TSdataout = load(['/Volumes/MyBook/work/data/predruns/output/data/TS_ninoremoved_',num2str(timeperiodhigh(1)),'-',num2str(timeperiodhigh(2)),num2str(abs(lats(1))),'-',...
+TSdataout = load(['/Volumes/ExternalOne/work/data/predruns/output/data/TS_ninoremoved_',num2str(timeperiodhigh(1)),'-',num2str(timeperiodhigh(2)),num2str(abs(lats(1))),'-',...
 num2str(abs(lats(2)))]);
 predruns_regmodel(Eachyear,TSdataout,toz_dataMonthArrange,tozmonth,longitude,latitude,1,timeperiodhigh);
 

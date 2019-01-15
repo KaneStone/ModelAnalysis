@@ -1,6 +1,6 @@
 function [GSS] = predruns_obsleaveoneout(data,waclon,waclat,inputs)
 
-    ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
+    ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
     %data.obstemp,data.toz_zm_nodetrend
     surfacedata = double(permute(nanmean(data.obstemp(:,:,:,inputs.varmonthtomean),4),[3,2,1]));
     %surfacedata_pct = nanmean(data.obstemp(:,:,[data.obspct.upperind,data.obspct.lowerind],inputs.varmonthstomean),4);
@@ -197,7 +197,7 @@ adm = permute(datasign_months,[3,2,4,1]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -226,9 +226,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    allsig = load('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat');
+    allsig = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Allperc.mat');
 end
 
 %%
@@ -247,7 +247,7 @@ adm = permute(datasignpct_months,[3,2,4,1]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -276,9 +276,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    allsigpct = load('/Volumes/MyBook/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat');
+    allsigpct = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/obs_empcomp_Pctperc.mat');
 end
     
     

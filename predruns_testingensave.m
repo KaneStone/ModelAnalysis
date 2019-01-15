@@ -2,9 +2,9 @@
 
 clear all
 
-[~,ENSAVE_TS,~] = Read_in_netcdf('/Volumes/MyBook/work/data/predruns/TS/highcl/ensave/TS_b.e11.BWTREFC2.f19_g16.ccmi34.HighCl.ENSAVE.cam.h0.nc');
+[~,ENSAVE_TS,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/predruns/TS/highcl/ensave/TS_b.e11.BWTREFC2.f19_g16.ccmi34.HighCl.ENSAVE.cam.h0.nc');
 
-[~,ENSAVE_TOZ,~] = Read_in_netcdf('/Volumes/MyBook/work/data/predruns/TOZ/highcl/ensave/TOZ_b.e11.BWTREFC2.f19_g16.ccmi34.HighCl.ENSAVE.nc');
+[~,ENSAVE_TOZ,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/predruns/TOZ/highcl/ensave/TOZ_b.e11.BWTREFC2.f19_g16.ccmi34.HighCl.ENSAVE.nc');
 
 %%
 lats = [75,90];

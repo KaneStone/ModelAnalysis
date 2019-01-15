@@ -4,10 +4,10 @@ clear all
 timperiod = [2000 2024];
 
 %% import SWOOSH
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
 
 %% Read in highcl runs
-directory = '/Volumes/MyBook/work/data/predruns/O3/highCl/zonalmean/';
+directory = '/Volumes/ExternalOne/work/data/predruns/O3/highCl/zonalmean/';
 files = dir([directory,'*.nc']);
 for i = 1:length(files)
     [~,highcldata(i),~] = Read_in_netcdf([directory,files(i).name]);
@@ -30,7 +30,7 @@ for i = 1:length(files)
 end
 
 %% Read in Uwind
-directory = '/Volumes/MyBook/work/data/predruns/U/highCl/';
+directory = '/Volumes/ExternalOne/work/data/predruns/U/highCl/';
 filesU = dir([directory,'*.nc']);
 for i = 1:length(filesU)
     [~,highclU(i),~] = Read_in_netcdf([directory,filesU(i).name]);

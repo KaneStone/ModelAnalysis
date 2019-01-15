@@ -7,7 +7,7 @@ line_plots = 0;
 plot_all = 1;
 plot_ens = 1;
 hindcast = 1;
-directory = '/Volumes/MyBook/work/data/CESM-CCMI/T/50hPa/';
+directory = '/Volumes/ExternalOne/work/data/CESM-CCMI/T/50hPa/';
 files = dir([directory,'9030*']);
 
 if remove_SD
@@ -112,14 +112,14 @@ if read_in
         nameprint_ens = {'Ref-C2','Sen-C2-fGHG','Sen-C2-fODS'};
     end
 
-    save(['/Volumes/MyBook/work/data/CESM-CCMI/output/T_trendsandeddytrends',num2str(trendyears(1)),'-',num2str(trendyears(2)),'.mat'],'b','b_eddy','bens','bens_eddy','lat','lon','nameprint','nameprint_ens');
+    save(['/Volumes/ExternalOne/work/data/CESM-CCMI/output/T_trendsandeddytrends',num2str(trendyears(1)),'-',num2str(trendyears(2)),'.mat'],'b','b_eddy','bens','bens_eddy','lat','lon','nameprint','nameprint_ens');
 else
     if line_plots
         for i = 1:length(files);
             [~,data(i).d,~] = Read_in_netcdf([directory,files(i).name]);
         end
     end
-    load(['/Volumes/MyBook/work/data/CESM-CCMI/output/T_trendsandeddytrends',num2str(trendyears(1)),'-',num2str(trendyears(2)),'.mat']);
+    load(['/Volumes/ExternalOne/work/data/CESM-CCMI/output/T_trendsandeddytrends',num2str(trendyears(1)),'-',num2str(trendyears(2)),'.mat']);
 end
 
 %% plotting trends and eddy component 

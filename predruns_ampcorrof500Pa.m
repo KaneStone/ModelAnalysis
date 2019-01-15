@@ -19,15 +19,15 @@ end
 % ClLevel = 'highCl';
 % timeperiodhigh = [1995,2016];%[1955,1975]
 % 
-% vardirectory = ['/Volumes/MyBook/work/data/predruns/','TS','/',ClLevel,'/'];
+% vardirectory = ['/Volumes/ExternalOne/work/data/predruns/','TS','/',ClLevel,'/'];
 % varfiles = dir([vardirectory,'*.nc']);
 % 
 % [highcl,~,~,~]= predruns_ReadInlayer(vardirectory,varfiles,'TS',timeperiodhigh,[-90,-75],0);
 
 %% Read in 500 hPa temperature
 
-temp500.lowcl = load('/Volumes/MyBook/work/data/predruns/output/T_500hPa_T.LowCl..mat');
-temp500.highcl = load('/Volumes/MyBook/work/data/predruns/output/T_500hPa_THighCl..mat');
+temp500.lowcl = load('/Volumes/ExternalOne/work/data/predruns/output/T_500hPa_T.LowCl..mat');
+temp500.highcl = load('/Volumes/ExternalOne/work/data/predruns/output/T_500hPa_THighCl..mat');
 %%
 fieldnames = fields(temp500);
 

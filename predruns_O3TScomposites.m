@@ -16,14 +16,14 @@ varmonth = [12,1,2]; % Can be any number of months in the year (e.g. [12,1,2] fo
 yearplus = 0;
 shortnames = 0;
 % read in data 
-%directqory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+%directqory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 %files = dir([directory,'*.nc']);
 %% Read in lowcl variable
 
 ClLevel = 'lowCl';
 timeperiodlow = [1955,1976];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfilespast = dir([vardirectory,'*.nc']);
 
 [data.lowcl,years.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
@@ -34,7 +34,7 @@ varfilespast = dir([vardirectory,'*.nc']);
 ClLevel = 'highCl';
 timeperiodhigh = [1995,2016];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
@@ -43,7 +43,7 @@ varfiles = dir([vardirectory,'*.nc']);
 %% Read in TOZ highcl and take percentiles
 ClLevel = 'highCl';
 tozdates = [1995,2015];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats);
@@ -54,7 +54,7 @@ tozfiles = dir([directory,'*.nc']);
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1975];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
 [toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilespast,tozvar,tozpastdates,lats);

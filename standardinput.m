@@ -1,5 +1,5 @@
 clear all
-directory = '/Volumes/MyBook/work/data/predruns/T/lowGHG/4060S/';
+directory = '/Volumes/ExternalOne/work/data/predruns/T/lowGHG/4060S/';
 files = dir([directory,'*.nc']);
 var = 'T';
 tic;
@@ -27,8 +27,8 @@ end
 
 %%
 
-outfile1 = ['/Volumes/MyBook/work/data/predruns/output/zonalanalysis/','lowGHG_standard.mat'];
-outfile2 = ['/Volumes/MyBook/work/data/predruns/output/zonalanalysis/','lowGHG_standard_4060Swa.mat'];
+outfile1 = ['/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/','lowGHG_standard.mat'];
+outfile2 = ['/Volumes/ExternalOne/work/data/predruns/output/zonalanalysis/','lowGHG_standard_4060Swa.mat'];
 
 save(outfile1,'standardData','latitudes','longitudes','years','regpres');
 save(outfile2,'standardwa','longitudes','years','regpres');

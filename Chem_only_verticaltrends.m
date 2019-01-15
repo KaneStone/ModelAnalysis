@@ -2,7 +2,7 @@
 clear all
 
 Stimeperiod = [2000 2014];
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
 SWOOSHyears = repmat(1984:2015,[12,1]);
 SWOOSHyears = [SWOOSHyears(:);ones(11,1)*2016];
 SWOOSHextract = permute(SWOOSH.combinedo3q(:,:,SWOOSHyears >= Stimeperiod(1) & SWOOSHyears <= Stimeperiod(2)),[2,1,3]);

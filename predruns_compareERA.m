@@ -23,7 +23,7 @@ end
 useBodeker = 1;
 %% Read in ERA-interim surface temperature
 
-ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
+ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
 ERAyears = 1979:2016;
 ERAyear_vector = repmat(ERAyears,12,1);
 ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vector(:)),1)*max(ERAyear_vector(:))+1];
@@ -35,7 +35,7 @@ if useBodeker
   
     tcolon = 26;
     tcolat_QBO = [10,30];
-    [~,BSdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
+    [~,BSdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
 
     BSyears = 1980:2016;
     BSyear_vector = repmat(BSyears,12,1);
@@ -70,18 +70,18 @@ if inputs.takediff
 
     %% calculate observed differences  
     monin = inputs.varmonthtomean;
-    if ~exist(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat'])
+    if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat'])
         [differences,differencesp,obspct,obstemp] = obsPercentileDifferences(ERAextract,toz_zm_nodetrend,20,...
             monin,inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,1,[]); 
         for i = 1:length(inputs.varmonth)
             [differences_ind(i,:,:),differencesp_ind(i,:,:),~,~] = obsPercentileDifferences(ERAextract,toz_zm_nodetrend,20,...
                 inputs.varmonth(i),inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,1,[]); 
         end
-        save(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext],...
+        save(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext],...
             'differences','differencesp','differences_ind','differencesp_ind','obspct','obstemp','toz_zm_nodetrend');
     else
-        load(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat']);
-end
+        load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat']);
+    end
 
 %% calculate ENSO
 
@@ -226,7 +226,7 @@ annotation('textbox',[sppos(1),sppos(2)+.01,sppos(3:4)],'String','b','FitBoxToTe
     'EdgeColor','none','fontweight','bold');    
 
 
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Correlation_comparison_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Correlation_comparison_',inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext];
  
 print(filename,'-depsc');
 
@@ -329,7 +329,7 @@ if inputs.includemarkers
     
 end
 
-filename2 = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Diff_comparison_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
+filename2 = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Diff_comparison_',inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
 
 print(filename2,'-depsc');
 
@@ -426,7 +426,7 @@ xlabel('Month','fontsize',fsize+2);
 title('Ensemble composite','fontsize',fsize+4)
 lh = legend(ph,lnamesmod);
 set(lh,'box','off','fontsize',fsize-4,'location','NorthEast')
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/North_20th_percentile_lines','_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/North_20th_percentile_lines_',inputs.ClLevel{1},'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
 export_fig(filename,'-pdf');
 
 end

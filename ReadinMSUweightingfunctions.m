@@ -2,7 +2,7 @@ function [datamat,surfaceweight,dataheaders] = ReadinMSUweightingfunctions(filen
 
 
 %% Initialize variables.
-%filename = '/Volumes/MyBook/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_land.txt';
+%filename = '/Volumes/ExternalOne/work/data/MSU/weightingfunctions/std_atmosphere_wt_function_chan_tmt_land.txt';
 startRow = 4;
 
 %% Read columns of data as text:

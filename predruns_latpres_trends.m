@@ -11,7 +11,7 @@ ClLevel = 'highCl';
 timeperiodhigh = [2005,2015];%[1955,1975]
 timeperiod = [2005,2014];%[1955,1975]
 
-vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/zonalmean/'];
+vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/zonalmean/'];
 varfiles = dir([vardirectory,'*.nc']);
 
 [data.(ClLevel),years.(ClLevel),composite.(ClLevel),dataMonthArrange.(ClLevel)]...
@@ -95,7 +95,7 @@ end
 
 %% read in swoosh
 
-[~,Swoosh,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/combinedo3qeq_swoosh-v02.1-198401-201501-latpress-2.5deg-L31.nc');
+[~,Swoosh,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/combinedo3qeq_swoosh-v02.1-198401-201501-latpress-2.5deg-L31.nc');
 temp = repmat(1984:2014,12,1);
 Swoosh.years = [temp(:);2015];
 

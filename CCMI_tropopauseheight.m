@@ -4,15 +4,15 @@ variable = 'T';
 area = '7590S';
 % trenddates = [19790201 19990101; 19990201 20150101];
 % finding all files
-directory = ['/Volumes/MyBook/work/data/CESM-CCMI/',variable,'/zonalmean/',area,'/'];
-Z3directory = ['/Volumes/MyBook/work/data/CESM-CCMI/','Z3','/zonalmean/',area,'/'];
-datedirectory = ['/Volumes/MyBook/work/data/CESM-CCMI/date/'];
+directory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/',variable,'/zonalmean/',area,'/'];
+Z3directory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/','Z3','/zonalmean/',area,'/'];
+datedirectory = ['/Volumes/ExternalOne/work/data/CESM-CCMI/date/'];
 files = dir([directory,'*.nc*']);
 Z3files = dir([Z3directory,'*.nc*']);
 datefiles = dir([datedirectory,'*.nc*']);
 
 %% Reading in ERA-Interim
-ERApressure = ncread('/Volumes/MyBook/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','level');
+ERApressure = ncread('/Volumes/ExternalOne/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','level');
 if includeERA
     if strcmp(variable,'Z3')
         eravar = 'z';
@@ -21,9 +21,9 @@ if includeERA
         eravar = 't';
         scale = 1;
     end
-    ERAdata = ncread(['/Volumes/MyBook/work/data/ERA-Interim/',variable,'/',variable,'_ERA-Interim.nc'],eravar)./scale;
+    ERAdata = ncread(['/Volumes/ExternalOne/work/data/ERA-Interim/',variable,'/',variable,'_ERA-Interim.nc'],eravar)./scale;
     
-    ERAlatitude = ncread('/Volumes/MyBook/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','latitude');
+    ERAlatitude = ncread('/Volumes/ExternalOne/work/data/ERA-Interim/Z3/Z3_ERA-Interim.nc','latitude');
     if strcmp(area,'6090S')
         ERAlatindex = find(ERAlatititude >= -90 && ERAlatititude <= -60);
     elseif strcmp(area,'6090N')

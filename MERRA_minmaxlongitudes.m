@@ -2,11 +2,11 @@
 
 % MERRA-interim minimum and maximum
 clear all 
-[~,MERRAdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/CESM-CCMI/T/50hPa/3090S_50hPa_T_f.e11.FWTREFC1SD.f19.f19.ccmi30.001.nc');
+[~,MERRAdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/CESM-CCMI/T/50hPa/3090S_50hPa_T_f.e11.FWTREFC1SD.f19.f19.ccmi30.001.nc');
 years(1).y = repmat(1979:2014,12,1);
 %years(1).y = [years(1).y(:);2017;2017];
 
-[~,MERRAdata4060S,~] = Read_in_netcdf('/Volumes/MyBook/work/data/CESM-CCMI/T/4060S/wgt_4060S_T_f.e11.FWTREFC1SD.f19.f19.ccmi30.001.nc');
+[~,MERRAdata4060S,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/CESM-CCMI/T/4060S/wgt_4060S_T_f.e11.FWTREFC1SD.f19.f19.ccmi30.001.nc');
 plotlines = 1;
 plotcorr = 1;
 %% finding minimum and maximum longitudes

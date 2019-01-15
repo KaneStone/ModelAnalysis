@@ -2,14 +2,14 @@
 
 Stimeperiod = [2000 2016];
 
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedanomfillo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedanomfillo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
 sfields = fieldnames(SWOOSH);
 
-[~,SWOOSH2,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedeqfillo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
+[~,SWOOSH2,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedeqfillo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
 
 sfields2 = fieldnames(SWOOSH2);
 
-[~,SWOOSH3,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
+[~,SWOOSH3,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201712-latpress-2.5deg-L31.nc');
 
 sfields3 = fieldnames(SWOOSH3);
 

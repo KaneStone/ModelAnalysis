@@ -21,7 +21,7 @@ remove_tertiary = 1;
 sulfdeviation = 0;
 ext = 1;
 
-addpath('/Volumes/MyBook/work/data/MLS/code/');
+addpath('/Volumes/ExternalOne/work/data/MLS/code/');
 [MLS,presind,allyears,MLSPressure] = importMLSmonthly(pres,0);
 
 %% importing OMI

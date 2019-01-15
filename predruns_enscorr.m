@@ -5,7 +5,7 @@ function [] = predruns_enscorr(dataMonthArrange,toz_dataMonthArrange,varmonth,to
 
 fields = fieldnames(dataMonthArrange);
 
-%[~,ENSAVE,~] = Read_in_netcdf('/Volumes/MyBook/work/data/predruns/TS/lowcl/ensave/TS_b.e11.BWTREFC2.f19_g16.ccmi34.LowCl.ENSAVE.cam.h0.nc');
+%[~,ENSAVE,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/predruns/TS/lowcl/ensave/TS_b.e11.BWTREFC2.f19_g16.ccmi34.LowCl.ENSAVE.cam.h0.nc');
 
 %% calculate ENSO
 
@@ -26,7 +26,7 @@ for i = 1:length(fields)
 
     NINO34all.(fields{i}) = NINOmonth.(fields{i})(:,:);    
              
-    save('/Volumes/MyBook/work/data/predruns/output/NINO34/highcl_1995_2014','NINO34all','NINOmonth');
+    save('/Volumes/ExternalOne/work/data/predruns/output/NINO34/highcl_1995_2014','NINO34all','NINOmonth');
 end
 
 %Calculate correlations between ENSO and TCO
@@ -168,11 +168,11 @@ for i = 1:length(fields)
     p.ind.(fields{i}) (p.ind.(fields{i}) <= .05) = 0;
     p.ind.(fields{i}) (p.ind.(fields{i}) > .05) = 1;
 end
-    if exist(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
+    if exist(['/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
         num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
         num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_','roll',num2str(rollwindow),'_',ClLevel],'file')
     else
-        save(['/Volumes/MyBook/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
+        save(['/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs',monthnames(tozmonth,0,0),'toz','_TS_detrend',...
             num2str(thigh(1)),'-',num2str(thigh(2)),'_',num2str(abs(lats2(1))),'-',...
             num2str(abs(lats2(2))),'S_Tperiod-',monthnames(varmonth,1,1),'_',ENSOext,'_','roll',num2str(rollwindow),'_',ClLevel],'r','p','bpred','bpred_int','lats','lons','rollcorr','rolltrend');
     end

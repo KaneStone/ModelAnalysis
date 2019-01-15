@@ -288,7 +288,7 @@ adm = permute(datasign_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Allperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -317,9 +317,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','f
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    allsig = load('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Allperc.mat');
+    allsig = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Allperc.mat');
 end
 
 p = zeros(size(GSS.all.mean));
@@ -340,7 +340,7 @@ adm = permute(datasignpct_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Pctperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -369,9 +369,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','f
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    allsigpct = load('/Volumes/MyBook/work/data/predruns/output/HSS/empcomp_Pctperc.mat');
+    allsigpct = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/empcomp_Pctperc.mat');
 end
 
 p2 = zeros(size(GSS.all.mean));

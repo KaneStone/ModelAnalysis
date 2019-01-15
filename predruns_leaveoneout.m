@@ -16,7 +16,7 @@ function [] = predruns_leaveoneout(surfacedata,surfacedataind,tozdata,inputs,lat
 % DON'T predefine anything!!!
 
 %% Read in ERA-Interim
-% Observations = load(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
+% Observations = load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
 % [obs.GSS] = predruns_obsleaveoneout(Observations,longitude,latitude,inputs);
 %% rearrange data into composite
 
@@ -306,7 +306,7 @@ for i = 1:size(mp,1)
 end
 
 %%
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/Allperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/Allperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -335,9 +335,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/Allperc.mat','file')
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/Allperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    allsig = load('/Volumes/MyBook/work/data/predruns/output/HSS/Allperc.mat');
+    allsig = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/Allperc.mat');
 end
 
 %%
@@ -388,7 +388,7 @@ adm = adm(:,:,:,:);
 
 %%
 tic;
-if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/Pctperc.mat','file')
+if ~exist('/Volumes/ExternalOne/work/data/predruns/output/HSS/Pctperc.mat','file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     bootstatm = zeros(5,size(mp,1),size(mp,2),500);
         
@@ -423,9 +423,9 @@ if ~exist('/Volumes/MyBook/work/data/predruns/output/HSS/Pctperc.mat','file')
         end
         toc;
     end
-    save('/Volumes/MyBook/work/data/predruns/output/HSS/Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
+    save('/Volumes/ExternalOne/work/data/predruns/output/HSS/Pctperc.mat','bootstat','bootstatm','percentiles','percentilesm');
 else
-    pctsig = load('/Volumes/MyBook/work/data/predruns/output/HSS/Pctperc.mat');
+    pctsig = load('/Volumes/ExternalOne/work/data/predruns/output/HSS/Pctperc.mat');
 end
 
 %%

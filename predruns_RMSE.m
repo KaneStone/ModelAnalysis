@@ -16,7 +16,7 @@ function [] = predruns_RMSE(surfacedata,surfacedataind,tozdata,inputs,latitude,l
 % DON'T predefine anything!!!
 
 %% Read in ERA-Interim
-% Observations = load(['/Volumes/MyBook/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
+% Observations = load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(inputs.varmonthtomean,1,1),'_and_',monthnames(inputs.varmonth,1,1),'.mat']);
 % [obs.GSS] = predruns_obsleaveoneout(Observations,longitude,latitude,inputs);
 %% rearrange data into composite
 

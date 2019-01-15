@@ -1,7 +1,7 @@
 % plot SPE events
 clear all
 
-[~,data,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
+[~,data,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
 
 %% getting months
 

@@ -1,8 +1,8 @@
 % Attempting to use ozone as a surrogate for itself to look at dynamical influences
 clear all
 %% Read in data
-if ~exist('/Volumes/MyBook/work/data/WACCM/output/REFC1_01.mat','file')
-    [~,data,~] = Read_in_netcdf('/Volumes/MyBook/work/data/CESM-CCMI/O3/O3_f.e11.FWTREFC1.f19_f19.ccmi30.002.nc');
+if ~exist('/Volumes/ExternalOne/work/data/WACCM/output/REFC1_01.mat','file')
+    [~,data,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/CESM-CCMI/O3/O3_f.e11.FWTREFC1.f19_f19.ccmi30.002.nc');
 
     %% calculate pressure
     Pressure = permute(repmat(data.ap.*100000,1,size(data.PS)),[2,3,1,4]) + ...
@@ -21,9 +21,9 @@ if ~exist('/Volumes/MyBook/work/data/WACCM/output/REFC1_01.mat','file')
 regpres.lat = data.lat;
 regpres.lon = data.lon;
 regpres.date = data.date;
-    save('/Volumes/MyBook/work/data/WACCM/output/REFC1_01.mat','regpres','-v7.3');
+    save('/Volumes/ExternalOne/work/data/WACCM/output/REFC1_01.mat','regpres','-v7.3');
 else
-    load('/Volumes/MyBook/work/data/WACCM/output/REFC1_01.mat');
+    load('/Volumes/ExternalOne/work/data/WACCM/output/REFC1_01.mat');
 end
 
 %%

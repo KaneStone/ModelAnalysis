@@ -1,7 +1,7 @@
 function [highClData,WAClat] = ReadInHighClRegression(intpres,timeperiod,type,variable)
 
 %% Read in highcl runs
-directory = ['/Volumes/MyBook/work/data/predruns/',variable,'/',type,'/zonalmean/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',variable,'/',type,'/zonalmean/'];
 files = dir([directory,'*.nc']);
 for i = 1:length(files)
     [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);    
@@ -26,7 +26,7 @@ WAClat = data(1).lat;
 
 %% Read in Uwind
 levs = [30,10];
-directory = ['/Volumes/MyBook/work/data/predruns/U/',type,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/U/',type,'/'];
 filesU = dir([directory,'*.nc']);
 for i = 1:length(filesU)    
     [~,highclU(i),~] = Read_in_netcdf([directory,filesU(i).name]);
@@ -41,8 +41,8 @@ end
 
 %% Read in heat flux
 levs = [100];
-directoryS = '/Volumes/MyBook/work/data/predruns/VTH3d/highCl/south/';
-directoryN = '/Volumes/MyBook/work/data/predruns/VTH3d/highCl/north/';
+directoryS = '/Volumes/ExternalOne/work/data/predruns/VTH3d/highCl/south/';
+directoryN = '/Volumes/ExternalOne/work/data/predruns/VTH3d/highCl/north/';
 filesHF_south = dir([directoryS,'*.nc']);
 filesHF_north = dir([directoryN,'*.nc']);
 for i = 1:length(filesHF_south)
@@ -82,7 +82,7 @@ end
 
 %% Read in Surface Pressure and construct ENSO
 
-directory = ['/Volumes/MyBook/work/data/predruns/TS/',type,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/TS/',type,'/'];
 filesTS = dir([directory,'*.nc']);
 for i = 1:length(filesTS)
     [~,highclTS(i),~] = Read_in_netcdf([directory,filesTS(i).name]);    

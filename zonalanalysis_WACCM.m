@@ -9,7 +9,7 @@ sig = .05;
 %% Read in TOZ highcl and take percentiles
 ClLevel = 'highCl';
 tozdates = [1995,2024];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
@@ -18,7 +18,7 @@ tozfiles = dir([directory,'*.nc']);
 %% Read in TOZ lowcl and take percentiles
 ClLevel = 'lowCl';
 tozpastdates = [1955,1979];
-directory = ['/Volumes/MyBook/work/data/predruns/',tozvar,'/',ClLevel,'/'];
+directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfilespast = dir([directory,'*.nc']);
 [toz_data.lowcl,toz_years.lowcl,toz_varweighted.lowcl,toz_composite.lowcl,toz_dataMonthArrange.lowcl] = ...
     predruns_ReadInlayer_areaaverage(directory,tozfilespast,tozvar,tozpastdates,lats,detrend_ozone);
@@ -62,12 +62,12 @@ ClLevel = 'lowcl';
 timeperiodhigh = [1955,1979];%[1955,1975]
 
 if varlayer
-    vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+    vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
     varfilespast = dir([vardirectory,'*.nc']);
     [data.highcl,years.highcl,composite.highcl,dataMonthArrange.highcl]...
         = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodhigh,lats,1);
 else
-    vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/','500hPa','/'];
+    vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/','500hPa','/'];
     varfilespast = dir([vardirectory,'*.nc']);
     [data.highcl,years.highcl,data_at_level.highcl,composite.highcl,dataMonthArrange.highcl]...
         = predruns_ReadIn4d(vardirectory,varfilespast,var,timeperiodhigh,400,1);
@@ -79,12 +79,12 @@ ClLevel = 'lowCl';
 timeperiodlow = [1955,1979];%[1955,1975]
 
 if varlayer
-    vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/'];
+    vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/'];
     varfilespast = dir([vardirectory,'*.nc']);
     [data.lowcl,years.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
         = predruns_ReadInlayer(vardirectory,varfilespast,var,timeperiodlow,lats,1);
 else
-    vardirectory = ['/Volumes/MyBook/work/data/predruns/',var,'/',ClLevel,'/',level,'/'];
+    vardirectory = ['/Volumes/ExternalOne/work/data/predruns/',var,'/',ClLevel,'/',level,'/'];
     varfilespast = dir([vardirectory,'*.nc']);
     [data.lowcl,years.lowcl,data_at_level.lowcl,composite.lowcl,dataMonthArrange.lowcl]...
         = predruns_ReadIn4d(vardirectory,varfilespast,var,timeperiodlow,400,1);

@@ -13,7 +13,7 @@ Pressure = rmfield(Pressure, 'MAM1990');
 runs = fields(MolConc);
 
 %% import SWOOSH
-[~,SWOOSH,~] = Read_in_netcdf('/Volumes/MyBook/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
+[~,SWOOSH,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/SWOOSH/O3/combinedo3q_swoosh-v02.6-198401-201611-latpress-10deg-L31.nc');
 %SWOOSHlatindex = find(SWOOSH.lat > lats(1) & SWOOSH.lat < lats(2));
 SWOOSH.combinedo3q = SWOOSH.combinedo3q(:,:,1:end-11);
 for i = 1:12
@@ -24,12 +24,12 @@ SWOOSHyears = 1984:2015;
 
 %% Read in Solar
 
-[~,solara,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/solar/f107a/f107a_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
-[~,solar,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/solar/f107/f107_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
+[~,solara,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/solar/f107a/f107a_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
+[~,solar,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/solar/f107/f107_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
 
 %% Read in SPE
 
-[~,SPE,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
+[~,SPE,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
 
 SPEde = SPE.Prod(:,SPE.date >= 19990101 & SPE.date <= 20160101);
 SPEde_date = SPE.date(SPE.date >= 19990101 & SPE.date <= 20160101);

@@ -51,16 +51,16 @@ monthtitle = {'January','February','March','April','May','June','July','August',
 if latlon
     %% read in daily data
 
-    [MAMinfo, MAMdata, MAMatt] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/newfromDoug/latlon/O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h5_merged_latlon.nc');
-    [VCMAMinfo, VCMAMdata, VCMAMatt] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/newfromDoug/latlon/O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.004f.cam.h5_merged_latlon.nc');
-    [MAMTinfo, MAMTdata, MAMTatt] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/newfromDoug/latlon/T_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h5_merged_latlon.nc');
+    [MAMinfo, MAMdata, MAMatt] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/newfromDoug/latlon/O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h5_merged_latlon.nc');
+    [VCMAMinfo, VCMAMdata, VCMAMatt] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/newfromDoug/latlon/O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.004f.cam.h5_merged_latlon.nc');
+    [MAMTinfo, MAMTdata, MAMTatt] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/newfromDoug/latlon/T_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h5_merged_latlon.nc');
     szMAM = size(MAMdata.O3);
     PressureMAM = permute(repmat(MAMdata.ap*100000,[1,szMAM([1,2,4])]),[2,3,1,4]) + permute(repmat(MAMdata.b,[1,szMAM([1,2,4])]),[2,3,1,4]).*permute(repmat(MAMdata.PS,[1,1,1,88]),[1,2,4,3]);      
 
     MAMlatlonconc = vmr2conc(MAMdata.O3,MAMTdata.T,PressureMAM,'03','conc');
     VCMAMlatlonconc = vmr2conc(VCMAMdata.O3,MAMTdata.T,PressureMAM,'03','conc');
 
-    [MAM1990info, MAM1990data, MAM1990att] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/O3/T_O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.1990-2000.mam.004f.cam.h0.nc');
+    [MAM1990info, MAM1990data, MAM1990att] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/O3/T_O3_f.e11.FWTREFC1SD.f19.f19.ccmi30.1990-2000.mam.004f.cam.h0.nc');
     sz1990MAM = size(MAM1990data.O3);
     Pressure1990MAM = permute(repmat(MAM1990data.hyam*100000,[1,sz1990MAM([1,2,4])]),[2,3,1,4]) + permute(repmat(MAM1990data.hybm,[1,sz1990MAM([1,2,4])]),[2,3,1,4]).*permute(repmat(MAM1990data.PS,[1,1,1,88]),[1,2,4,3]);      
     

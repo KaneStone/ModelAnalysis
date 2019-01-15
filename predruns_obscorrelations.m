@@ -10,7 +10,7 @@ shortnames = 0;
 removeENSO = 0;
 %% Read in ERA-interim surface temperature
 
-ERAdata = ReadinERA('/Volumes/MyBook/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
+ERAdata = ReadinERA('/Volumes/ExternalOne/work/data/ERA-Interim/TS/TS_ERA-Interim.nc');
 ERAyears = 1979:2016;
 ERAyear_vector = repmat(ERAyears,12,1);
 ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vector(:)),1)*max(ERAyear_vector(:))+1];
@@ -19,7 +19,7 @@ ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vect
 tcolat = -75.5;
 tcolon = 26;
 tcolat_QBO = [10,30];
-[~,BSdata,~] = Read_in_netcdf('/Volumes/MyBook/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
+[~,BSdata,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/BodekerScientific/TCO/Bodeker_TCO_monavg.nc');
 
 BSyears = 1980:2016;
 BSyear_vector = repmat(BSyears,12,1);
@@ -41,7 +41,7 @@ toz_zm = squeeze(BSdata.tco(lonindex_bs,latindex_bs,BSdateindex(1)+tozmonth:12:B
 %% Read in Halley Station
 
 %% Initialize variables.
-filename = '/Volumes/MyBook/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
+filename = '/Volumes/ExternalOne/work/data/TCOstations/Halley_Total_Ozone_1956-2012.txt';
 startRow = 3;
 
 formatSpec = '%4f%7f%7f%7f%7f%7f%7f%7f%7f%7f%f%[^\n\r]';

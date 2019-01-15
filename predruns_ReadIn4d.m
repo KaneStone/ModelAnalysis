@@ -4,7 +4,7 @@ function [data,years,data_at_level,data_composite,dataMonthArrange]...
 data_at_level = zeros(length(files),144,96,(dates(2)-dates(1)+1)*12);
 % Read in pred run 4d data
 count = 1;
-filename = ['/Volumes/MyBook/work/data/predruns/output/',var,'_',num2str(level),'hPa',files(1).name(end-19:end-13),'.mat'];
+filename = ['/Volumes/ExternalOne/work/data/predruns/output/',var,'_',num2str(level),'hPa',files(1).name(end-19:end-13),'.mat'];
 for i = 1:length(files)
     %read in weighted area average data [height,time]
     [~,data(i),~] = Read_in_netcdf([directory,files(i).name]);

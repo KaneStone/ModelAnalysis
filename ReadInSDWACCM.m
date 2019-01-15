@@ -23,7 +23,7 @@ end
 
 %% Read in U wind if needed
 
-[~,U,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/U/wa_-5_5_U_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
+[~,U,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/U/wa_-5_5_U_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
 lev = [10,50];
 [~,levind] = min(abs(U.lev - lev));
 SDWaccmData(1).U = squeeze(U.U(levind,dateind));
@@ -31,8 +31,8 @@ SDWaccmData(2).U = repmat(squeeze(U.U(levind,1:12)),[1,timeperiod(2) - timeperio
 
 %% Read in U wind if needed
 
-[~,HFS,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/VTH3d/wa_-80_-40_VTH3d_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
-[~,HFN,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/VTH3d/wa_40_80_VTH3d_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
+[~,HFS,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/VTH3d/wa_-80_-40_VTH3d_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
+[~,HFN,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/VTH3d/wa_40_80_VTH3d_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0zm_merged_c160105.nc');
 lev = 50;
 [~,levind] = min(abs(HFS.ilev - lev));
 SDWaccmData(1).HFS = squeeze(HFS.VTH3d(levind,dateindHF));
@@ -41,7 +41,7 @@ SDWaccmData(2).HFS = repmat(SDWaccmData(1).HFS(1,1:12),[1,size(SDWaccmData(1).HF
 SDWaccmData(2).HFN = repmat(SDWaccmData(1).HFN(1,1:12),[1,size(SDWaccmData(1).HFN,2)./12]); % up to here.
 
 %% Read in andconstruct ENSO if needed
-[~,TS,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/TS/merged_TS_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0.1999-2014.nc');
+[~,TS,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/TS/merged_TS_f.e11.FWTREFC1SD.f19.f19.ccmi30.mam.004f.cam.h0.1999-2014.nc');
 
 SDWaccmData(1).TS = squeeze(TS.TS(:,:,dateind));
 
@@ -63,12 +63,12 @@ SDWaccmData(1).NINO34 = detrend((NINO_mn3 - NINOallmean)./NINOstd);
 
 %% Read in Solar
 
-[~,solar,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/solar/f107a/f107a_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
+[~,solar,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/solar/f107a/f107a_species_f.e11.FWTREFC1SD.f19.f19.ccmi30.vc.mam.1999.004f.cam.h0zm_merged_c160105.nc');
 SDWaccmData(2).solar = solar.f107a(dateind);
 
 %% Read in SPE
 
-[~,SPE,~] = Read_in_netcdf('/Volumes/MyBook/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
+[~,SPE,~] = Read_in_netcdf('/Volumes/ExternalOne/work/data/WACCM/SPE/spes_1963-2014_c150717.nc');
 
 SPEde = SPE.Prod(:,SPE.date >= 19990101 & SPE.date <= 20160101);
 SPEde_date = SPE.date(SPE.date >= 19990101 & SPE.date <= 20160101);
@@ -96,8 +96,8 @@ clearvars count
 
 %% Read in NO2 regression function
 
-load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression2.mat');
-%abc = load('/Volumes/MyBook/work/data/regressionOutput/NO2forregression2.mat');
+load('/Volumes/ExternalOne/work/data/regressionOutput/NO2forregression2.mat');
+%abc = load('/Volumes/ExternalOne/work/data/regressionOutput/NO2forregression2.mat');
 
 SDWaccmData(1).NO2 = squeeze(SDanomalllats(1,:,:,:));
 SDWaccmData(2).NO2 = squeeze(SDanomalllats(2,:,:,:));

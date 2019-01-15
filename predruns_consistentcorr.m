@@ -1,11 +1,11 @@
 % compare difference between ENSO and no ENSO signals in correlations
 
 clear all
-SHreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2024_90-75S_Tperiod-DecJanFeb_.mat');
-SHregshort = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
+SHreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2024_90-75S_Tperiod-DecJanFeb_.mat');
+SHregshort = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefsNovembertoz_TS_detrend1995-2016_90-75S_Tperiod-DecJanFeb_.mat');
 
-obsreg = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins_1979-2013_.mat'); 
-obsshort = load('/Volumes/MyBook/work/data/predruns/output/regression/regcoefs_Justins_1979-2000_.mat');
+obsreg = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins_1979-2013_.mat'); 
+obsshort = load('/Volumes/ExternalOne/work/data/predruns/output/regression/regcoefs_Justins_1979-2000_.mat');
 
 tozmonth = 11;
 varmonth = [12,1,2];
