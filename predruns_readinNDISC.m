@@ -8,11 +8,21 @@ if strcmp(datatype,'seaiceindex')
         data(:,:,i) = datatemp.data;
     end
     data (data == -9999) = NaN;
-elseif strcmp(datatype,'source')
+elseif strcmp(datatype,'Goddard')
     directory = '/Volumes/ExternalOne/work/data/NSIDC_seaice/';
     files = dir([directory,'*.nc']);
     for i = 1:length(files)
-        [data(i).seaiceconcentration] = ncread([directory,files(i).name],'goddard_merged_seaice_conc_monthly');
+        [data(i).seaiceconcentration] = ncread([directory,files(i).name],'goddard_bt_seaice_conc_monthly'); %goddard_merged_seaice_conc_monthly
+        [data(i).time] = ncread([directory,files(i).name],'time');
+        [data(i).latitude] = ncread([directory,files(i).name],'latitude');
+        [data(i).longitude] = ncread([directory,files(i).name],'longitude');
+        data(i).seaiceconcentration (data(i).seaiceconcentration < 0) = NaN;
+    end    
+elseif strcmp(datatype,'ERA')
+    directory = '/Volumes/ExternalOne/work/data/ERA-Interim/SEAICE/';
+    files = dir([directory,'*.nc']);
+    for i = 1:length(files)
+        [data(i).seaiceconcentration] = ncread([directory,files(i).name],'siconc');
         [data(i).time] = ncread([directory,files(i).name],'time');
         [data(i).latitude] = ncread([directory,files(i).name],'latitude');
         [data(i).longitude] = ncread([directory,files(i).name],'longitude');

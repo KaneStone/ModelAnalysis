@@ -1,35 +1,37 @@
-function [difference,p,pct,TSmonths] = obsPercentileDifferences(surfacetemperature,ozone,percentile,mons,tozmon,longitude,latitude,hem,plotting)
+function [difference,p,pct,TSmonths] = obsPercentileDifferences(surfacetemperature,ozone,percentile,mons,tozmon,longitude,latitude,plotting,ext)
 
 pct.lowerpercentile = prctile(ozone,percentile);
 pct.upperpercentile = prctile(ozone,100-percentile);
 pct.lowerind = find(ozone <= pct.lowerpercentile);
 pct.upperind = find(ozone >= pct.upperpercentile);
 
-if ~hem
-    %surfacetemperature = cat(3,surfacetemperature,zeros(size(surfacetemperature,1),size(surfacetemperature,2),2));
-    surfacetemperature = cat(3,surfacetemperature,surfacetemperature(:,:,end-11:end-10));
-    surfacetemperature (surfacetemperature == 0) = NaN;
-end
-
-for i = 1:12    
+% if ~hem
+%     %surfacetemperature = cat(3,surfacetemperature,zeros(size(surfacetemperature,1),size(surfacetemperature,2),2));
+%     surfacetemperature = cat(3,surfacetemperature,surfacetemperature(:,:,end-11:end-10));
+%     surfacetemperature (surfacetemperature == 0) = NaN;
+% end
+count = 1;
+for i = mons
+    %for i = 1:12    
     for j = 1:size(surfacetemperature,1)
         for k = 1:size(surfacetemperature,2)
-            if hem
-                TSmonths(j,k,:,i) = detrend(squeeze(surfacetemperature(j,k,i:12:end)))+...
-                    nanmean(squeeze(surfacetemperature(j,k,12+i:12:end-2)));
-            else
-                if i < 5
-                    TSmonths(j,k,:,i) = detrend(squeeze(surfacetemperature(j,k,12+i:12:end)));                                
-                else
-                    TSmonths(j,k,:,i) = detrend(squeeze(surfacetemperature(j,k,i:12:end)));
-                end        
-            end
+%             if hem
+                TSmonths(j,k,:,count) = detrend(squeeze(surfacetemperature(j,k,i:12:end-ext)))+...
+                    nanmean(squeeze(surfacetemperature(j,k,i:12:end-ext)));
+%             else
+%                 if i < 5
+%                     TSmonths(j,k,:,i) = detrend(squeeze(surfacetemperature(j,k,12+i:12:end)));                                
+%                 else
+%                     TSmonths(j,k,:,i) = detrend(squeeze(surfacetemperature(j,k,i:12:end)));
+%                 end        
+%             end
         end
     end
+    count = count+1;
 end
 
-upper = TSmonths(:,:,pct.upperind,mons);
-lower = TSmonths(:,:,pct.lowerind,mons);
+upper = TSmonths(:,:,pct.upperind); %HERE
+lower = TSmonths(:,:,pct.lowerind);
 difference = nanmean(upper(:,:,:),3) - nanmean(lower(:,:,:),3);
 difference = permute(reshape(difference,[size(difference),1]),[3,1,2]);
 for i = 1:size(upper,1)
@@ -37,7 +39,6 @@ for i = 1:size(upper,1)
        p(1,i,j) = ttest2(squeeze(upper(i,j,:)),squeeze(lower(i,j,:)));
     end
 end
-
 
 p (p == 0) = -1;
 p (p == 1) = 0;

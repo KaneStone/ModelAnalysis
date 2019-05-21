@@ -35,6 +35,13 @@ if ~exist([filename,'.mat'],'file')
     isless = varmonth2 <= 2;
     varmonth2 = (varmonth2 + isless*12);
 
+    % find if data vector extends beyond december
+    ismore = varmonth2 > 12;
+    if sum(ismore) > 0
+        ext = 6;
+    else
+        ext = 0;
+    end
     laglength = 3;    
     
     for i = 1:length(inputs.varmonthtomean)
@@ -48,7 +55,7 @@ if ~exist([filename,'.mat'],'file')
     % Here I am regressing with the of the seasonal average
     for j = 1:length(inputs.varmonth)
         %together(:,:,:,:,j) = squeeze(datamonthall(:,:,:,varmonth2(j):12:end-inputs.varmonth(1)+inputs.varmonth(end)));
-        together(:,:,:,:,j) = squeeze(datamonthall(:,:,:,varmonth2(j):12:end));
+        together(:,:,:,:,j) = squeeze(datamonthall(:,:,:,varmonth2(j):12:end-ext));
     end
     
     [~,vmindex] = intersect(inputs.varmonth,inputs.varmonthtomean);
@@ -61,17 +68,17 @@ if ~exist([filename,'.mat'],'file')
                 for l = 1:size(datamonthall,2) % latitudes
                     for m = 1:size(datamonthall,3) % longitudes
                         for lag = 1:laglength % lag
-                            regressors = [ones(length(squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag))),1),...
-                                squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag))'];
-                            [b(j,k,l,m,lag,:)] = regress(squeeze(datamonthall(j,l,m,varmonth2(k):12:end-lag)),...
+                            regressors = [ones(length(squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag-ext))),1),...
+                                squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag-ext))'];
+                            [b(j,k,l,m,lag,:)] = regress(squeeze(datamonthall(j,l,m,varmonth2(k):12:end-lag-ext)),...
                                 regressors);                        
                             % finding largest lag correlation
                         end
                         [~,llc(j,k,l,m)] = max(abs(squeeze(b(j,k,l,m,:,2))));
                         blag(j,k,l,m,:) = b(j,k,l,m,llc(j,k,l,m),:);
-                        dataVarMonth(j,:,k,l,m) = squeeze(datamonthall(j,l,m,varmonth2(k):12:end-laglength)) - ...
+                        dataVarMonth(j,:,k,l,m) = squeeze(datamonthall(j,l,m,varmonth2(k):12:end-laglength-ext)) - ...
                             squeeze(b(j,k,l,m,llc(j,k,l,m),2))*...
-                            squeeze(NINO34all(j,varmonth2(k)-llc(j,k,l,m)+1:12:end-laglength))';                        
+                            squeeze(NINO34all(j,varmonth2(k)-llc(j,k,l,m)+1:12:end-laglength-ext))';                        
                     end
                 end
             end        

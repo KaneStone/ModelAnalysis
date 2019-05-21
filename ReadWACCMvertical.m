@@ -136,7 +136,7 @@ for i = 1:length(files)
         if ND
             NumberDensity.(names{i}) = vmr2conc(data.(names{i}).(variable),TAdata.(names{i}).T,Pressure.(names{i}),variable,'conc');
         else
-            NumberDensity.(names{i}) = []
+            NumberDensity.(names{i}) = [];
         end
     end
     

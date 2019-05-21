@@ -2,17 +2,19 @@ function [inputs] = predruns_inputs
 
 % general
 inputs.tozvar = 'toz';
-inputs.var = 'TS'; %TS %SNOWHICE
+inputs.var = 'ICEFRAC'; %TS %SNOWHICE %ICEFRAC
 inputs.detrend = 1;
 inputs.detrend_ozone = 1;
 inputs.lats = [63,90];
-inputs.ClLevel = {'lowCl'}; %{'highCl','lowCl','lowGHG'}
-inputs.timeperiodtoz = [1955,1979];%[1995,2024];
-inputs.timeperiodvar = [1955,1979];%[1995,2024];
+inputs.ClLevel = {'highCl'}; %{'highCl','lowCl','lowGHG'}
+inputs.timeperiodtoz = [1995,2024];%[1955,1979];
+inputs.timeperiodvar = [1995,2024];%[1955,1979];
+% inputs.timeperiodtoz = [1955,1979];
+% inputs.timeperiodvar = [1955,1979];
 inputs.percentile = 20;
 inputs.tozmonth = 3;
-inputs.varmonth = [3,4,5,6,7];
-inputs.varmonthtomean = [4];
+inputs.varmonth = [3,4,5,6,7,8,9,10,11];%[3,4,5,6,7];
+inputs.varmonthtomean = [9];
 inputs.removeENSO = 1;
 inputs.lastfiveyears = 0;
 %compare to obs

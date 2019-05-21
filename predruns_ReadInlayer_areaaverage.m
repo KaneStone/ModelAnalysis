@@ -1,5 +1,14 @@
 function [data,years,varweighted,data_composite,dataMonthArrange] = ...
-    predruns_ReadInlayer_areaaverage(directory,files,var,dates,lats,ifdetrend)
+    predruns_ReadInlayer_areaaverage(directory,files,var,dates,lats,ifdetrend,varmonth)
+
+% definging end point
+ifmore = varmonth > 12;
+
+if sum(ifmore) > 0
+    ext = 12;
+else
+    ext = 0;
+end
 
 % Read in pred run 3d data
 count = 1;
@@ -18,7 +27,7 @@ for i = 1:length(files)
     
     %constructing composite
     dateindfirst = find(years(i).y == dates(1),1);
-    dateindlast = find(years(i).y == dates(2),1,'last');
+    dateindlast = find(years(i).y == dates(2),1,'last')-ext;
     data_composite.data(count:count+dateindlast-dateindfirst) = varweighted(i,dateindfirst:dateindlast);
     count = count+size(data(i).(var)(:,:,dateindfirst:dateindlast),3);        
     
@@ -26,6 +35,7 @@ end
     
 for i = 1:size(varweighted,1)    
     dateind = find(years(i).y >= dates(1) & years(i).y <= dates(2));  
+    dateind = dateind(1:end-ext);
     for j = 1:12    
         if ifdetrend
             dataMonthArrange(i,j,:) = detrend(varweighted(i,dateind(1)+j-1:12:dateind(end))) + ...

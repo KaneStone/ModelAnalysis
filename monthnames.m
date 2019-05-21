@@ -1,11 +1,20 @@
-function [monthout] = monthnames(monthinput,stringtogether,shortnames)
+function [monthout] = monthnames(monthinput,stringtogether,type)
 
-if shortnames
+for i = 1:length(monthinput)
+    if monthinput(i) > 12
+        monthinput(i) = monthinput(i)-12;        
+    end
+end
+
+if strcmp(type,'short')
     monthtitles = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug',...
         'Sep','Oct','Nov','Dec'};
-else
+elseif strcmp(type,'long')
     monthtitles = {'January','February','March','April','May','June','July','August',...
         'September','October','November','December'};
+elseif strcmp(type,'single')
+    monthtitles = {'J','F','M','A','M','J','J','A',...
+        'S','O','N','D'};
 end
 
 for i = 1:length(monthinput)

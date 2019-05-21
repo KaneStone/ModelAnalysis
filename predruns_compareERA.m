@@ -7,6 +7,16 @@ else
     ensoext = 'noremoveENSO';
 end
 
+ifmore = inputs.varmonth > 12;
+
+if sum(ifmore) > 0
+    ext = 12;
+    extts = 4;
+else
+    ext = 0;
+    extts = 4;
+end
+
 %% Observations -----------------------------------------------------------------------------
 % using ERA-Interim TS and Bodeker scientific TCO
 if inputs.timeperiodvar(2) < 2016
@@ -31,7 +41,7 @@ ERAdata.years = [ERAyear_vector(:);ones(length(ERAdata.time)-length(ERAyear_vect
 
 if useBodeker
     %% READ in Bodeker 
-    tcolat = [63,90];
+    tcolat = inputs.lats;
   
     tcolon = 26;
     tcolat_QBO = [10,30];
@@ -47,11 +57,11 @@ if useBodeker
     latindex_bs = find(BSdata.lat >= tcolat(1) & BSdata.lat <= tcolat(2));
     
     toz_zm = detrend(weightedaverage(squeeze(nanmean(BSdata.tco(:,latindex_bs,ozonedateindex(1)+...
-        inputs.tozmonth-1:12:ozonedateindex(2)),1)),BSdata.lat(latindex_bs))) + ...
+        inputs.tozmonth-1:12:ozonedateindex(2))-ext,1)),BSdata.lat(latindex_bs))) + ...
         nanmean(weightedaverage(squeeze(nanmean(BSdata.tco(:,latindex_bs,ozonedateindex(1)+...
-        inputs.tozmonth-1:12:ozonedateindex(2)),1)),BSdata.lat(latindex_bs)));
+        inputs.tozmonth-1:12:ozonedateindex(2)-ext),1)),BSdata.lat(latindex_bs)));
     toz_zm_nodetrend = weightedaverage(squeeze(nanmean(BSdata.tco(:,latindex_bs,ozonedateindex(1)+...
-        inputs.tozmonth-1:12:ozonedateindex(2)),1)),BSdata.lat(latindex_bs));        
+        inputs.tozmonth-1:12:ozonedateindex(2)-ext),1)),BSdata.lat(latindex_bs));        
 
     
 end
@@ -68,51 +78,67 @@ end
 
 if inputs.takediff
 
+    %% calculate ENSO
+
+    %ERAdateindex(1) = find(ERAdata.years == obstimeperiod(1),1,'first');
+    %ERAdateindex(2) = find(ERAdata.years == obstimeperiod(2),1,'last');
+
+    latlimits = [-5 5];
+    lonlimits = [190 240];
+
+    latindex = find(ERAdata.latitude >= latlimits(1) & ERAdata.latitude <= latlimits(2));
+    lonindex = find(ERAdata.longitude >= lonlimits(1) & ERAdata.longitude <= lonlimits(2));
+
+    for j = 1:12
+        NINO_mn(:,j,:) = squeeze(nanmean(ERAextract(lonindex,latindex,j:12:end),1));
+        NINO_mn2(j,:) = squeeze(nanmean(NINO_mn(:,j,:),1));
+        NINOmonth(j,:) = (NINO_mn2(j,:) - nanmean(NINO_mn2(j,:),2))./std(NINO_mn2(j,:),1,2);
+    end   
+
+    NINO34all = NINOmonth(:);
+
+    for i = 1:12    
+        for j = 1:size(ERAdata.t2m,2)
+            for k = 1:size(ERAdata.t2m,1)
+                ts(k,j,:,i) = detrend(squeeze(ERAextract(k,j,i:12:end))) + ...
+                    repmat(squeeze(nanmean(ERAextract(k,j,i:12:end),3)),...
+                    [1,obstimeperiod(2)-obstimeperiod(1)+1])';
+            end
+        end    
+    end
+    ts = permute(ts,[1,2,4,3]);
+    ts = ts(:,:,:);
+    
+    
     %% calculate observed differences  
+    
+    ifmore = inputs.varmonth > 12;
+
+    if sum(ifmore) > 0
+        ext = 6;
+    else
+        ext = 0;
+    end
+    
     monin = inputs.varmonthtomean;
     if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat'])
-        [differences,differencesp,obspct,obstemp] = obsPercentileDifferences(ERAextract,toz_zm_nodetrend,20,...
-            monin,inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,1,[]); 
+        [differences,differencesp,obspct,obstemp] = obsPercentileDifferences(ts,toz_zm_nodetrend,20,...
+            monin,inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,[],ext); 
         for i = 1:length(inputs.varmonth)
-            [differences_ind(i,:,:),differencesp_ind(i,:,:),~,~] = obsPercentileDifferences(ERAextract,toz_zm_nodetrend,20,...
-                inputs.varmonth(i),inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,1,[]); 
+            [differences_ind(i,:,:),differencesp_ind(i,:,:),~,~] = obsPercentileDifferences(ts,toz_zm_nodetrend,20,...
+                inputs.varmonth(i),inputs.tozmonth,ERAdata.longitude,ERAdata.latitude,[],ext); 
         end
-        save(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext],...
+        save(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',...
+            monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),...
+            '_',ensoext,'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))],...
             'differences','differencesp','differences_ind','differencesp_ind','obspct','obstemp','toz_zm_nodetrend');
     else
-        load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'.mat']);
+        load(['/Volumes/ExternalOne/work/data/predruns/output/data/obs/','obs_perc_diff',...
+            monthnames(monin,1,1),'_and_',monthnames(inputs.varmonth,1,1),'_',...
+            num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'.mat']);
     end
 
-%% calculate ENSO
 
-%ERAdateindex(1) = find(ERAdata.years == obstimeperiod(1),1,'first');
-%ERAdateindex(2) = find(ERAdata.years == obstimeperiod(2),1,'last');
-
-latlimits = [-5 5];
-lonlimits = [190 240];
-
-latindex = find(ERAdata.latitude >= latlimits(1) & ERAdata.latitude <= latlimits(2));
-lonindex = find(ERAdata.longitude >= lonlimits(1) & ERAdata.longitude <= lonlimits(2));
-
-for j = 1:12
-    NINO_mn(:,j,:) = squeeze(nanmean(ERAextract(lonindex,latindex,j:12:end),1));
-    NINO_mn2(j,:) = squeeze(nanmean(NINO_mn(:,j,:),1));
-    NINOmonth(j,:) = (NINO_mn2(j,:) - nanmean(NINO_mn2(j,:),2))./std(NINO_mn2(j,:),1,2);
-end   
-
-NINO34all = NINOmonth(:);
-    
-for i = 1:12    
-    for j = 1:size(ERAdata.t2m,2)
-        for k = 1:size(ERAdata.t2m,1)
-            ts(k,j,:,i) = detrend(squeeze(ERAextract(k,j,i:12:end))) + ...
-                repmat(squeeze(nanmean(ERAextract(k,j,i:12:end),3)),...
-                [1,obstimeperiod(2)-obstimeperiod(1)+1])';
-        end
-    end    
-end
-ts = permute(ts,[1,2,4,3]);
-ts = ts(:,:,:);
 
 %% taking correlations
 if tcolat(1) > 0
@@ -201,6 +227,16 @@ difftoplot = cat(1,differences_interp,modeldifferences.composite);
 diff_p_toplot = cat(1,differences_interp_p,modeldifferences.ttest.ensmean);
 
 %% plotting polar    
+
+if inputs.lats(1) < 0
+    ylims = [-90 0];
+    diffclims = [-3 3];
+else
+    ylims = [0 90];
+    diffclims = [-5 5];
+end
+
+%%
 plotting = 1;
 fsize = 16;
 contourtitle = {'Observed correlations','Ensemble composite correlations'};
@@ -209,11 +245,11 @@ corrtitles = {'Correlation','Temperature'};
 intervals = [-1 1;-1 1; -5 5;-5 5];
 
 [fig,fh] = subplotmaps(polartoplot,waclon,waclat,{'div','RdBu'},1,polar_p_toplot,16,contourtitle,'Longitude','Latitude','Correlation','on',...
-    [-.75 .75],22,[waclon(1:24:end)]-180,[waclon(1:24:end)]-180,[0:15:90],[0:15:90],'',1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+    [-.75 .75],22,[waclon(1:24:end)]-180,[waclon(1:24:end)]-180,[ylims(1):15:ylims(2)],[ylims(1):15:ylims(2)],'',1,[0 360],ylims,0,'none',1,'Miller Cylindrical');
     
 child = get(fig,'children');
 axes1 = child(4);
-axes2 = child(2);
+axes2 = child(2);       
 
 axes(axes1);
 sppos = get(gca,'position');
@@ -226,7 +262,8 @@ annotation('textbox',[sppos(1),sppos(2)+.01,sppos(3:4)],'String','b','FitBoxToTe
     'EdgeColor','none','fontweight','bold');    
 
 
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Correlation_comparison_',inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Correlation_comparison_',inputs.ClLevel{1},...
+    '_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_',ensoext];
  
 print(filename,'-depsc');
 
@@ -234,8 +271,14 @@ print(filename,'-depsc');
 
 %% calculate areas of largest difference
 %ERAinterim
-areas_lons = [85,180;30,85;240,290;30,120]; %lons (East Russia, West Russia,America,Asia)
-areas_lats = [55,80;55,80;40,65;20,45]; %lats
+if inputs.lats(1) < 0
+    areas_lons = [115,155;10,40;285,320;280,300]; %lons (East Russia, West Russia,America,Asia)
+    areas_lats = [-40,-15;-35,-15;-40,-15;-55,-40]; %lats
+else
+    areas_lons = [85,180;30,85;240,290;30,120]; %lons (East Russia, West Russia,America,Asia)
+    areas_lats = [55,80;55,80;40,65;20,45]; %lats
+end
+
 
 for i = 1:size(areas_lons,1)
     lats = waclat > areas_lats(i,1) & waclat < areas_lats(i,2);
@@ -249,8 +292,12 @@ for i = 1:size(areas_lons,1)
     for k = 1:size(difftoplot,1)           
         
         diff = permute(difftoplot,[1,3,2]);                   
-        mult = squeeze(diff(k,lats,lons));                
-        [maxval(i,k),maxind] = max(abs(mult(:)));        
+        mult = squeeze(diff(k,lats,lons));          
+        if i == 1 && inputs.lats(1) < 0
+            [maxval(i,k),maxind] = max(mult(:));        
+        else
+            [maxval(i,k),maxind] = max(abs(mult(:)));        
+        end
         lattoplot(k,i) = latmesh(maxind);
         lontoplot(k,i) = lonmesh(maxind);
     end
@@ -283,7 +330,7 @@ lstyle = {':','-','-.','--','-'};
 Mks = {'d','s','o','v'};
 
 [fig,~] = subplotmaps(difftoplot,waclon,waclat,{'div','RdBu'},1,diff_p_toplot,16,contourtitle2,'Longitude','Latitude','Temperature difference (K)','on',...
-    [-5 5],22,[waclon(1:24:end)]-180,[waclon(1:24:end)]-180,[0:15:90],[0:15:90],'',1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');
+    diffclims,22,[waclon(1:24:end)]-180,[waclon(1:24:end)]-180,[ylims(1):15:ylims(2)],[ylims(1):15:ylims(2)],'',1,[0 360],ylims,0,'none',1,'Miller Cylindrical');
 
 
 child = get(fig,'children');
@@ -329,7 +376,9 @@ if inputs.includemarkers
     
 end
 
-filename2 = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Diff_comparison_',inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
+filename2 = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/Diff_comparison_',...
+    inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2))...
+    ,num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),ensoext,'composite'];
 
 print(filename2,'-depsc');
 
@@ -349,17 +398,31 @@ for i = 1:length(complats)
     [~,modlonind(i)] = min(abs(lontoplot2(2,i)-waclon));
 end
 
+if inputs.lats(1) < 0
+    ylimax = [-2.5 2.5];
+    xticklab = {'November','December','January','February','March'};
+    lnames = {['Australia, (',num2str(round(abs(lontoplot(1,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,1)))),'{\circ}','N)'],...
+        ['Southern Africa, (',num2str(round(abs(lontoplot(1,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,2)))),'{\circ}','N)'],...
+        ['South America, (',num2str(round(abs(lontoplot(1,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,3)))),'{\circ}','N)'],...
+        ['SA peninsula , (',num2str(round(abs(lontoplot(1,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,4)))),'{\circ}','N)']};
+    lnamesmod = {['Australia, (',num2str(round(abs(lontoplot(2,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,1)))),'{\circ}','N)'],...
+        ['Southern Africa, (',num2str(round(abs(lontoplot(2,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,2)))),'{\circ}','N)'],...
+        ['South America, (',num2str(round(abs(lontoplot(2,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,3)))),'{\circ}','N)'],...
+        ['SA peninsula, (',num2str(round(abs(lontoplot(2,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,4)))),'{\circ}','N)']};
+else
+    ylimax = [-7.5 7.5];
+    xticklab = {'March','April','May','June','July'};
+    lnames = {['eastern Russia, (',num2str(round(abs(lontoplot(1,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,1)))),'{\circ}','N)'],...
+        ['western Russia, (',num2str(round(abs(lontoplot(1,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,2)))),'{\circ}','N)'],...
+        ['North America, (',num2str(round(abs(lontoplot(1,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,3)))),'{\circ}','N)'],...
+        ['southern Asia, (',num2str(round(abs(lontoplot(1,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,4)))),'{\circ}','N)']};
+    lnamesmod = {['eastern Russia, (',num2str(round(abs(lontoplot(2,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,1)))),'{\circ}','N)'],...
+        ['western Russia, (',num2str(round(abs(lontoplot(2,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,2)))),'{\circ}','N)'],...
+        ['North America, (',num2str(round(abs(lontoplot(2,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,3)))),'{\circ}','N)'],...
+        ['southern Asia, (',num2str(round(abs(lontoplot(2,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,4)))),'{\circ}','N)']};
+end
 
-lnames = {['eastern Russia, (',num2str(round(abs(lontoplot(1,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,1)))),'{\circ}','N)'],...
-    ['western Russia, (',num2str(round(abs(lontoplot(1,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,2)))),'{\circ}','N)'],...
-    ['North America, (',num2str(round(abs(lontoplot(1,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,3)))),'{\circ}','N)'],...
-    ['southern Asia, (',num2str(round(abs(lontoplot(1,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(1,4)))),'{\circ}','N)']};
-lnamesmod = {['eastern Russia, (',num2str(round(abs(lontoplot(2,1)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,1)))),'{\circ}','N)'],...
-    ['western Russia, (',num2str(round(abs(lontoplot(2,2)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,2)))),'{\circ}','N)'],...
-    ['North America, (',num2str(round(abs(lontoplot(2,3)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,3)))),'{\circ}','N)'],...
-    ['southern Asia, (',num2str(round(abs(lontoplot(2,4)))),'{\circ}','W, ',num2str(round(abs(lattoplot(2,4)))),'{\circ}','N)']};
 
-xticklab = {'March','April','May','June','July'};
 
 % cbrewqual = cbrewer('qual','Set1',10);
 % cbrewqual2 = cbrewqual([3,4,10,8],:);
@@ -376,7 +439,7 @@ for i = 1:length(obslats)
 end
 plot([0 5],[0,0],'--k','lineWidth',2);
 xlim([.5,5.5]);
-ylim([-7.5 7.5]);
+ylim(ylimax);
 set(gca,'fontsize',fsize,'xtick',1:5,'xticklabel',xticklab)
 xlabel('Month','fontsize',fsize+2);
 ylabel('Temperature difference (K)','fontsize',fsize+2);
@@ -419,14 +482,15 @@ annotation('textbox',[sp_pos(2,1),sp_pos(2,2),sp_pos(2,3:4)],'String','d','FitBo
 hold on
 plot([0 5],[0,0],'--k','lineWidth',2);
 xlim([.5,5.5]);
-ylim([-7.5 7.5]);
+ylim([ylimax]);
 set(gca,'fontsize',fsize,'xtick',1:5,'xticklabel',xticklab)
 xlabel('Month','fontsize',fsize+2);
 
 title('Ensemble composite','fontsize',fsize+4)
 lh = legend(ph,lnamesmod);
 set(lh,'box','off','fontsize',fsize-4,'location','NorthEast')
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/North_20th_percentile_lines_',inputs.ClLevel{1},'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'composite'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/20th_percentile_lines_',...
+    inputs.ClLevel{1},'_',monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_',ensoext,'composite'];
 export_fig(filename,'-pdf');
 
 end

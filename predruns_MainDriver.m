@@ -21,7 +21,7 @@ for i = 1:nofields
     nofiles = length(tozdata.(fields{i}).data);
     [pct.(fields{i}),tozextract.(fields{i}),Eachyear.(fields{i})] = predruns_varPercentiles(...
         tozdata.(fields{i}).toz_composite.montharrange,tozdata.(fields{i}).dataMonthArrange,...
-        inputs.tozmonth,inputs.percentile,nofiles);
+        inputs.tozmonth,inputs.percentile,nofiles,inputs.varmonth);
 end
 
 longitude = surfacedata.(fields{1}).data(1).lon;

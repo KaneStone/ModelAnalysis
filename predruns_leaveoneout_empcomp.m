@@ -15,6 +15,12 @@ function [] = predruns_leaveoneout_empcomp(surfacedata,surfacedataind,tozdata,in
 % find average temperature anomaly of lower 50th percentile of ozone
 % two cases that can be used as a binary prediction (shift in pdf)
 
+if inputs.lats(1) < 0
+    ext = 1;
+else
+    ext = 0;
+end
+
 %% rearrange data into composite
 
 %% rearrange data into composite
@@ -153,12 +159,14 @@ for k = 1:size(surfacedata,1)
         leaveout = allin;        
         %leaveout (leaveout == i) = [];                         
         if i == 1
-            leaveout (leaveout == count | leaveout == count+1) = []; 
+            leaveout (leaveout == count | leaveout == count+1) = [];             
         elseif i == 30
             leaveout (leaveout == count | leaveout == count-1) = []; 
         else
             leaveout (leaveout == count-1 | leaveout == count | leaveout == count+1) = [];         
         end
+        
+        leaveoutenso = [leaveout,leaveout(end)+ext];
         
         predictors_anom = [leaveout',ones(size(leaveout))'];        
         
@@ -194,19 +202,23 @@ for k = 1:size(surfacedata,1)
         
         %ozone_anomalysign = sign(ozone_anomaly);
                 
-        ENSOyearind = predruns_removeENSOforpred(alldata(:,:,leaveout,:,:),latitude,longitude,0);
+        ENSOyearind = predruns_removeENSOforpred(alldata(:,:,leaveoutenso,:,:),latitude,longitude,0);
+        ENSOyearind = ENSOyearind(:,:);
         ENSOall = predruns_removeENSOforpred(alldata,latitude,longitude,0);
+        ENSOall = ENSOall(:,:); 
         laglength = 3;        
         
         for j = 1:length(latitude)
             
             % remove ENSO
-            if ~inputs.removeENSO
+            if inputs.removeENSO
                 for lag = 1:laglength
-                    ensopredictors = [squeeze(ENSOyearind(k,inputs.varmonthtomean-lag+1,:)),ones(size(leaveout))'];
+                    %ensopredictors = [squeeze(ENSOyearind(k,inputs.varmonthtomean-lag+1,:)),ones(size(leaveout))'];
+                    ensopredictors = [squeeze(ENSOyearind(k,inputs.varmonthtomean-lag+1:12:end-ext*6))',ones(1,length(leaveout))'];
                     benso(lag,:,:) = ensopredictors\squeeze(surfacedata(k,leaveout,j,:));
 
-                    ensopredictors_alldata = [squeeze(ENSOall(k,inputs.varmonthtomean-lag+1,:)),ones(size(ENSOall,3),1)];
+                    %ensopredictors_alldata = [squeeze(ENSOall(k,inputs.varmonthtomean-lag+1,:)),ones(size(ENSOall,3),1)];
+                    ensopredictors_alldata = [squeeze(ENSOall(k,inputs.varmonthtomean-lag+1:12:end-ext*6))',ones(size(alldata,3)-ext,1)];
                     benso_alldata(lag,:,:) = ensopredictors_alldata\squeeze(surfacedata(k,:,j,:));
 
                 end
@@ -220,10 +232,13 @@ for k = 1:size(surfacedata,1)
                 end
 
                 %removing enso
-                for li = 1:size(longitude)
-                    temp_anomaly2(:,li) = squeeze(surfacedata(k,leaveout,j,li)) - (squeeze(bensomax(li)).*squeeze(ENSOyearind(k,inputs.varmonthtomean-bensomax_ind(1,1,li)+1,:)))';
-                    temp_left2(li,1) = squeeze(surfacedata(k,count,j,li)) - (squeeze(bensomax_alldata(li)).*squeeze(ENSOall(k,inputs.varmonthtomean-bensomax_ind_alldata(1,1,li)+1,count))');
+                if i == 2
+                    abc = 1;
                 end
+                for li = 1:size(longitude)
+                    temp_anomaly2(:,li) = squeeze(surfacedata(k,leaveout,j,li)) - (squeeze(bensomax(li)).*squeeze(ENSOyearind(k,inputs.varmonthtomean-bensomax_ind(1,1,li)+1)))';
+                    temp_left2(li,1) = squeeze(surfacedata(k,count,j,li)) - (squeeze(bensomax_alldata(li)).*squeeze(ENSOall(k,inputs.varmonthtomean-bensomax_ind_alldata(1,1,li)+1))');                   
+                end                
                 temp_left = temp_left2;
                 temp_anomaly = temp_anomaly2;
                 clearvars temp_left2 temp_anomaly2
@@ -311,10 +326,10 @@ for k = 1:size(surfacedata,1)
                 %remove enso
                 % remove ENSO
                 for lag = 1:laglength
-                    ensopredictors = [squeeze(ENSOyearind(k,inputs.varmonth(m)-lag+1,:)),ones(size(leaveout))'];
+                    ensopredictors = [squeeze(ENSOyearind(k,inputs.varmonth(m)-lag+1:12:end-ext*6,:))',ones(size(leaveout))'];
                     benso(lag,:,:) = ensopredictors\squeeze(surfacedataind(k,leaveout,m,j,:));
 
-                    ensopredictors_alldata = [squeeze(ENSOall(k,inputs.varmonth(m)-lag+1,:)),ones(size(ENSOall,3),1)];
+                    ensopredictors_alldata = [squeeze(ENSOall(k,inputs.varmonth(m)-lag+1:12:end-ext*6,:))',ones(size(alldata,3)-ext,1)];
                     benso_alldata(lag,:,:) = ensopredictors_alldata\squeeze(surfacedataind(k,:,m,j,:));
 
                 end
@@ -330,8 +345,8 @@ for k = 1:size(surfacedata,1)
 
                 %removing enso
                 for li = 1:size(longitude)
-                    temp_anomaly_months2(:,li) = squeeze(surfacedataind(k,leaveout,m,j,li)) - (squeeze(bensomax(li)).*squeeze(ENSOyearind(k,inputs.varmonth(m)-bensomax_ind(1,1,li)+1,:)))';
-                    temp_left_months2(li,1) = squeeze(surfacedataind(k,count,m,j,li)) - (squeeze(bensomax_alldata(li)).*squeeze(ENSOall(k,inputs.varmonth(m)-bensomax_ind_alldata(1,1,li)+1,count))');
+                    temp_anomaly_months2(:,li) = squeeze(surfacedataind(k,leaveout,m,j,li)) - (squeeze(bensomax(li)).*squeeze(ENSOyearind(k,inputs.varmonth(m)-bensomax_ind(1,1,li)+1)))';
+                    temp_left_months2(li,1) = squeeze(surfacedataind(k,count,m,j,li)) - (squeeze(bensomax_alldata(li)).*squeeze(ENSOall(k,inputs.varmonth(m)-bensomax_ind_alldata(1,1,li)+1))');
                 end
                 temp_left_months = temp_left_months2;
                 temp_anomaly_months = temp_anomaly_months2;
@@ -449,7 +464,7 @@ adm = permute(datasign_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat'],'file')
+if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_empcomp_Allperc.mat'],'file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -478,14 +493,14 @@ if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{
         end
         toc;
     end
-    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
+    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_empcomp_Allperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
 %     allsig.percentiles  = percentiles;
 %     allsig.percentiles  = percentilesm;
 %     allsig.percentiles  = bootstat;
 %     allsig.percentiles  = bootstatm;
 
 end
-allsig = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_','empcomp_Allperc.mat']);
+allsig = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_','empcomp_Allperc.mat']);
 p = zeros(size(GSS.all.mean));
 p (GSS.all.mean < reshape(allsig.percentiles.ninetyfive,[1,size(allsig.percentiles.ninetyfive)])) = -1;
 
@@ -504,7 +519,7 @@ adm = permute(datasignpct_months,[4,3,5,1,2]);
 adm = adm(:,:,:,:);
 
 
-if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat'],'file')
+if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_empcomp_Pctperc.mat'],'file')
     bootstat = zeros(size(mp,1),size(mp,2),500);
     percentiles.eighty = zeros(size(mp,1),size(mp,2));
     percentiles.ninety = zeros(size(mp,1),size(mp,2));
@@ -533,18 +548,27 @@ if ~exist(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{
         end
         toc;
     end
-    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
+    save(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_empcomp_Pctperc.mat'],'bootstat','bootstatm','percentiles','percentilesm');
 end
-allsigpct = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_empcomp_Pctperc.mat']);
+allsigpct = load(['/Volumes/ExternalOne/work/data/predruns/output/HSS/',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'_empcomp_Pctperc.mat']);
 p2 = zeros(size(GSS.all.mean));
 p2 (GSS.pct.mean < reshape(allsigpct.percentiles.ninetyfive,[1,size(allsigpct.percentiles.ninetyfive)])) = -1;
 
 
 %% plot     
+
+if inputs.lats(1) < 0
+    ylims = [-90 0];
+    diffclims = [-3 3];
+else
+    ylims = [0 90];
+    diffclims = [-5 5];
+end
+
 titles = {'Ensemble composite HSSs ','Ensemble composite HSSs during ozone extremes','Observed percentile general skill score (leave one out)'};
 toplotp = permute(cat(1,p,p2),[1,3,2]);
 [fig,fh] = subplotmaps(permute(cat(1,GSS.all.mean,GSS.pct.mean),[1,3,2]),longitude,latitude,{'seq','YlGnBu'},0,toplotp,22,titles,'Longitude','Latitude','HSS','on',...
-        [0,50],11,[longitude(1:24:end)]-180,[longitude(1:24:end)]-180,[0:15:90],[0:15:90],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');         
+        [0,50],11,[longitude(1:24:end)]-180,[longitude(1:24:end)]-180,[ylims(1):15:ylims(2)],[ylims(1):15:ylims(2)],{''},1,[0 360],ylims,0,'none',1,'Miller Cylindrical');         
  
 % subplotmaps(permute(cat(1,GSS.all2.mean,GSS.pct2.mean),[1,3,2]),longitude,latitude,{'seq','YlGnBu'},0,[],16,titles,'Longitude','Latitude','','on',...
 %         [0,50],11,[longitude(1:24:end)]-180,[longitude(1:24:end)]-180,[0:15:90],[0:15:90],{''},1,[0 360],[0 90],0,'none',1,'Miller Cylindrical');             
@@ -565,7 +589,8 @@ annotation('textbox',[sppos(1),sppos(2)+.01,sppos(3:4)],'String','d','FitBoxToTe
 
 
 set(gcf,'Renderer','Painters');
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/predictions/maps/CompEmp_Ensmean_GSSothercolor_nodetrend_upto80_',inputs.ClLevel{1},'_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'.eps'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/predictions/maps/CompEmp_Ensmean_GSSothercolor_nodetrend_upto80_',...
+    inputs.ClLevel{1},'_',monthnames(inputs.varmonth,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',inputs.ClLevel{1},'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'.eps'];
 print(filename,'-depsc');            
     
 %% plot skill lines    
@@ -587,13 +612,15 @@ cbrewqual = cbrewer('qual','Set1',10);
 cbrewqual2 = cbrewqual([4,1,10,8],:);
 cbrewqual3 = cbrewqual2./2;
 
-xticklab = {'March','April','May','June','July'};
+if inputs.lats(1) < 0
+    xticklab = {'November','December','January','February','March'};
+else    
+    xticklab = {'March','April','May','June','July'};
+end
 
 lstyle = {':','-','-.','--','-'};    
 fsize = 16;
 Mks = {'d','s','o','v'};
-
-
 
 %%
 same = 1;
@@ -603,10 +630,13 @@ corrtoplot = 0;
 %  areas_lons = [80,180;30,80;240,290;60,120];%lons (Greenland,East Russia, West Russia,America,Asia)
 % areas_lats = [60,80;60,80;35,60;25,45];%lats
 
-areas_lons = [85,180;30,85;240,290;30,120]; %lons (East Russia, West Russia,America,Asia)
-areas_lats = [55,80;55,80;40,65;20,45]; %lats
-
-
+if inputs.lats(1) < 0
+    areas_lons = [115,155;10,40;285,320;280,300]; %lons (East Russia, West Russia,America,Asia)
+    areas_lats = [-40,-15;-35,-15;-40,-15;-55,-40]; %lats
+else
+    areas_lons = [85,180;30,85;240,290;30,120]; %lons (East Russia, West Russia,America,Asia)
+    areas_lats = [55,80;55,80;40,65;20,45]; %lats
+end
 
 for j = 1:2
     for mon = 1:5
@@ -648,9 +678,14 @@ for j = 1:2
                         mult_pct = squeeze(diff(k,mon,lats,lons));        
                     end
                 else                
-                end        
-                [maxval(i,k),maxind] = max(abs(mult(:)));
-                [maxval_pct(i,k),maxind_pct] = max(abs(mult_pct(:)));        
+                end    
+                if i == 1 && inputs.lats(1) < 0
+                    [maxval(i,k),maxind] = max(mult(:));
+                    [maxval_pct(i,k),maxind_pct] = max(abs(mult_pct(:)));        
+                else
+                    [maxval(i,k),maxind] = max(abs(mult(:)));
+                    [maxval_pct(i,k),maxind_pct] = max(abs(mult_pct(:)));        
+                end                
                 lattoplot(j).g(mon,k,i) = latmesh(maxind);
                 lontoplot(j).g(mon,k,i) = lonmesh(maxind);
 
@@ -958,11 +993,11 @@ sp2 = subplot(3,1,3);
 
 % fig = figure;
 % set(fig,'position',[100 100 1000 400],'color','white');
-m_proj('Equidistant Cylindrical','lon',[-180 180],'lat',[0 90]);
+m_proj('Equidistant Cylindrical','lon',[-180 180],'lat',ylims);
 [~,h] = m_contourf(longitude-180,latitude,squeeze(nanmean(diffforplot(:,:,:,mon),1))',-5:.5:5,'LineStyle','none');
 hold on
 m_coast('color','k','LineWidth',1);
-m_grid('ytick',[0:15:90],'xtick',[-180:60:360],'XaxisLocation','bottom','fontsize',fsize);  
+m_grid('ytick',[ylims(1):15:ylims(2)],'xtick',[-180:60:360],'XaxisLocation','bottom','fontsize',fsize);  
 caxis([-5 5]);
 ch = colorbar;
 set(ch,'YTick',[-5:1:5],'fontsize',fsize)%,
@@ -979,12 +1014,12 @@ annotation('textbox',[sppos(1),sppos(2)-.04,sppos(3:4)],'String','c','FitBoxToTe
             'EdgeColor','none','fontweight','bold');    
 cbarrow
 if corrtoplot
-    title(['Location of maximum ensemble March TCO and ',monthnames(mon+2,0,0), ' TS differences'],'fontsize',fsize+2);
+    title(['Location of maximum ensemble ', monthnames(inputs.tozmonth,0,0),' TCO and ',xticklab{mon}, ' TS differences'],'fontsize',fsize+2);
 elseif difftoplot
-    title(['Locations of ensemble March TCO and ',monthnames(mon+2,0,0), ' surface temperature differences'],'fontsize',fsize+2);
+    title(['Locations of ensemble ' monthnames(inputs.tozmonth,0,0) ' TCO and ',xticklab{mon}, ' surface temperature differences'],'fontsize',fsize+2);
     
 else
-    title(['Location of maximum ensemble member March TCO and ',monthnames(mon+2,0,0), ' HSS'],'fontsize',fsize+2);
+    title(['Location of maximum ensemble member ', monthnames(inputs.tozmonth,0,0),' TCO and ',xticklab{mon}, ' HSS'],'fontsize',fsize+2);
 end
 %a = 1
 box on
@@ -998,10 +1033,11 @@ for i = 1:size(areas_lats,1)
 end
 %axes.SortMethod='ChildOrder';
 
-annotation('textbox',[.01 .995 .925 0],'String','March TCO - surface temperature ensemble composite HSSs','FitBoxToText','on','VerticalAlignment','top','HorizontalAlignment','center','fontsize',fsize+6,... % 
+annotation('textbox',[.01 .995 .925 0],'String',[monthnames(inputs.tozmonth,0,0),' TCO - surface temperature ensemble composite HSSs'],'FitBoxToText','on','VerticalAlignment','top','HorizontalAlignment','center','fontsize',fsize+6,... % 
         'EdgeColor','none','fontweight','bold');    
 
-filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/CompEmp_Ind_',inputs.ClLevel{1},'_',corrtoplotext,'_','mean_Locations_withpct_test','_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),monthnames(mon+2,0,0),'both'];
+filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MyPapers/Mine/OzonePred/Draft/Figures/CompEmp_Ind_',...
+    inputs.ClLevel{1},'_',corrtoplotext,'_','mean_Locations_withpct_test','_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),monthnames(mon+2,0,0),'_',num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2))),'both'];
 print(filename,'-depsc');
 end
 end

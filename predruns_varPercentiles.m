@@ -1,8 +1,16 @@
-function [pct,dataout,Eachyear] = predruns_varPercentiles(data,datamontharrange,monthin,percentile,nofiles)
+function [pct,dataout,Eachyear] = predruns_varPercentiles(data,datamontharrange,monthin,percentile,nofiles,varmonth)
 
 % Using the percentile function - calulates the percentiles and associated
 % index locations of the upper and lower user input: percentile
 
+%% 
+ifmore = varmonth > 12;
+
+if sum(ifmore) > 0
+    ext = 12;
+else
+    ext = 0;
+end
 %%
 
 yearlength = size(data,2)/nofiles;

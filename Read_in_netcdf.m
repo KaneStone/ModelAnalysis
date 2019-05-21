@@ -9,7 +9,7 @@ ncid = netcdf.open(filename);
 scale_factor = 1;
 add_offset = 0;
 
-for j = 1:ncsz(1,2);
+for j = 1:ncsz(1,2)
     %aquiring variables
     varnames{j,1} = netcdf.inqVar(ncid,j-1);
     varid(j) = netcdf.inqVarID(ncid,varnames{j});
@@ -17,7 +17,7 @@ for j = 1:ncsz(1,2);
     netcdf_data.(varnames{j,1}) = netcdf.getVar(ncid,varid(j),datatype{j,1});
     
     %aquiring variable attributes
-    for l = 1:length(netcdf_fileinfo.Variables(j).Attributes);
+    for l = 1:length(netcdf_fileinfo.Variables(j).Attributes)
         attname = netcdf.inqAttName(ncid,varid(j),l-1);
         attname_for_naming = attname;
         attname_for_naming (attname_for_naming(1) == '_') = [];
