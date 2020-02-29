@@ -55,7 +55,7 @@ tozdates = [1995,2016];
 directory = ['/Volumes/ExternalOne/work/data/predruns/',tozvar,'/',ClLevel,'/'];
 tozfiles = dir([directory,'*.nc']);
 [toz_data.highcl,toz_years.highcl,toz_varweighted.highcl,toz_composite.highcl,toz_dataMonthArrange.highcl] = ...
-    predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
+    predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone,11);
 
 longitude = toz_data(1).highcl.lon;
 latitude = toz_data(1).highcl.lat;
@@ -63,7 +63,7 @@ latitude = toz_data(1).highcl.lat;
 %% equator latitudes
 lats = [-30,-10];
 [~,~,~,~,eq_toz_dataMonthArrange.highcl] = ...
-    predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone);
+    predruns_ReadInlayer_areaaverage(directory,tozfiles,tozvar,tozdates,lats,detrend_ozone,11);
 
 %%
 % take the mean of all 12,1,2 elnino
@@ -73,9 +73,9 @@ ENS = nanmean(cat(3,squeeze(HighCL.NINOmonth.highcl(:,12,1:end-1)),squeeze(HighC
 ENSqbo = squeeze(HighCL.NINOmonth.highcl(:,11,1:end));
     
 for i = 1:9
-    rQBO(i) = corr(detrend(squeeze(eq_toz_dataMonthArrange.highcl(i,11,1:end))),detrend(ENSqbo(i,:))');
-    r(i) = corr(detrend(squeeze(toz_dataMonthArrange.highcl(i,11,1:end-1))),detrend(ENS(i,:))');
-    r2(i) = corr(detrend(squeeze(toz_dataMonthArrange.highcl(i,11,1:end))),detrend(ENSqbo(i,:))');
+    rQBO(i) = corr(detrend(squeeze(eq_toz_dataMonthArrange.highcl(i+1,11,1:end))),detrend(ENSqbo(i,:))');
+    r(i) = corr(detrend(squeeze(toz_dataMonthArrange.highcl(i+1,11,1:end-1))),detrend(ENS(i,:))');
+    r2(i) = corr(detrend(squeeze(toz_dataMonthArrange.highcl(i+1,11,1:end))),detrend(ENSqbo(i,:))');
 end
 
 ErQBO = corr(ERA.NINO34all(11:12:end),toz_zmQBO');

@@ -8,9 +8,10 @@ function [weightedmean] = weightedaverage(data,latitudes)
 %yearly latitude weighted averages
 W = cosd(latitudes);
 weightedmean = zeros(1,size(data,2));
+
 for i = 1:size(data,2)
-    temp = data(:,i);
+    temp = data(:,i);    
     weightedmean(i) = nansum(temp(:).*W(:))./nansum(W(:));       
 end
-
+weightedmean (weightedmean == 0) = NaN;
 end

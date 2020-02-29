@@ -164,17 +164,17 @@ if inputs.plotcorr
     % all data
     titles = {'Ensemble mean correlation'}; 
     subplotmaps(toplot(1,:,:),lons,lats,{'div','RdBu'},1,toplotp(1,:,:),16,titles,'Longitude','Latitude','Correlation','on',...
-        clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_correlations2_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     export_fig(filename,'-png');        
     %%
     clearvars ax2 ax
     titles = {'Standard deviation/Ensemble mean'}; 
     [fig,sh] = subplotmaps(toplot(2,:,:),lons,lats,{'seq','Blues'},0,toplotp(2,:,:),16,titles,'Longitude','Latitude','','on',...
-        [0 5],11,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        [0 5],11,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
 %     ax = gca;
 %     hold on
 %     lontoplot = lons-180;
@@ -196,48 +196,48 @@ if inputs.plotcorr
 %     set(ch,'orientation','horizontal','position',[.105 .3 .725 .02],'fontsize',22);
            
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_sigtonoise_stddivmean2_withuwindat500hPa_std',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     %export_fig(filename,'-png');
     print(filename,'-depsc');
     %%
     titles = {'Ensemble mean - standard deviation'}; 
     subplotmaps(toplot(3,:,:),lons,lats,{'div','RdBu'},1,toplotp(2,:,:),16,titles,'Longitude','Latitude','','on',...
-        [-.3 .3],12,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        [-.3 .3],12,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_sigtonoise_meanminstd2_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     export_fig(filename,'-png');
    
     % Percentiles
     titles = {'Ensemble mean upper and lower percentile correlation'}; 
     subplotmaps(toplot2(1,:,:),lons,lats,{'div','RdBu'},1,toplotp2,16,titles,'Longitude','Latitude','Correlation','on',...
-        clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_correlations2_pct_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     export_fig(filename,'-png');        
     
     titles = {'percentile correlation - Standard deviation/Ensemble mean'}; 
     subplotmaps(toplot2(2,:,:),lons,lats,{'seq','Blues'},0,toplotp2(2,:,:),16,titles,'Longitude','Latitude','','on',...
-        [0 5],11,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        [0 5],11,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_sigtonoise_stddivmean2_pct',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     export_fig(filename,'-png');
     
     titles = {'percentile correlation - Ensemble mean - standard deviation'}; 
     subplotmaps(toplot2(3,:,:),lons,lats,{'div','RdBu'},1,toplotp2(2,:,:),16,titles,'Longitude','Latitude','','on',...
-        [-.3 .3],12,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+        [-.3 .3],12,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/correlations/maps/EnsMean_sigtonoise_meanminstd2_pct',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
     export_fig(filename,'-png');
-    
+    close all
 end
 
 %% plot ensemble mean differences and (minus) std
@@ -257,13 +257,13 @@ if inputs.plotdiff
     
     titles = {'Composite','Composite/standard deviation'}; 
     subplotmaps(toplot,lons,lats,{'div','RdBu'},1,toplotp,16,titles,'Longitude','Latitude','Temperature difference','on',...
-            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
         
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/differences/maps/Composite_sigtonoise_meanminstd_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
         export_fig(filename,'-png');
-        
+    close all    
     p = differences.ttest.eachyear;
     p (p == 1) = -2;
     p (p == 0) = -1;
@@ -278,13 +278,13 @@ if inputs.plotdiff
     
     titles = {'Ensemble-Each year','Ensemble-Each year/standard deviation'}; 
     subplotmaps(toplot,lons,lats,{'div','RdBu'},1,toplotp,16,titles,'Longitude','Latitude','Temperature difference','on',...
-            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/differences/maps/EnsMean_Eachyear_sigtonoise_meanminstd_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
         export_fig(filename,'-png');
-                
+    close all         
     p = differences.ttest.ensmean;
     p (p == 1) = -2;
     p (p == 0) = -1;
@@ -299,13 +299,13 @@ if inputs.plotdiff
     
     titles = {'Ensemble mean','Ensemble mean/standard deviation'}; 
     subplotmaps(toplot,lons,lats,{'div','RdBu'},1,toplotp,16,titles,'Longitude','Latitude','Temperature difference','on',...
-            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical');
+            clims,22,[lons(1:24:end)]-180,[lons(1:24:end)]-180,[ylim(1):15:ylim(2)],[ylim(1):15:ylim(2)],mtitle,1,[0 360],ylim,0,'none',1,'Miller Cylindrical',0);
     
     filename = ['/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/differences/maps/EnsMean_sigtonoise_meanminstd_',...
-        monthnames(inputs.varmonthtomean,1,1),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),'_',num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),ensoext,'_',...
                 num2str(abs(inputs.lats(1))),'-',num2str(abs(inputs.lats(2)))];
         export_fig(filename,'-png');    
-        
+    close all    
 end
 
 end

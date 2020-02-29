@@ -4,7 +4,7 @@ function [dataVarMonthAve,dataVarMonth,NINO34all,differences,correlations] = pre
 % This function calculates the ensemble mean and individual correlation and percentile
 % differeces
 
-[dataVarMonthAve,dataVarMonth,NINO34all] = predruns_removeENSO(dataMonthArrange,lats,lons,inputs,ClLevel);
+[dataVarMonthAve,dataVarMonth,NINO34all] = predruns_removeENSO(dataMonthArrange,dataMonthArrange,lats,lons,inputs,ClLevel);
 
 
 %% extracting upper and lower percentiles from the lowest and highest two simulations from each year

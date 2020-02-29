@@ -23,7 +23,11 @@ for i = 1:length(files)
     varweighted(i,:) = weightedaverage(squeeze(nanmean(data(i).(var)(:,latind(1):latind(2),:),1)),data(i).lat(latind(1):latind(2)));                            
     
     % construct year only vector
-    years(i).y = CCMI_years(data(i).date,1);      
+    if i == 1
+        years(i).y = CCMI_years(data(i).date,0);      
+    else
+        years(i).y = CCMI_years(data(i).date,1);      
+    end
     
     %constructing composite
     dateindfirst = find(years(i).y == dates(1),1);
@@ -37,9 +41,9 @@ for i = 1:size(varweighted,1)
     dateind = find(years(i).y >= dates(1) & years(i).y <= dates(2));  
     dateind = dateind(1:end-ext);
     for j = 1:12    
-        if ifdetrend
+        if ifdetrend            
             dataMonthArrange(i,j,:) = detrend(varweighted(i,dateind(1)+j-1:12:dateind(end))) + ...
-                squeeze(nanmean(varweighted(i,dateind(1)+j-1:12:dateind(end))));
+                squeeze(nanmean(varweighted(i,dateind(1)+j-1:12:dateind(end))));                     
         else
              dataMonthArrange(i,j,:) = varweighted(i,dateind(1)+j-1:12:dateind(end));
         end

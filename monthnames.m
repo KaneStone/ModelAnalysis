@@ -1,9 +1,11 @@
 function [monthout] = monthnames(monthinput,stringtogether,type)
 
+ext = [];
 for i = 1:length(monthinput)
     if monthinput(i) > 12
-        monthinput(i) = monthinput(i)-12;        
-    end
+        monthinput(i) = monthinput(i)-12; 
+        ext = '+';    
+    end    
 end
 
 if strcmp(type,'short')
@@ -21,10 +23,10 @@ for i = 1:length(monthinput)
     monthout{i} = monthtitles{monthinput(i)};
 end
 if length(monthinput) == 1
-    monthout = [monthout{:}];
+    monthout = [monthout{:},ext];
 else
     if stringtogether
-        monthout = [monthout{:}];
+        monthout = [monthout{:},ext];
     end
 end
 end

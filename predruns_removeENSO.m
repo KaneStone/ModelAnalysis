@@ -1,4 +1,4 @@
-function [dataVarMonthAve,dataVarMonth,NINO34all] = predruns_removeENSO(dataMonthArrange,lats,lons,inputs,ClLevel)
+function [dataVarMonthAve,dataVarMonth,NINO34all] = predruns_removeENSO(dataMonthArrange,temperature,lats,lons,inputs,ClLevel)
 
 %% calculate ENSO and remove it from the surface temperature data
 
@@ -9,7 +9,7 @@ latindex = lats >= latlimits(1) & lats <= latlimits(2);
 lonindex = lons >= lonlimits(1) & lons <= lonlimits(2);
     
 for j = 1:12
-    NINO_mn(:,j,:,:) = squeeze(nanmean(dataMonthArrange(:,j,:,latindex,lonindex),5));
+    NINO_mn(:,j,:,:) = squeeze(nanmean(temperature(:,j,:,latindex,lonindex),5));
     NINO_mn2(:,j,:) = squeeze(nanmean(NINO_mn(:,j,:,:),4));
     NINOmonth(:,j,:) = (squeeze(NINO_mn2(:,j,:)) - nanmean(squeeze(NINO_mn2(:,j,:)),2))./std(squeeze(NINO_mn2(:,j,:)),1,2);
 end   
@@ -18,16 +18,17 @@ NINO34all = NINOmonth(:,:);
 save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',ClLevel,'_',ClLevel,inputs.timeperiodvar(1),'-',inputs.timeperiodvar(1),'_',num2str(inputs.detrend)],'NINO34all','NINOmonth');
 
 if inputs.removeENSO
-    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',ClLevel,'_TS_ninoremoved_',...
-        monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',ClLevel,'_',inputs.var,'_ninoremoved_',...
+        monthnames(inputs.varmonthtomean,1,'short'),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
     num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 else
-    filename = ['/Volumes/ExternalOne/work/data/predruns/outputdata/',ClLevel,'_TS_',...
-        monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',ClLevel,'_',inputs.var,'_',...
+        monthnames(inputs.varmonthtomean,1,'short'),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
     num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 end
+warning('off','all')
 if ~exist([filename,'.mat'],'file')
 
     %% take ensemble averages
@@ -65,20 +66,35 @@ if ~exist([filename,'.mat'],'file')
         % finding maximum regression lag time
         for j = 1:size(datamonthall,1) % members
             for k = 1:length(varmonth2)
+                k
                 for l = 1:size(datamonthall,2) % latitudes
                     for m = 1:size(datamonthall,3) % longitudes
                         for lag = 1:laglength % lag
-                            regressors = [ones(length(squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag-ext))),1),...
-                                squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-lag-ext))'];
-                            [b(j,k,l,m,lag,:)] = regress(squeeze(datamonthall(j,l,m,varmonth2(k):12:end-lag-ext)),...
-                                regressors);                        
+                            regressors = [ones(length(squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-ext))),1),...
+                                squeeze(NINO34all(j,varmonth2(k)-lag+1:12:end-ext))'];
+                            try
+                                [b(j,k,l,m,lag,:)] = regress(squeeze(datamonthall(j,l,m,varmonth2(k):12:end-ext)),...
+                                    regressors); 
+                            catch
+                                abc = 1;
+                            end
+                            
                             % finding largest lag correlation
                         end
-                        [~,llc(j,k,l,m)] = max(abs(squeeze(b(j,k,l,m,:,2))));
+                        try
+                            [~,llc(j,k,l,m)] = max(abs(squeeze(b(j,k,l,m,:,2))));
+                        catch
+                            abc = 1;
+                        end
                         blag(j,k,l,m,:) = b(j,k,l,m,llc(j,k,l,m),:);
-                        dataVarMonth(j,:,k,l,m) = squeeze(datamonthall(j,l,m,varmonth2(k):12:end-laglength-ext)) - ...
+                        try
+                        dataVarMonth(j,:,k,l,m) = squeeze(datamonthall(j,l,m,varmonth2(k):12:end-ext)) - ...
                             squeeze(b(j,k,l,m,llc(j,k,l,m),2))*...
-                            squeeze(NINO34all(j,varmonth2(k)-llc(j,k,l,m)+1:12:end-laglength-ext))';                        
+                            squeeze(NINO34all(j,varmonth2(k)-llc(j,k,l,m)+1:12:end-ext))';                        
+                        catch
+                            abc = 1;
+                        end
+                        
                     end
                 end
             end        

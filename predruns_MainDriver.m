@@ -7,8 +7,17 @@ clc
 %% Read in model (user inputs located in function)
 inputs = predruns_inputs;
 
-%%
-[surfacedata,tozdata] = predruns_ReadinModel(inputs,0);
+%% 
+if strcmp(inputs.var,'TS')
+    [surfacedata,tozdata] = predruns_ReadinModel(inputs);
+elseif strcmp(inputs.var,'T')
+    [~,tozdata] = predruns_ReadinModel(inputs);
+    directory = '/Volumes/ExternalOne/work/data/predruns/T/highCl/raw/';
+    files = dir([directory,'*.nc']);
+    [surfacedata.highCl.years,dataLevel,datacomp,surfacedata.highCl.dataMonthArrange,longitude,latitude] = predruns_ReadIn4d(directory,files,inputs.var,[1995,2024],500,inputs.detrend);
+    surfacedata.highCl.data.lon = longitude;
+    surfacedata.highCl.data.lat = latitude;
+end
 
 % obtaining number and names of fields 
 fields = fieldnames(surfacedata);
@@ -29,13 +38,13 @@ latitude = surfacedata.(fields{1}).data(1).lat;
 
 %% Calculate correlations and upper and lower temperature differences between TS and toz
 if inputs.removeENSO
-    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_ninoremoved_','diffsandcorrs_',...
-        monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_',inputs.var,'_ninoremoved_','diffsandcorrs_',...
+        monthnames(inputs.varmonthtomean,1,'short'),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
         num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 else
-    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_TS_','diffsandcorrs_',...
-        monthnames(inputs.varmonthtomean,1,1),num2str(inputs.timeperiodvar(1)),'-',...
+    filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',inputs.ClLevel{1},'_',inputs.var,'_diffsandcorrs_',...
+        monthnames(inputs.varmonthtomean,1,'short'),num2str(inputs.timeperiodvar(1)),'-',...
         num2str(inputs.timeperiodvar(2)),num2str(abs(inputs.lats(1))),'-',...
         num2str(abs(inputs.lats(2))),'_',num2str(inputs.detrend)];
 end

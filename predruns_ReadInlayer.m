@@ -26,10 +26,7 @@ for i = 1:length(files)
     dateind = find(years(i).y >= dates(1) & years(i).y <= dates(2));  
     for j = 1:12                
         if ifdetrend
-            for k = 1:length(data(1).lat)
-                if i == 7
-                    a = 1;
-                end
+            for k = 1:length(data(1).lat)                
                 dataMonthArrange(i,j,:,k,:) = detrend(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end)))')...
                     + repmat(nanmean(squeeze(data(i).(var)(:,k,dateind(1)+j-1:12:dateind(end))),2),[1,dates(2) - dates(1)+1])';
                 

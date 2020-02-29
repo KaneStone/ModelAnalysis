@@ -6,10 +6,11 @@ netcdf_fileinfo = ncinfo(filename);
 ncsz = size(netcdf_fileinfo.Variables);
 ncid = netcdf.open(filename); 
 
-scale_factor = 1;
-add_offset = 0;
+
 
 for j = 1:ncsz(1,2)
+    scale_factor = 1;
+    add_offset = 0;
     %aquiring variables
     varnames{j,1} = netcdf.inqVar(ncid,j-1);
     varid(j) = netcdf.inqVarID(ncid,varnames{j});
@@ -25,15 +26,16 @@ for j = 1:ncsz(1,2)
         netcdf_attributes.(varnames{j,1}).(attname_for_naming) = ...
             netcdf.getAtt(ncid,varid(j),attname);
         if strcmp(attname_for_naming,'scale_factor')
-            scale_factor = netcdf_attributes.(varnames{j,1}).scale_factor;
-        elseif strcmp(attname_for_naming,'add_offset')
-            add_offset = netcdf_attributes.(varnames{j,1}).add_offset;
+            scale_factor = netcdf_attributes.(varnames{j,1}).scale_factor;        
+        end      
+        if strcmp(attname_for_naming,'add_offset')
+            add_offset = netcdf_attributes.(varnames{j,1}).add_offset;        
         end
     end
     
     %taking into account scale factors and offsets
     
-    netcdf_data.(varnames{j,1}) = netcdf_data.(varnames{j,1})*scale_factor+add_offset;             
+    netcdf_data.(varnames{j,1}) = double(netcdf_data.(varnames{j,1}))*scale_factor+add_offset;             
     
 end  
 
