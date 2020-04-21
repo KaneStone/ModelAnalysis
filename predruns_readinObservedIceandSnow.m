@@ -47,13 +47,14 @@ elseif strcmp(inputs.obstouse,'Goddard')
         %adding in missing years
         data.(obvar) = cat(3,data.(obvar)(:,:,1:107),ones(size(data.(obvar)(:,:,1:2)))*-9999,data.(obvar)(:,:,108:end));
         data.(obvar) (data.(obvar) == -9999) = NaN;
+        data.(obvar) = cat(2,ones(size(data.(obvar),1),91,size(data.(obvar),3))*-9999,data.obvar);
         save('/Volumes/ExternalOne/work/data/NSIDC_seaice/output/GoddardMergedStandard_bootstrapped.mat','data');
         
     else
         load('/Volumes/ExternalOne/work/data/NSIDC_seaice/output/GoddardMergedStandard_bootstrapped.mat');        
     end
     
-    
+    data.latitude = -90:1.5:90;
     
 elseif strcmp(inputs.obstouse,'ERA')
     data.timeperiod = 1979:2018;
@@ -114,7 +115,8 @@ end
 for i = 1:12
     if inputs.detrend
         for j = 1:length(data.latitude)
-            data.montharrange(i,:,j,:) = detrend(squeeze(data.(obvar)(:,j,i:12:end))')'+nanmean(squeeze(data.(obvar)(:,j,i:12:end)),2);    
+            %data.montharrange(i,:,j,:) = detrend(data.(obvar)(:,j,i:12:end))'+nanmean(squeeze(data.(obvar)(:,j,i:12:end)),2);    
+            data.montharrange(i,:,j,:) = squeeze(detrendNaN3(data.(obvar)(:,j,i:12:end)))+nanmean(squeeze(data.(obvar)(:,j,i:12:end)),2);    
         end        
     else
         data.montharrange(i,:,:,:) = permute(data.(obvar)(:,:,i:12:end),[3,1,2]);    
@@ -159,7 +161,7 @@ data.toz.highind = find(data.toz.zm >= highperc);
 data.montharrange = data.montharrange(:,data.timeperiod >= data.toz.timeperiod(1) & data.timeperiod <= data.toz.timeperiod(2),:,:);
 
 %% calculate ENSO
-if inputs.removeENSO && ~exist(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO.mat'])
+if inputs.removeENSO && ~exist(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO_',inputs.obstouse,'.mat'])
     
     datamonthall = permute(data.montharrange,[3,4,1,2]);
     datamonthall = datamonthall(:,:,:);
@@ -222,9 +224,9 @@ if inputs.removeENSO && ~exist(['/Volumes/ExternalOne/work/data/predruns/output/
     montharrange_re = cat(1,dataVarMonth(1:2,:,:,:),dataVarMonth);
     data.montharrange_re = cat(1,dataVarMonth(1:2,:,:,:),dataVarMonth);
     data.ENSO = NINO34all;
-    save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO.mat'],'montharrange_re','ENSO');
-elseif inputs.removeENSO && exist(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO.mat']);
-    load(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO.mat']);
+    save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO_',inputs.obstouse,'.mat'],'montharrange_re','ENSO');
+elseif inputs.removeENSO && exist(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO_',inputs.obstouse,'.mat'])
+    load(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',inputs.var,'_removeENSO_',inputs.obstouse,'.mat']);
     data.montharrange_re = montharrange_re;
     data.ENSO = ENSO;
 end

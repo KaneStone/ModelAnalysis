@@ -23,12 +23,17 @@ for i = 1:length(files)
     varweighted(i,:) = weightedaverage(squeeze(nanmean(data(i).(var)(:,latind(1):latind(2),:),1)),data(i).lat(latind(1):latind(2)));                            
     
     % construct year only vector
-    if i == 1
-        years(i).y = CCMI_years(data(i).date,0);      
-    else
-        years(i).y = CCMI_years(data(i).date,1);      
-    end
     
+% This is for composite stuff not seaicework
+%     if i == 1
+%         years(i).y = CCMI_years(data(i).date,0);      
+%     else
+%         years(i).y = CCMI_years(data(i).date,1);      
+%     end
+   
+%
+    years(i).y = CCMI_years(data(i).date,1);      
+
     %constructing composite
     dateindfirst = find(years(i).y == dates(1),1);
     dateindlast = find(years(i).y == dates(2),1,'last')-ext;

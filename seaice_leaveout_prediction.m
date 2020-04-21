@@ -23,7 +23,7 @@ end
 
 %pcttouse = [10,90];
 %pcttouse = [20,80];
-pcttouse = [30,70];
+pcttouse = [23,77];
 
 %% calculate sea ice extent or snow depth time series.
 obs.data = permute(observations.montharrange,[1,2,4,3]);
@@ -83,8 +83,8 @@ for i = 1:length(obs.allin)
     obs.ozone_pct1(i) = prctile(obs.toz(obs.leaveout),pcttouse(1));
     obs.ozone_pct2(i) = prctile(obs.toz(obs.leaveout),pcttouse(2));
 
-    obs.ozonelowerind(i).m = find(obs.toz(obs.leaveout) <= obs.ozone_pct1(i));
-    obs.ozoneupperind(i).m = find(obs.toz(obs.leaveout) >= obs.ozone_pct2(i));                      
+    obs.ozonelowerind(i).m = find(obs.toz(obs.leaveout) < obs.ozone_pct1(i));
+    obs.ozoneupperind(i).m = find(obs.toz(obs.leaveout) > obs.ozone_pct2(i));                      
 
     obs.ozone_left(i) = obs.toz(count) - obs.ozone_pct(i);
 
@@ -106,7 +106,8 @@ for i = 1:length(obs.allin)
             obs.dataextent(j).a = obs.data(:,:,obslatind,obslonind);            
             obs.dataextentfinal(j,:,:) = nansum(obs.dataextent(j).a(:,:,:),3);            
             
-            obsdifftemp = permute(repmat(permute(nanmean(differences.observations.difference([2,3,4],obslonind,obslatind),1),[3,2,1]),[1,1,size(obs.dataextent(j).a,1),size(obs.dataextent(j).a,2)]),[3,4,1,2]);            
+            %obsdifftemp = permute(repmat(permute(nanmean(differences.observations.difference([2,3,4],obslonind,obslatind),1),[3,2,1]),[1,1,size(obs.dataextent(j).a,1),size(obs.dataextent(j).a,2)]),[3,4,1,2]);            
+            obsdifftemp = permute(repmat(permute(nanmean(differences.observations.difference(1,obslonind,obslatind),1),[3,2,1]),[1,1,size(obs.dataextent(j).a,1),size(obs.dataextent(j).a,2)]),[3,4,1,2]);            
             if i < 3
                 obs.dataextent(j).a (obsdifftemp > 0) = NaN;            
             else
@@ -172,10 +173,10 @@ for i = 1:length(obs.allin)
             obs.anomaly_months = obs_leaveout_detrend - nanmedian(obs_leaveout_detrend);
 
             % extracting mean of ozone upper 20th percentile in training dataset
-            obs.anomaly_upper_months = squeeze(nanmean(obs.anomaly_months(obs.ozoneupperind(i).m)));
+            obs.anomaly_upper_months = squeeze(nanmedian(obs.anomaly_months(obs.ozoneupperind(i).m)));
 
             % extracting mean of ozone lower 20th percentile in training dataset
-            obs.anomaly_lower_months = squeeze(nanmean(obs.anomaly_months(obs.ozonelowerind(i).m)));                        
+            obs.anomaly_lower_months = squeeze(nanmedian(obs.anomaly_months(obs.ozonelowerind(i).m)));                        
 
             % calculating the sign of the difference in extremes
             obs.signchange_months(i,j,m) = sign(obs.anomaly_upper_months-obs.anomaly_lower_months);
@@ -295,8 +296,8 @@ for k = 1:size(surfacedata.highCl.dataMonthArrange,1)
         ozone_pct1(k,i) = prctile(precondtoz(leaveout,k),pcttouse(1));
         ozone_pct2(k,i) = prctile(precondtoz(leaveout,k),pcttouse(2));
 
-        ozonelowerind(k,i).m = find(precondtoz(leaveout,k) <= ozone_pct1(k,i));
-        ozoneupperind(k,i).m = find(precondtoz(leaveout,k) >= ozone_pct2(k,i));                      
+        ozonelowerind(k,i).m = find(precondtoz(leaveout,k) < ozone_pct1(k,i));
+        ozoneupperind(k,i).m = find(precondtoz(leaveout,k) > ozone_pct2(k,i));                      
 
         ozone_left(k,i) = precondtoz(count,k) - ozone_pct(k,i);
         
@@ -323,7 +324,8 @@ for k = 1:size(surfacedata.highCl.dataMonthArrange,1)
                 dataextent(j).a = modeldata(:,:,:,latind,lonind);
                 dataextentfinal(j,:,:,:) = nanmean(dataextent(j).a(:,:,:,:),4);
                 
-                difftemp = permute(repmat(nansum(differences.difference.ens(latind,lonind,[2,3,4]),3),[1,1,size(dataextent(j).a,1),size(dataextent(j).a,2),size(dataextent(j).a,3)]),[3,4,5,1,2]);
+                %difftemp = permute(repmat(nansum(differences.difference.ens(latind,lonind,[2,3,4]),3),[1,1,size(dataextent(j).a,1),size(dataextent(j).a,2),size(dataextent(j).a,3)]),[3,4,5,1,2]);
+                difftemp = permute(repmat(nansum(differences.difference.ens(latind,lonind,1),3),[1,1,size(dataextent(j).a,1),size(dataextent(j).a,2),size(dataextent(j).a,3)]),[3,4,5,1,2]);
                 
                 if i < 3
                     dataextent(j).a (difftemp > 0) = NaN;            
@@ -458,6 +460,11 @@ condition1 (condition1 >= 1) = 1;  %18
 correct_months2 = correct_months.*condition1;
 predsign_months3 = predsign_months2.*condition1;
 datasign_months3 = datasign_months.*condition1;
+
+% correct_months2 = correct_months;
+% predsign_months3 = predsign_months2;
+% datasign_months3 = datasign_months;
+
 %%
 
 % extracting pct
@@ -586,11 +593,11 @@ else
 end
 
 figure;
-set(gcf,'position',[100 100 700 800],'color','white');
+set(gcf,'position',[100 100 1400 350],'color','white');
 
 plot([2,13],[0,0],'--k','LineWidth',2);
 for j = 1:2
-    sp(j) = subplot(2,1,j);
+    sp(j) = subplot(1,2,j);
     sppos(j,:) = get(sp(j),'position');
     for i = 1:size(GSS.monthspct.mean,2)
         hold on
@@ -604,27 +611,31 @@ for j = 1:2
                 'MarkerSize',15);
             title('Observations, ozone extremes','fontsize',fsize+4)
             if strcmp(inputs.var,'ICEFRAC')
-                ylim([-100 120]);             
+                ylim([-100 120]);   
+                ylab = [-100:20:120];
             else
-                ylim([-100 130]);             
+                ylim([-100 130]);   
+                ylab = -100:50:100;
             end
         else
             errorbar([xin]+xshift(i),squeeze(GSS.monthspct.mean(1,i,xin)),percentilesm.ninetyfive(xin,i),'LineStyle',lstyle{i},'color',cbrewqual2(i,:),...
                 'LineWidth',3,'Marker',Mks{i},'MarkerFaceColor',cbrewqual2(i,:),'MarkerEdgeColor',cbrewqual3(i,:),...
                 'MarkerSize',15);
-            xlabel('Month','fontsize',fsize+2);
+            %xlabel('Month','fontsize',fsize+2);
             title('Model composite, ozone extremes','fontsize',fsize+4)
-            set(sp(j),'position',[sppos(j,1),sppos(j,2)+.05,sppos(j,3:4)]);
+            set(sp(j),'position',[sppos(j,1)-.05,sppos(j,2),sppos(2,3),sppos(1,4)-.01]);
            if strcmp(inputs.var,'ICEFRAC')
-                ylim([-50 70]);             
+                ylim([-50 70]);    
+                ylab = [-50:10:70];
             else
-                ylim([-30 40]);             
+                ylim([-50 50]);    
+                ylab = [-50:10:50];
             end
         end
         xlim([xin(1)-1,xin(end)+1])
         box on
-        ylabel('HSS','fontsize',fsize+2);
-        set(gca,'fontsize',fsize+2,'xtick',xin,'xticklabel',xticklab);
+        %ylabel('HSS','fontsize',fsize+2);
+        set(gca,'fontsize',fsize+2,'xtick',xin,'xticklabel',xticklab,'ytick',ylab);
     end
     if j == 1
         if strcmp(inputs.var,'ICEFRAC')
@@ -639,7 +650,7 @@ end
 
 % filename
  filedir = '/Users/kanestone/Dropbox (MIT)/Work_Share/MITWork/predruns/ozoneseaice/';
-filename = [filedir,'Prediction_',inputs.var,'_LINEPLOT_from_',...
+filename = [filedir,'Prediction_',num2str(pcttouse(1)),'-',num2str(pcttouse(2)),inputs.var,'_LINEPLOT_from_',...
     monthnames(inputs.tozmonth,1,'long'),'_',inputs.obstouse,'_Arcticozoneextremes_over_',...
     num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2))];
 export_fig(filename,'-pdf');

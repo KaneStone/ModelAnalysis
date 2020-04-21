@@ -15,7 +15,7 @@ for j = 1:12
 end   
 
 NINO34all = NINOmonth(:,:);    
-save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',ClLevel,'_',ClLevel,inputs.timeperiodvar(1),'-',inputs.timeperiodvar(1),'_',num2str(inputs.detrend)],'NINO34all','NINOmonth');
+save(['/Volumes/ExternalOne/work/data/predruns/output/NINO34/',ClLevel,'_',ClLevel,num2str(inputs.timeperiodvar(1)),'-',num2str(inputs.timeperiodvar(2)),'_',num2str(inputs.detrend)],'NINO34all','NINOmonth');
 
 if inputs.removeENSO
     filename = ['/Volumes/ExternalOne/work/data/predruns/output/data/',ClLevel,'_',inputs.var,'_ninoremoved_',...

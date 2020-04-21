@@ -2,9 +2,9 @@ function [inputs] = predruns_inputs
 
 % general
 inputs.tozvar = 'toz';
-inputs.var = 'PRECSL'; %TS %SNOWHICE %ICEFRAC %PRECSL
-inputs.detrend = 1;
-inputs.detrend_ozone = 1;
+inputs.var = 'SNOWHICE'; %TS %SNOWHICE %ICEFRAC %PRECSL
+inputs.detrend = 0;
+inputs.detrend_ozone = 0;
 inputs.lats = [63,90];
 inputs.ClLevel = {'highCl'}; %{'highCl','lowCl','lowGHG'}
 inputs.timeperiodtoz = [1995,2024];%[1955,1979];

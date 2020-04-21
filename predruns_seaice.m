@@ -133,14 +133,15 @@ end
 inputs.coincidence = 0;
 inputs.nocoincidence = 0;
 
+inputs.removeENSO = 0;
 % calculate difference in surface metric based on input extremes (either ozone or wind)
 differences = Seaice_TakeDifference(inputs,mons,surfacedata,nofiles,pct,observations,[],.05);
 
 %% plotting individuals
 plotind = 0;
-combine = 0;
+combine = 1;
 if plotind
-    Seaice_PlotSeaIceIndividual(inputs,differences.difference.ind,latitude,longitude,mons,seasons)
+    Seaice_PlotSeaIceIndividual(inputs,differences.difference.ind,latitude,longitude,inputs.varmonthtomean,inputs.seasons,1)
 end
 
 %% plotting ensemble
@@ -177,7 +178,7 @@ seaice_comparisonLinePlots(surfacedata.highCl.dataMonthArrange,observations,...
     tozdata,observations.toz.zm,Seasplot,latitude,longitude,observations.latitude,observations.longitude,inputs,pct);
 
 %% prediction
-
+inputs.removeENSO = 1;
 seaice_leaveout_prediction(surfacedata,tozdata,inputs,latitude,longitude,differences,observations,Seasplot)
 
 %dataVarMonthAve,dataVarMonth,tozdata.(inputs.ClLevel{1}).dataMonthArrange,inputs,latitude,longitude,pct,differences.indmonths.individual,surfacedata.(fields{i}).dataMonthArrange

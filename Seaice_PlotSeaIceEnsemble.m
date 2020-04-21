@@ -85,6 +85,7 @@ for i = 1:size(combineddifference_modeldim,1)
         
         modellontoplot = [longitude;longitude(1)+360]; 
         obslontoplot =  [obslon;obslon(1)+360]; 
+        %obslontoplot =  [0;obslon]; 
         slen = size(modelfinal,3);
         for j = 1:size(mons,1)            
             titles{j} = {['Observations: ',monthnames(mons(j,:),1,montype)]};                     

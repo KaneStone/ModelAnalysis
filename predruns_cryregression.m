@@ -181,7 +181,7 @@ for i = 1:size(Seasplot.lon,1)
             modelprediction(i,k,m,:) = resttozdetrend.*btoz(i,k,m,1) + btoz(i,k,m,2) - median(tozdetrend.*btoz(i,k,m,1) + btoz(i,k,m,2));% - btoz(i,k,m,2);
             surface(i,k,m,:) = squeeze(seaiceextent(i).seadetrend(k,m,:)) - median(squeeze(seaiceextent(i).seadetrend(k,m,:)));
             surfaceleft(i,k,m,:) = squeeze(restseaiceextent(i).seadetrend(k,m,:)) - median(squeeze(seaiceextent(i).seadetrend(k,m,:)));
-            modelcorr(i,k,m) = corr(squeeze(seaiceextent(i).seadetrend(k,m,:)),tozdetrend);
+            [modelcorr(i,k,m),modelpval(i,k,m)] = corr(squeeze(seaiceextent(i).seadetrend(k,m,:)),tozdetrend);
         end
         for m  = 1:3            
             btoz_seasons(i,k,m,:) = ozonepredictors\squeeze(seaiceextent(i).seadetrendseasons(k,m,:));
@@ -206,7 +206,7 @@ for i = 1:size(Seasplot.lon,1)
         obsmodelprediction(i,m,:) = btozobs(i,m,1).*obsozonerest + btozobs(i,m,2) - median(squeeze(btozobs(i,m,1).*obsozonepredictors(:,1) + btozobs(i,m,2)));
         obssurface(i,m,:) = squeeze(obsseaiceextent(i).seadetrend(m,:))' - median(squeeze(obsseaiceextent(i).seadetrend(m,:))');
         obssurfaceleft(i,m,:) = squeeze(restobsseaiceextent(i).seadetrend(m,:))' - median(squeeze(obsseaiceextent(i).seadetrend(m,:))');
-        obscorr(i,m) = corr(obsseaiceextent(i).seadetrend(m,:)',squeeze(obstozdetrend(1:31))');
+        [obscorr(i,m),obspval(i,m)] = corr(obsseaiceextent(i).seadetrend(m,:)',squeeze(obstozdetrend(1:31))');
     end    
     for m  = 1:3        
         btozobs_seasons(i,m,:) = obsozonepredictors\squeeze(obsseaiceextent(i).seadetrendseasons(m,:))';
